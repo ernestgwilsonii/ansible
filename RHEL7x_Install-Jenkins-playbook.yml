@@ -79,6 +79,4 @@
       enabled=yes
       state=restarted
       # Note: Command line verification:
-      # systemctl status elasticsearch.service
-      # cat /var/log/elasticsearch/graylog2.log
-      # curl -XGET 'http://IPAddressHere:9200/_cluster/health?pretty=true'
+      # systemctl status jenkins.service
