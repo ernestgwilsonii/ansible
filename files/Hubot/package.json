@@ -1,0 +1,28 @@
+{
+  "name": "chatops",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "cron": "latest",
+    "lodash": "latest",
+    "moment": "latest",
+    "time": "latest",
+    "node-rest-client": "latest",
+    "hubot": "latest",
+    "hubot-ansible": "latest",
+    "hubot-auth": "latest",
+    "hubot-diagnostics": "latest",
+    "hubot-env": "latest",
+    "hubot-help": "latest",
+    "hubot-redis-brain": "latest",
+    "hubot-slack": "latest"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Ernest G. Wilson II <ErnestGWilsonII@gmail.com>",
+  "license": "MIT",
+  "description": "Hubot"
+}

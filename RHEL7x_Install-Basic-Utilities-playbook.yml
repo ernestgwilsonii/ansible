@@ -1,0 +1,121 @@
+---
+
+################################################################################
+#  description: Installs some basic / handy utilities on RHEL7x
+#  usage: ansible-playbook RHEL7x_Install-Basic-Utilities-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Install some basic / handy utilities on RHEL7x
+  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# Install yum packages (listed in alphabetical order)
+# REF: http://docs.ansible.com/ansible/yum_module.html
+######################################################
+
+  - name: Install expect
+    yum:
+      name=expect
+      state=latest
+  
+  - name: Install expect-devel
+    yum:
+      name=expect-devel
+      state=latest
+  
+  - name: Install htop
+    yum:
+      name=htop
+      state=latest
+
+  - name: Install jq
+    yum:
+      name=jq
+      state=latest
+
+  - name: Install mc
+    yum:
+      name=mc
+      state=latest
+
+  - name: Install mtr
+    yum:
+      name=mtr
+      state=latest
+
+  - name: Install oniguruma
+    yum:
+      name=oniguruma
+      state=latest
+
+  - name: Install openvpn
+    yum:
+      name=openvpn
+      state=latest
+
+  - name: Install tcpdump
+    yum:
+      name=tcpdump
+      state=latest
+
+  - name: Install telnet
+    yum:
+      name=telnet
+      state=latest
+
+  - name: Install traceroute
+    yum:
+      name=traceroute
+      state=latest
+
+  - name: Install wget
+    yum:
+      name=wget
+      state=latest
+
+  - name: Install wireshark
+    yum:
+      name=wireshark
+      state=latest
+
+  - name: Install xauth for X11
+    yum:
+      name=xauth
+      state=latest
+
+  - name: Install xclock so the most basic X11 requirements get installed
+    yum:
+      name=xclock
+      state=latest
+
+  - name: Install xhost for X11
+    yum:
+      name=xhost
+      state=latest
+
+
+# Update various configuration files
+# REF: http://docs.ansible.com/ansible/lineinfile_module.html
+#############################################################
+
+  - name: Set OpenVPN Client NSS_HASH_ALG_SUPPORT environment variable for root on next login
+    lineinfile:
+      dest=/root/.bashrc
+      state=present
+      line='export NSS_HASH_ALG_SUPPORT=+MD5'
+
+  - name: Set OpenVPN Client OPENSSL_ENABLE_MD5_VERIFY environment variable for root on next login
+    lineinfile:
+      dest=/root/.bashrc
+      state=present
+      line='export OPENSSL_ENABLE_MD5_VERIFY=1'

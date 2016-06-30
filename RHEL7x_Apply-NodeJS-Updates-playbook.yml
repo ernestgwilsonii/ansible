@@ -1,0 +1,62 @@
+---
+
+################################################################################
+#  description: Updates NodeJS on RHEL7x
+#  usage: ansible-playbook RHEL7x_Apply-NodeJS-Updates-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Update NodeJS on RHEL7x
+  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# Install yum packages (listed in alphabetical order)
+# REF: http://docs.ansible.com/ansible/yum_module.html
+######################################################
+
+  - name: Update nodejs
+    yum:
+      name=nodejs
+      state=latest
+
+  - name: Update redis
+    yum:
+      name=redis
+      state=latest
+
+
+# Execute raw command(s)
+# REF: http://docs.ansible.com/ansible/raw_module.html
+##########################################################
+
+  - name: Update npm globally
+    raw: /usr/bin/npm install npm -g
+
+  - name: Update coffee globally
+    raw: /usr/bin/npm install coffee -g
+
+  - name: Update coffee-script globally
+    raw: /usr/bin/npm install coffee-script -g
+
+  - name: Update generator-hubot globally
+    raw: /usr/bin/npm install generator-hubot -g
+
+
+# Restart redis.service
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Ensure the redis.service service is enabled and restarted
+    service:
+      name=redis.service
+      enabled=yes
+      state=restarted

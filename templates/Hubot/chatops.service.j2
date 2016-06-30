@@ -1,0 +1,32 @@
+[Unit]
+Description=chatops
+Requires=network.target
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/chatops
+User=chatops
+
+Restart=always
+RestartSec=10
+
+# Slack module
+Environment=HUBOT_SLACK_BOTNAME={{ HUBOT_SLACK_BOTNAME|default ('YourHubotNameGoesHere') }}
+Environment=HUBOT_SLACK_TOKEN={{ HUBOT_SLACK_TOKEN|default ('YourHubotSlackAPITokenKeyGoesHere') }}
+# Auth module
+Environment=HUBOT_AUTH_ADMIN={{ HUBOT_AUTH_ADMIN|default ('YourCommaSeperatedListOfSlackIDsGoesHere') }}
+# Ansible module
+Environment=HUBOT_ANSIBLE_INVENTORY_FILE=/etc/ansible/hosts
+Environment=HUBOT_ANSIBLE_PRIVATE_KEY=null
+Environment=HUBOT_ANSIBLE_PREFIX_HOSTS
+Environment=HUBOT_ANSIBLE_REMOTE_USER=Administrator
+Environment=HUBOT_ANSIBLE_AUTHORIZED_ROLES=deploy
+# CLC Control creds for Ansible
+Environment=CLC_V2_API_USERNAME={{ CLC_V2_API_USERNAME|default ('YourCLCControlUsernameForAPIv2GoesHere') }}
+Environment=CLC_V2_API_PASSWD={{ CLC_V2_API_PASSWD|default ('YourCLCControlPasswordForAPIv2GoesHere') }}
+
+ExecStart=/opt/chatops/node_modules/hubot/bin/hubot --adapter slack
+
+[Install]
+WantedBy=multi-user.target

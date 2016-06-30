@@ -1,0 +1,265 @@
+---
+
+################################################################################
+#  description: Installs Ansible with CenturyLink Cloud kit on RHEL7x
+#  usage: ansible-playbook RHEL7x_Install-Ansible-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#     or: ansible-playbook RHEL7x_Install-Ansible-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere CLC_V2_API_USERNAME=YourCenturyLinkCloudControlUsername CLC_V2_API_PASSWD=YourCenturyLinkCloudControlPassword'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Install Ansible with CenturyLink Cloud kit on RHEL7x
+  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# Install yum packages (listed in alphabetical order)
+# REF: http://docs.ansible.com/ansible/yum_module.html
+######################################################
+
+  - name: Install gcc
+    yum:
+      name=gcc
+      state=latest
+
+  - name: Install gcc-c++
+    yum:
+      name=gcc-c++
+      state=latest
+
+  - name: Install git
+    yum:
+      name=git
+      state=latest
+
+  - name: Install krb5-devel
+    yum:
+      name=krb5-devel
+      state=latest
+
+  - name: Install krb5-libs
+    yum:
+      name=krb5-libs
+      state=latest
+
+  - name: Install krb5-workstation
+    yum:
+      name=krb5-workstation
+      state=latest
+
+  - name: Install libffi-devel
+    yum:
+      name=libffi-devel
+      state=latest
+
+  - name: Install make
+    yum:
+      name=make
+      state=latest
+
+  - name: Install openssl-devel
+    yum:
+      name=openssl-devel
+      state=latest
+
+  - name: Install python-devel
+    yum:
+      name=python-devel
+      state=latest
+
+  - name: Install python-setuptools
+    yum:
+      name=python-setuptools
+      state=latest
+
+  - name: Install sshpass
+    yum:
+      name=sshpass
+      state=latest
+
+
+# Execute command(s)
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: Use easy_install to install pip
+    command: /usr/bin/easy_install pip
+
+
+# Use pip to install and manage Python dependencies
+# REF: http://docs.ansible.com/ansible/pip_module.html
+######################################################
+
+  - name: Use pip to install pybuilder
+    pip:
+      name=pybuilder
+
+  - name: Use pip to install mock
+    pip:
+      name=mock
+
+  - name: Use pip to install nose
+    pip:
+      name=nose
+
+  - name: Use pip to install coverage
+    pip:
+      name=coverage
+
+  - name: Use pip to install cryptography
+    pip:
+      name=cryptography
+
+  - name: Use pip to install xmltodict
+    pip:
+      name=xmltodict
+
+  - name: Use pip to install pywinrm
+    pip:
+      name=pywinrm
+      version=0.1.1
+
+  - name: Use pip to install kerberos
+    pip:
+      name=kerberos
+
+  - name: Use pip to install httplib2
+    pip:
+      name=httplib2
+
+  - name: Use pip to install ansible
+    pip:
+      name=ansible
+
+  - name: Use pip to install clc-sdk
+    pip:
+      name=clc-sdk
+
+  - name: Use pip to install clc-ansible-module
+    pip:
+      name=clc-ansible-module
+      # See: https://github.com/CenturyLinkCloud/clc-ansible-module
+
+
+# Use the file module to create a directory and symbolic links if they don't exist
+# REF: http://docs.ansible.com/ansible/file_module.html
+##################################################################################
+
+  - name: Create directory /etc/ansible if it does not exist - mkdir -p /etc/ansible
+    file:
+      path=/etc/ansible
+      state=directory
+      mode=0755
+
+  - name: Create directory /etc/ansible/group_vars if it does not exist - mkdir -p /etc/ansible/group_vars
+    file:
+      path=/etc/ansible/group_vars
+      state=directory
+      mode=0755
+
+  - name: Create directory /etc/ansible/host_vars if it does not exist - mkdir -p /etc/ansible/host_vars
+    file:
+      path=/etc/ansible/host_vars
+      state=directory
+      mode=0755
+
+  - name: Create symbolic link if it does not exist - ln -s /usr/bin/clc_inv.py /etc/ansible/hosts
+    file:
+      src=/usr/bin/clc_inv.py
+      dest=/etc/ansible/hosts
+      state=link
+
+  - name: Create symbolic link if it does not exist - ln -s /usr/bin/clc_inv.py /usr/local/bin/clc_inv.py
+    file:
+      src=/usr/bin/clc_inv.py
+      dest=/usr/local/bin/clc_inv.py
+      state=link
+
+
+# Set attributes of files
+# REF: http://docs.ansible.com/ansible/file_module.html
+#######################################################
+
+  - name: Create a blank Ansible configuration - /etc/ansible/ansible.cfg
+    file:
+      path=/etc/ansible/ansible.cfg
+      state=touch
+      mode=0644
+
+
+# Update various configuration files
+# REF: http://docs.ansible.com/ansible/lineinfile_module.html
+#############################################################
+
+# Populate values in /etc/ansible/ansible.cfg
+
+  - name: Populate values in /etc/ansible/ansible.cfg with - [defaults]
+    lineinfile:
+      dest=/etc/ansible/ansible.cfg
+      state=present
+      line='[defaults]'
+
+  - name: Populate values in /etc/ansible/ansible.cfg with - library=/usr/lib/python2.7/site-packages/clc_ansible_module
+    lineinfile:
+      dest=/etc/ansible/ansible.cfg
+      state=present
+      line='library=/usr/lib/python2.7/site-packages/clc_ansible_module'
+
+  - name: Populate values in /etc/ansible/ansible.cfg with - inventory=/etc/ansible/hosts
+    lineinfile:
+      dest=/etc/ansible/ansible.cfg
+      state=present
+      line='inventory=/etc/ansible/hosts'
+
+  - name: Populate values in /etc/ansible/ansible.cfg with - host_key_checking=False
+    lineinfile:
+      dest=/etc/ansible/ansible.cfg
+      state=present
+      line='host_key_checking=False'
+
+  - name: Populate values in /etc/ansible/ansible.cfg with - retry_files_enabled=False
+    lineinfile:
+      dest=/etc/ansible/ansible.cfg
+      state=present
+      line='retry_files_enabled=False'
+
+  - name: Populate values in /etc/ansible/ansible.cfg with - forks=100
+    lineinfile:
+      dest=/etc/ansible/ansible.cfg
+      state=present
+      line='forks=100'
+
+
+# Populate values in /root/.bashrc
+
+  - name: Populate values in /root/.bashrc with - export ANSIBLE_LIBRARY=/usr/lib/python2.7/site-packages/clc_ansible_module
+    lineinfile:
+      dest=/root/.bashrc
+      state=present
+      line='export ANSIBLE_LIBRARY=/usr/lib/python2.7/site-packages/clc_ansible_module'
+
+
+  - name: Populate values in /root/.bashrc with - export ANSIBLE_HOST_KEY_CHECKING=False
+    lineinfile:
+      dest=/root/.bashrc
+      state=present
+      line='export ANSIBLE_HOST_KEY_CHECKING=False'
+
+  - name: Populate values in /root/.bashrc with - export CLC_V2_API_USERNAME='YourCenturyLinkCloudControlUsername'
+    lineinfile:
+      dest=/root/.bashrc
+      state=present
+      line='export CLC_V2_API_USERNAME='{{ CLC_V2_API_USERNAME|default ('YourCenturyLinkCloudControlUsername') }}''
+
+  - name: Populate values in /root/.bashrc with - export CLC_V2_API_PASSWD='YourCenturyLinkCloudControlPassword'
+    lineinfile:
+      dest=/root/.bashrc
+      state=present
+      line='export CLC_V2_API_PASSWD='{{ CLC_V2_API_PASSWD|default ('YourCenturyLinkCloudControlPassword') }}''

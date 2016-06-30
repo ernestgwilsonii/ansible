@@ -1,0 +1,23 @@
+---
+
+################################################################################
+#  description: Configures RHEL7x OS with mongoDB
+#  usage: ansible-playbook RHEL7x_MASTER-Basic-OS-with-mongoDB-Service-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Include specific / desired Ansible Playbooks
+# REF: http://docs.ansible.com/ansible/playbooks_roles.html
+###########################################################
+
+# Basic OS items included on every RHEL7x installation
+- include: RHEL7x_Apply-OS-Updates-playbook.yml
+- include: RHEL7x_Install-Basic-Utilities-playbook.yml
+
+# Included if Java is desired
+- include: RHEL7x_Install-Java8x-playbook.yml
+
+# Included if mongoDB Services is desired
+- include: RHEL7x_Install-mongoDB-playbook.yml

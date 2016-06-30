@@ -1,0 +1,37 @@
+---
+
+################################################################################
+#  description: Configures RHEL7x OS with some standard/typical features and adds a basic Ansible with CenturyLink Cloud kit
+#  usage: ansible-playbook RHEL7x_MASTER-Basic-OS-and-Ansible.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#     or: ansible-playbook RHEL7x_MASTER-Basic-OS-and-Ansible.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere CLC_V2_API_USERNAME=YourCenturyLinkCloudControlUsername CLC_V2_API_PASSWD=YourCenturyLinkCloudControlPassword'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Include specific / desired Ansible Playbooks
+# REF: http://docs.ansible.com/ansible/playbooks_roles.html
+###########################################################
+
+# Basic OS items included on every RHEL7x installation
+- include: RHEL7x_Apply-OS-Updates-playbook.yml
+- include: RHEL7x_Install-Basic-Utilities-playbook.yml
+
+# Included if Java is desired
+- include: RHEL7x_Install-Java8x-playbook.yml
+
+# Included if RDP Services is desired
+- include: RHEL7x_Install-RDP-Services-playbook.yml
+
+# Included if a basic Ansible with CenturyLink Cloud kit is desired
+- include: RHEL7x_Install-Ansible-playbook.yml
+# Included to update the Ansible kit to the latest versions
+- include: RHEL7x_Apply-Ansible-Updates-playbook.yml
+
+# Included if a Node.js is desired
+- include: RHEL7x_Install-NodeJS-playbook.yml
+# Included to update Node.js to the latest versions
+- include: RHEL7x_Apply-NodeJS-Updates-playbook.yml
+
+# Included if a Hubot is desired
+- include: RHEL7x_Install-Hubot-playbook.yml
