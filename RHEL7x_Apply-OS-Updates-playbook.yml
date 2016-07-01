@@ -28,7 +28,7 @@
       name=*
       state=latest
 
-  - name: Install yum-utils if that package is not already present
+  - name: Install yum-utils if that package is not already present or update existing if needed
     yum:
       name=yum-utils
       state=latest
@@ -39,7 +39,7 @@
 ##########################################################
 
   - name: Remove old kernels from the OS keeping only the last most recent two
-    command: /usr/bin/package-cleanup --oldkernels --count=2
+    command: /usr/bin/package-cleanup --oldkernels --count=2 -y
 
 
 # Set attributes of files
