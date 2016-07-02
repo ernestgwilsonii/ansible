@@ -19,7 +19,7 @@
   tasks:
 
 
-# Install or confogire repository used on the OS by yum
+# Install or configure repository used on the OS by yum
 # REF: https://docs.ansible.com/ansible/yum_repository_module.html
 ##################################################################
 
