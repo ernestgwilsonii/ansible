@@ -45,6 +45,147 @@
       state=latest
 
 
+# Set attributes of files
+# REF: http://docs.ansible.com/ansible/file_module.html
+#######################################################
+
+  - name: Create a blank Docker environment file if it does not exist - touch /etc/sysconfig/docker
+    file:
+      path=/etc/sysconfig/docker
+      state=touch
+      mode=0644
+
+
+# Update various configuration files
+# REF: http://docs.ansible.com/ansible/lineinfile_module.html
+#############################################################
+
+# Populate values in /etc/sysconfig/docker
+  - name: Populate values in /etc/sysconfig/docker with - OPTIONS=--bip=172.19.0.1/16
+    lineinfile:
+      dest=/etc/sysconfig/docker
+      state=present
+      line='OPTIONS=--bip=172.19.0.1/16'
+      # Note: The default bridge interface for Docker is 172.17.0.1/16
+
+
+# Tweak settings in INI files
+# REF: http://docs.ansible.com/ansible/ini_file_module.html1
+############################################################
+
+# Set values in /etc/systemd/system/docker.service
+  - name: Specify ExecStart value under Service section in /etc/systemd/system/docker.service
+    ini_file:
+      dest=/etc/systemd/system/docker.service
+      section=Service
+      option=ExecStart
+      value='/usr/bin/docker daemon -H tcp://0.0.0.0:2376 -H unix:///var/run/docker.sock --storage-driver devicemapper --tlsverify --tlscacert /etc/docker/ca.pem --tlscert /etc/docker/server.pem --tlskey /etc/docker/server-key.pem --label provider=generic $OPTIONS'
+
+# Set values in /etc/systemd/system/docker.service
+  - name: Specify EnvironmentFile value under Service section in /etc/systemd/system/docker.service
+    ini_file:
+      dest=/etc/systemd/system/docker.service
+      section=Service
+      option=EnvironmentFile
+      value='/etc/sysconfig/docker'
+
+
+# Restart firewalld to make sure it is running OK before changing any rules
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Ensure the firewalld service is enabled and re-started before changing any rules
+    service:
+      name=firewalld
+      enabled=yes
+      state=restarted
+
+
+# Update the firewalld configuration
+# REF: http://docs.ansible.com/ansible/firewalld_module.html
+############################################################
+
+  - name: Update firewall to allow port TCP 2375 for incoming Docker Cloud connections
+    firewalld:
+      port=2375/tcp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+  - name: Update firewall to allow port TCP 2376 for incoming docker-machine connections
+    firewalld:
+      port=2376/tcp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+  - name: Update firewall to allow port TCP 2377 for incoming Docker cluster management connections
+    firewalld:
+      port=2377/tcp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+  - name: Update firewall to allow port TCP 4789 for incoming Docker overlay network connections
+    firewalld:
+      port=4789/tcp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+  - name: Update firewall to allow port UDP 4789 for incoming Docker overlay network connections
+    firewalld:
+      port=4789/udp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+  - name: Update firewall to allow port TCP 6783 for incoming Docker overlay network connections
+    firewalld:
+      port=6783/tcp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+  - name: Update firewall to allow port UDP 6783 for incoming Docker overlay network connections
+    firewalld:
+      port=6783/udp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+  - name: Update firewall to allow port TCP 7946 for incoming Docker communication among nodes
+    firewalld:
+      port=7946/tcp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+  - name: Update firewall to allow port UDP 7946 for incoming Docker communication among nodes
+    firewalld:
+      port=7946/udp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+  - name: Update firewall to allow ports TCP 30000-32767 for incoming Docker swarm manager PublishedPort connections
+    firewalld:
+      port=30000-32767/tcp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+
 # Enable and start docker
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
@@ -64,3 +205,14 @@
       #
       # To run docker as a normal user, add that user to the docker group:
       # usermod -aG docker your_username
+
+
+# get_url - Downloads files from HTTP, HTTPS, or FTP to node
+# REF: http://docs.ansible.com/ansible/get_url_module.html
+############################################################
+
+  - name: Download docker-machine
+    get_url:
+      url=https://github.com/docker/machine/releases/download/v0.7.0/docker-machine-Linux-x86_64
+      dest=/usr/local/bin/docker-machine
+      mode=777
