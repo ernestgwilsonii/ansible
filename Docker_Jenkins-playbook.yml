@@ -1,0 +1,36 @@
+---
+
+################################################################################
+#  description: Run Docker container Jenkins
+#  usage: ansible-playbook Docker_Jenkins-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Run Docker container Jenkins
+  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# docker - manage docker containers
+# REF: http://docs.ansible.com/ansible/docker_container_module.html
+###################################################################
+
+  - name: jenkins container
+    docker_container:
+      name: jenkins
+      image: jenkins
+      state: started
+      exposed_ports:
+      - 8080
+      - 50000
+      ports:
+      - "8080:8080"
+      - "50000:50000"

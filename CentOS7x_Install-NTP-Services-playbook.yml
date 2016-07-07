@@ -1,0 +1,75 @@
+---
+
+################################################################################
+#  description: Installs NTP Services on CentOS7x
+#  usage: ansible-playbook CentOS7x_Install-NTP-Services-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Install NTP Services on CentOS7x
+  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# Install yum packages
+# REF: http://docs.ansible.com/ansible/yum_module.html
+######################################################
+
+  - name: Install ntp (ntpd) package
+    yum:
+      name=ntp
+      state=present
+
+
+# Restart firewalld to make sure it is running OK before changing any rules
+# REF: http://docs.ansible.com/ansible/service_module.html
+###########################################################################
+
+  - name: Ensure the firewalld service is enabled and re-started before changing any rules
+    service:
+      name=firewalld
+      enabled=yes
+      state=restarted
+
+
+# Update the firewalld configuration
+# REF: http://docs.ansible.com/ansible/firewalld_module.html
+############################################################
+
+  - name: Update firewall to allow port TCP 123 ntpd connections
+    firewalld:
+      port=123/tcp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+  - name: Update firewall to allow port UDP 123 ntpd connections
+    firewalld:
+      port=123/udp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+
+# Enable and start services
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Enable and start the ntpd service
+    service:
+      name=ntpd
+      enabled=yes
+      state=restarted
+      # Command line verification:
+      # systemctl status ntpd
+      # ntpq -p

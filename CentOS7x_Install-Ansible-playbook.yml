@@ -1,9 +1,9 @@
 ---
 
 ################################################################################
-#  description: Installs Ansible with CenturyLink Cloud kit on RHEL7x
-#  usage: ansible-playbook RHEL7x_Install-Ansible-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
-#     or: ansible-playbook RHEL7x_Install-Ansible-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere CLC_V2_API_USERNAME=YourCenturyLinkCloudControlUsername CLC_V2_API_PASSWD=YourCenturyLinkCloudControlPassword'
+#  description: Installs Ansible with CenturyLink Cloud kit on CentOS7x
+#  usage: ansible-playbook CentOS7x_Install-Ansible-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#     or: ansible-playbook CentOS7x_Install-Ansible-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere CLC_V2_API_USERNAME=YourCenturyLinkCloudControlUsername CLC_V2_API_PASSWD=YourCenturyLinkCloudControlPassword'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
@@ -13,7 +13,7 @@
 # REF: http://docs.ansible.com/ansible/playbooks.html
 #####################################################
 
-- name: Install Ansible with CenturyLink Cloud kit on RHEL7x
+- name: Install Ansible with CenturyLink Cloud kit on CentOS7x
   hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
   serial: "100%"
   gather_facts: False
