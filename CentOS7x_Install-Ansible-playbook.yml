@@ -186,6 +186,24 @@
       dest=/usr/local/bin/clc_inv.py
       state=link
 
+  - name: Create directory /etc/ansible/vault if it does not exist - mkdir -p /etc/ansible/vault
+    file:
+      path=/etc/ansible/vault
+      state=directory
+      mode=0755
+
+  - name: Create empty file used later - /etc/ansible/vault/vault_pass.txt
+    file:
+      path=/etc/ansible/vault/vault_pass.txt
+      state=touch
+      mode=0644
+
+  - name: Create empty file used later - /etc/ansible/.gitignore
+    file:
+      path=/etc/ansible/.gitignore
+      state=touch
+      mode=0644
+
 
 # Set attributes of files
 # REF: http://docs.ansible.com/ansible/file_module.html
@@ -256,6 +274,12 @@
       state=present
       line='export ANSIBLE_HOST_KEY_CHECKING=False'
 
+  - name: Populate values in /root/.bashrc with - export ANSIBLE_VAULT_PASSWORD_FILE=/etc/ansible/vault/vault_pass.txt
+    lineinfile:
+      dest=/root/.bashrc
+      state=present
+      line='export ANSIBLE_VAULT_PASSWORD_FILE=/etc/ansible/vault/vault_pass.txt'
+
   - name: Populate values in /root/.bashrc with - export CLC_V2_API_USERNAME='YourCenturyLinkCloudControlUsername'
     lineinfile:
       dest=/root/.bashrc
@@ -267,3 +291,21 @@
       dest=/root/.bashrc
       state=present
       line='export CLC_V2_API_PASSWD='{{ CLC_V2_API_PASSWD|default ('YourCenturyLinkCloudControlPassword') }}''
+
+
+# Populate values in /etc/ansible/vault/vault_pass.txt
+
+  - name: Populate values in /etc/ansible/vault/vault_pass.txt with - YourVaultPasswordGoesHere
+    lineinfile:
+      dest=/etc/ansible/vault/vault_pass.txt
+      state=present
+      line='YourVaultPasswordGoesHere'
+
+
+# Populate values in /etc/ansible/.gitignore
+
+  - name: Populate values in /etc/ansible/.gitignore with - vault
+    lineinfile:
+      dest=/etc/ansible/.gitignore
+      state=present
+      line='vault'
