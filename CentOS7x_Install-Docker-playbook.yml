@@ -48,6 +48,27 @@
     raw: /usr/bin/curl -fsSL https://experimental.docker.com/ | sh
 
 
+# Enable and but do NOT yet start docker
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Enable and but do NOT yet start the docker service
+    service:
+      name=docker
+      enabled=yes
+      state=stopped
+      # Note: Verify docker via SSH command line:
+      # systemctl status docker
+      # docker run hello-world
+      #
+      # More advanced verification:
+      # docker run -it ubuntu bash
+      # cat /etc/lsb-release
+      #
+      # To run docker as a normal user, add that user to the docker group:
+      # usermod -aG docker your_username
+
+
 # Set attributes of files
 # REF: http://docs.ansible.com/ansible/file_module.html
 #######################################################
