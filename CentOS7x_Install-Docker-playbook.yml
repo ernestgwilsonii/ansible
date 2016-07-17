@@ -48,40 +48,6 @@
     raw: /usr/bin/curl -fsSL https://experimental.docker.com/ | sh
 
 
-# Enable but do NOT yet start docker
-# REF: http://docs.ansible.com/ansible/service_module.html
-##########################################################
-
-  - name: Enable but do NOT yet start the docker service
-    service:
-      name=docker
-      enabled=yes
-      state=stopped
-      # Note: Verify docker via SSH command line:
-      # systemctl status docker
-      # docker run hello-world
-      #
-      # More advanced verification:
-      # docker run -it ubuntu bash
-      # cat /etc/lsb-release
-      #
-      # To run docker as a normal user, add that user to the docker group:
-      # usermod -aG docker your_username
-
-
-# Tweak settings in INI files
-# REF: http://docs.ansible.com/ansible/ini_file_module.html1
-############################################################
-
-# Set values in /etc/systemd/system/multi-user.target.wants/docker.service
-  - name: Specify ExecStart value --bip=172.19.0.1/16 under Service section in /etc/systemd/system/multi-user.target.wants/docker.service
-    ini_file:
-      dest=/etc/systemd/system/multi-user.target.wants/docker.service
-      section=Service
-      option=ExecStart
-      value='/usr/bin/dockerd -H fd:// --bip=172.19.0.1/16'
-
-
 # Restart firewalld to make sure it is running OK before changing any rules
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
