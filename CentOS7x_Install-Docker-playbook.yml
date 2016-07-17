@@ -48,11 +48,11 @@
     raw: /usr/bin/curl -fsSL https://experimental.docker.com/ | sh
 
 
-# Enable and but do NOT yet start docker
+# Enable but do NOT yet start docker
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
 
-  - name: Enable and but do NOT yet start the docker service
+  - name: Enable but do NOT yet start the docker service
     service:
       name=docker
       enabled=yes
