@@ -69,49 +69,17 @@
       # usermod -aG docker your_username
 
 
-# Set attributes of files
-# REF: http://docs.ansible.com/ansible/file_module.html
-#######################################################
-
-  - name: Create a blank Docker environment file if it does not exist - touch /etc/sysconfig/docker
-    file:
-      path=/etc/sysconfig/docker
-      state=touch
-      mode=0644
-
-
-# Update various configuration files
-# REF: http://docs.ansible.com/ansible/lineinfile_module.html
-#############################################################
-
-# Populate values in /etc/sysconfig/docker
-  - name: Populate values in /etc/sysconfig/docker with - OPTIONS=--bip=172.19.0.1/16
-    lineinfile:
-      dest=/etc/sysconfig/docker
-      state=present
-      line='OPTIONS=--bip=172.19.0.1/16'
-      # Note: The default bridge interface for Docker is 172.17.0.1/16
-
-
 # Tweak settings in INI files
 # REF: http://docs.ansible.com/ansible/ini_file_module.html1
 ############################################################
 
 # Set values in /etc/systemd/system/multi-user.target.wants/docker.service
-  - name: Specify ExecStart value under Service section in /etc/systemd/system/multi-user.target.wants/docker.service
+  - name: Specify ExecStart value --bip=172.19.0.1/16 under Service section in /etc/systemd/system/multi-user.target.wants/docker.service
     ini_file:
       dest=/etc/systemd/system/multi-user.target.wants/docker.service
       section=Service
       option=ExecStart
-      value='/usr/bin/dockerd -H fd:// --bip=172.19.0.1/16 $OPTIONS'
-
-# Set values in /etc/systemd/system/multi-user.target.wants/docker.service
-  - name: Specify EnvironmentFile value under Service section in /etc/systemd/system/multi-user.target.wants/docker.service
-    ini_file:
-      dest=/etc/systemd/system/multi-user.target.wants/docker.service
-      section=Service
-      option=EnvironmentFile
-      value='/etc/sysconfig/docker'
+      value='/usr/bin/dockerd -H fd:// --bip=172.19.0.1/16'
 
 
 # Restart firewalld to make sure it is running OK before changing any rules
