@@ -103,7 +103,7 @@
       dest=/etc/systemd/system/multi-user.target.wants/docker.service
       section=Service
       option=ExecStart
-      value='2/usr/bin/dockerd -H fd:// $OPTIONS'
+      value='/usr/bin/dockerd -H fd:// $OPTIONS'
 
 # Set values in /etc/systemd/system/multi-user.target.wants/docker.service
   - name: Specify EnvironmentFile value under Service section in /etc/systemd/system/multi-user.target.wants/docker.service
