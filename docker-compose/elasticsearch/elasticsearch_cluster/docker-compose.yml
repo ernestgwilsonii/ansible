@@ -1,0 +1,28 @@
+elasticsearch_master:
+    image: elasticsearch:latest
+    command: "elasticsearch -Des.cluster.name=elasticsearch -Des.node.master=true -Des.node.data=false"
+    environment:
+       - ES_HEAP_SIZE=512m
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+
+elasticsearch1:
+    image: elasticsearch:latest
+    command: "elasticsearch -Des.cluster.name=elasticsearch -Des.discovery.zen.ping.unicast.hosts=elasticsearch_master"
+    links:
+      - elasticsearch_master
+    volumes:
+      - "/usr/share/elasticsearch/data"
+    environment:
+       - ES_HEAP_SIZE=512m
+
+elasticsearch2:
+    image: elasticsearch:latest
+    command: "elasticsearch -Des.cluster.name=elasticsearch -Des.discovery.zen.ping.unicast.hosts=elasticsearch_master"
+    links:
+      - elasticsearch_master
+    volumes:
+      - "/usr/share/elasticsearch/data"
+    environment:
+       - ES_HEAP_SIZE=512m

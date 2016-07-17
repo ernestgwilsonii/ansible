@@ -1,0 +1,10 @@
+version: '2'
+services:
+  haproxy:
+    build: .
+    ports:
+     - "80:80"
+     - "443:443"
+     - "9000:9000"
+    container_name: haproxy
+

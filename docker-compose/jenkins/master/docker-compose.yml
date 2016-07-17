@@ -1,0 +1,11 @@
+version: '2'
+services:
+  jenkins:
+    build: .
+    ports:
+     - "2222:2222"
+     - "8080:8080"
+     - "50000:50000"
+    volumes:
+     - "/opt/davfs2/Docker/jenkins/master:/tmp/jenkins"
+    container_name: jenkins

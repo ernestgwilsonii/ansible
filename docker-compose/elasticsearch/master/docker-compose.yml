@@ -1,0 +1,16 @@
+version: '2'
+services:
+  elasticsearch:
+    build: .  
+    container_name: elasticsearch_master
+    ports:
+    - "9200:9200"
+    - "9300:9300"
+    - "54328:54328"
+    expose:
+    - "9200"
+    - "9300"
+    - "54328"
+    network_mode: "bridge"
+    external_links:
+    - elasticsearch_member1
