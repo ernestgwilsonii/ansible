@@ -1,0 +1,32 @@
+---
+
+################################################################################
+#  description: Ensure a specific server group exists in Control in CenturyLink Cloud
+#  usage: ansible-playbook CLC_Ensure-Control-Group-Exists-playbook.yml --extra-vars 'Group=YourGroupNameGoesHere DC=YourDCGoesHere'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Ensure a specific server group exists in Control
+  hosts: localhost
+  gather_facts: False
+  connection: local
+  tasks:
+
+
+# clc_group - Create/delete Server Groups at Centurylink Cloud
+# REF: http://docs.ansible.com/ansible/clc_group_module.html
+############################################################
+
+    - name: Ensure "{{ Group }}" group exists in "{{ DC }}" in Control 
+      clc_group:
+        location: "{{ DC }}"
+        name: "{{ Group }}"
+        description: "{{ Group }}" in "{{ DC }}" 
+        state: present
+      register: clc
