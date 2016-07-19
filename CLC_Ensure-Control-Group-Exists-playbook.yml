@@ -27,6 +27,6 @@
       clc_group:
         location: "{{ DC }}"
         name: "{{ Group }}"
-        description: "{{ Group }}" in "{{ DC }}" 
+        description: "{{ Group }}"
         state: present
       register: clc
