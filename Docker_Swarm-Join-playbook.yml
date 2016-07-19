@@ -2,7 +2,7 @@
 
 ################################################################################
 #  description: Joins a Docker Swarm via raw command - requires Docker 1.12
-#  usage: ansible-playbook Docker_Swarm-Join-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  usage: ansible-playbook Docker_Swarm-Join-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere Secret=ssss Hash=hhhh IP=SwarmManagerIP'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
@@ -19,4 +19,4 @@
   tasks:
 
   - name: Join the swarm!
-    raw: docker swarm join --secret 9te9lbw7wnruafjrjfovy1uh2 --ca-hash sha256:da6e36cb3aff7aa4f08046eb7cf34c9c816ce66627302d55edf41f6157746bef 10.127.215.31:2377
+    raw: docker swarm join --secret {{Secret}} --ca-hash {{Hash}} {{IP}}:2377
