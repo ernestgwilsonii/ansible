@@ -41,6 +41,11 @@
       name=tigervnc-server
       state=latest
 
+  - name: Install the Microsoft Visual Studio Code via remote rpm
+    yum:
+      name=https://az764295.vo.msecnd.net/stable/e6b4afa53e9c0f54edef1673de9001e9f0f547ae/code-1.3.1-1468329898.el7.x86_64.rpm
+      state=present
+
 
 # Restart firewalld to make sure it is running OK before changing any rules
 # REF: http://docs.ansible.com/ansible/service_module.html
