@@ -1,0 +1,17 @@
+version: '2'
+services:
+  centos7-systemd:
+    build: .
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /run
+      - /run/lock
+    security_opt:
+      - seccomp=unconfined
+    stop_signal: SIGRTMIN+3
+    ports:
+    - "80:80"
+    container_name: centos7-systemd
+    command: /usr/sbin/init
+
