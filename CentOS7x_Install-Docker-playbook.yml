@@ -47,6 +47,11 @@
   - name: Install Docker v1.12RC4 via raw curl command temporarily
     raw: /usr/bin/curl -fsSL https://experimental.docker.com/ | sh
 
+  - name: Install python-pip
+    yum:
+      name=python-pip
+      state=latest
+
 
 # Restart firewalld to make sure it is running OK before changing any rules
 # REF: http://docs.ansible.com/ansible/service_module.html
@@ -180,3 +185,20 @@
       url=https://github.com/docker/compose/releases/download/1.7.1/docker-compose-Linux-x86_64
       dest=/usr/local/bin/docker-compose
       mode=777
+
+
+# Execute command(s)
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: Use pip to update and ensure pip is at the latest version
+    command: /usr/bin/pip install --upgrade pip
+
+
+# Use pip to install and manage Python dependencies
+# REF: http://docs.ansible.com/ansible/pip_module.html
+######################################################
+
+  - name: Use pip to install docker-cloud
+    pip:
+      name=docker-cloud

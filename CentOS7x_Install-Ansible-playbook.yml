@@ -134,6 +134,18 @@
     pip:
       name=httplib2
 
+  - name: Use pip to install requests
+    pip:
+      name=requests
+
+  - name: Use pip to install simplejson
+    pip:
+      name=simplejson
+
+  - name: Use pip to install docker-cloud
+    pip:
+      name=docker-cloud
+
   - name: Use pip to install docker-py
     pip:
       name=docker-py
