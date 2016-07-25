@@ -1,0 +1,16 @@
+version: '2'
+services:
+  centos7-systemd-sshd:
+    build: .
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /run
+      - /run/lock
+    security_opt:
+      - seccomp=unconfined
+    stop_signal: SIGRTMIN+3
+    ports:
+    - "2222:22"
+    container_name: centos7-systemd-sshd
+    command: /usr/sbin/init
