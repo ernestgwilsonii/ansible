@@ -1,5 +1,6 @@
 input { stdin { } }
 output {
-  stdout { codec => rubydebug }
-  elasticsearch { embeded => true }
+  file {
+    path => "/var/log/logstash/logstash.stdout"
+  }
 }

@@ -119,7 +119,8 @@
       # Note: Verify Logstash via SSH command line:
       # systemctl status logstash
       # service logstash status
-      # cat /var/log/logstash/logstash.err
       # cat /var/log/logstash/logstash.log
+      # cat /etc/logstash/conf.d/logstash.conf
+      # cat /var/log/logstash/logstash.err
       # cat /var/log/logstash/logstash.stdout
       # cat /etc/logrotate.d/logstash
