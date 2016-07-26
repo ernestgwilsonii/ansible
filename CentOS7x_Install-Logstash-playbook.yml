@@ -116,5 +116,10 @@
       name=logstash
       enabled=yes
       state=restarted
-      # Note: Verify logstash via SSH command line:
+      # Note: Verify Logstash via SSH command line:
       # systemctl status logstash
+      # service logstash status
+      # cat /var/log/logstash/logstash.err
+      # cat /var/log/logstash/logstash.log
+      # cat /var/log/logstash/logstash.stdout
+      # cat /etc/logrotate.d/logstash
