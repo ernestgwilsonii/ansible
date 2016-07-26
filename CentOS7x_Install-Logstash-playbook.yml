@@ -107,7 +107,7 @@
       mode=0644
 
 
-# Enable and start docker
+# Enable and start Logstash
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
 
