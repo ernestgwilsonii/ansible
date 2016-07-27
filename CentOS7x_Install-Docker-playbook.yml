@@ -163,6 +163,17 @@
     service:
       name=docker
       enabled=yes
+
+  - name: Remove Requires=docker.socket from /etc/systemd/system/multi-user.target.wants/docker.service
+    lineinfile:
+      dest=/etc/systemd/system/multi-user.target.wants/docker.service
+      state=absent
+      line='Requires=docker.socket'
+
+  - name: Enable and start the docker service
+    service:
+      name=docker
+      enabled=yes
       state=restarted
       # Note: Verify docker via SSH command line:
       # systemctl status docker

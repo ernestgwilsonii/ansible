@@ -71,6 +71,11 @@
   - name: Install openvpn
     yum:
       name=openvpn
+      state=
+  
+    - name: Install net-snmp-utils
+    yum:
+      name=net-snmp-utils
       state=latest
 
   - name: Install tcpdump
