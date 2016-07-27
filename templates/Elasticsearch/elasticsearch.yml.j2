@@ -1,4 +1,4 @@
-cluster.name: graylog2
+cluster.name: elasticsearch
 discovery.zen.ping.multicast.enabled: true
 discovery.zen.ping.unicast.hosts: ["{{ansible_ssh_host}}:9300"]
 network.host: {{ansible_ssh_host}}
