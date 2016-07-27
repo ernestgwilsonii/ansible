@@ -50,7 +50,7 @@
 #    yum:
 #      name=docker-engine
 #      state=latest
-  - name: Install Docker v1.12RC4 via raw curl command temporarily
+  - name: Install Docker v1.12RC5 via raw curl command temporarily
     raw: /usr/bin/curl -fsSL https://experimental.docker.com/ | sh
 
   - name: Install python-pip
