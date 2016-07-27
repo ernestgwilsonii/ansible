@@ -140,4 +140,5 @@
       # Note: Command line verification:
       # systemctl status graylog-server.service
       # cat /var/log/graylog-server/server.log
+      # Maybe: cat /var/log/elasticsearch/graylog2.log
       # Login to the Graylog web interface as user admin http://ServerIPHere:9000/
