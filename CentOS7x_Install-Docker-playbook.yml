@@ -170,6 +170,9 @@
       state=absent
       line='Requires=docker.socket'
 
+  - name: systemctl daemon-reload
+    command: /usr/bin/systemctl daemon-reload
+
   - name: Enable and start the docker service
     service:
       name=docker
