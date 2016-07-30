@@ -45,12 +45,11 @@
       state=latest
       # brctl show
 
+# https://github.com/docker/docker/releases
   - name: Install docker-engine
     yum:
       name=docker-engine
       state=latest
-  - name: Install Docker v1.12RC5 via raw curl command temporarily
-    raw: /usr/bin/curl -fsSL https://experimental.docker.com/ | sh
 
   - name: Install python-pip
     yum:

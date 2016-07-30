@@ -50,6 +50,7 @@
 #    yum:
 #      name=docker-engine
 #      state=latest
+# https://github.com/docker/docker/releases
   - name: Install Docker v1.12RC5 via raw curl command temporarily
     raw: /usr/bin/curl -fsSL https://experimental.docker.com/ | sh
 
