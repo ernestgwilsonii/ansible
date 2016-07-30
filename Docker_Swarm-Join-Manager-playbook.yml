@@ -1,0 +1,22 @@
+---
+
+################################################################################
+#  description: Joins a Manager to an existing Docker Swarm via raw command - requires Docker 1.12
+#  usage: ansible-playbook Docker_Swarm-Join-Manager-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere Token=token Socket=ip:port'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Docker Swarm Join
+  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+  - name: Joining a manager to the swarm!
+    raw: "docker swarm join --token {{Token}} {{Socket}}"
