@@ -45,10 +45,11 @@
       state=latest
       # brctl show
 
-  - name: Install docker-engine
-    yum:
-      name=docker-engine
-      state=latest
+# Commented out the official install so we can try the latest RC beta
+#  - name: Install docker-engine
+#    yum:
+#      name=docker-engine
+#      state=latest
   - name: Install Docker v1.12RC5 via raw curl command temporarily
     raw: /usr/bin/curl -fsSL https://experimental.docker.com/ | sh
 
@@ -157,6 +158,20 @@
 # Enable and start docker
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
+
+  - name: Enable and start the docker service
+    service:
+      name=docker
+      enabled=yes
+
+  - name: Remove Requires=docker.socket from /etc/systemd/system/multi-user.target.wants/docker.service
+    lineinfile:
+      dest=/etc/systemd/system/multi-user.target.wants/docker.service
+      state=absent
+      line='Requires=docker.socket'
+
+  - name: systemctl daemon-reload
+    command: /usr/bin/systemctl daemon-reload
 
   - name: Enable and start the docker service
     service:
