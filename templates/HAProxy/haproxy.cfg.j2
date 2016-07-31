@@ -1,0 +1,54 @@
+global
+    daemon
+    log         127.0.0.1 local2    #Log configuration
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000                
+    user        haproxy             #Haproxy running under user and group "haproxy"
+    group       haproxy
+    # turn on stats unix socket
+    stats       socket              /var/lib/haproxy/stats
+    stats       timeout             30s
+
+defaults
+    mode        http
+    log         global
+    option      httplog
+    option      dontlognull
+    option      http-server-close
+    option      forwardfor          except 127.0.0.0/8
+    option      redispatch
+    retries     3
+    timeout     http-request        10s
+    timeout     queue               1m
+    timeout     connect             10s
+    timeout     client              1m
+    timeout     server              1m
+    timeout     http-keep-alive     10s
+    timeout     check               10s
+    maxconn     3000
+
+listen haproxy3-monitoring *:8080               # Haproxy Monitoring run on port 8080
+    mode http
+    option forwardfor
+    option httpclose
+    stats enable
+    stats show-legends
+    stats refresh 5s
+    stats uri /stats                            # URL for HAProxy monitoring
+    stats realm Haproxy\ Statistics
+    stats auth howtoforge:howtoforge            # User and Password for login to the monitoring dashboard
+    stats admin if TRUE
+    default_backend app-main                    # This is optionally for monitoring backend
+
+frontend http-in
+    bind *:80
+    default_backend servers
+    option forwardfor
+
+backend servers
+    balance roundrobin
+    option httpchk HEAD / HTTP/1.1\r\nHost:\ localhost    # Check the server application is up and healty - 200 status code  
+    server ws01 172.217.1.68:80 check
+    server ws02 98.139.183.24:80 check
+    server ws03 204.79.197.200:80 check

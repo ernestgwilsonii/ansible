@@ -1,0 +1,88 @@
+---
+
+################################################################################
+#  description: Installs HAProxy on CentOS7x
+#  usage: ansible-playbook CentOS7x_Install-HAProxy-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Install HAProxy on CentOS7x
+  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# Install yum packages
+# REF: http://docs.ansible.com/ansible/yum_module.html
+######################################################
+
+  - name: Install haproxy
+    yum:
+      name=haproxy
+      state=latest
+
+
+# Restart firewalld to make sure it is running OK before changing any rules
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Ensure the firewalld service is enabled and re-started before changing any rules
+    service:
+      name=firewalld
+      enabled=yes
+      state=restarted
+
+
+# Update the firewalld configuration
+# REF: http://docs.ansible.com/ansible/firewalld_module.html
+############################################################
+
+  - name: Update firewall to allow port TCP 80 for incoming HAProxy connections
+    firewalld:
+      port=80/tcp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+  - name: Update firewall to allow port TCP 8080 for incoming HAProxy stats connections
+    firewalld:
+      port=8080/tcp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+
+# Use the template module to populate files with data
+# REF: http://docs.ansible.com/ansible/template_module.html
+###########################################################
+
+# /usr/local/etc/haproxy/haproxy.cfg
+  - name: Fill in the variables and copy templates/HAProxy/haproxy.cfg.j2 to remote /usr/local/etc/haproxy/haproxy.cfg
+    template:
+      src=templates/HAProxy/haproxy.cfg.j2
+      dest=/usr/local/etc/haproxy/haproxy.cfg
+      owner=root
+      group=root
+      mode=0644
+
+
+# Enable and start docker
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Enable and start the haproxy service
+    service:
+      name=haproxy
+      enabled=yes
+      state=restarted
+      # Note: Verify docker via SSH command line:
+      # systemctl status haproxy
