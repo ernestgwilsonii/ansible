@@ -29,7 +29,7 @@
       name: nginx
       description: NGINX Repository
       file: nginx
-      baseurl: http://nginx.org/packages/centos/7/$basearch/
+      baseurl: http://nginx.org/packages/mainline/centos/7/$basearch/
       enabled: yes
       gpgcheck: no
 
@@ -108,6 +108,17 @@
       zone=public
 
 
+# Use the file module to delete unwanted files
+# REF: http://docs.ansible.com/ansible/file_module.html
+#######################################################
+
+# /etc/nginx/conf.d/default.conf
+  - name: rm /etc/nginx/conf.d/default.conf
+    file:
+      path: /etc/nginx/conf.d/default.conf
+      state: absent
+
+
 # Use the template module to populate files with data
 # REF: http://docs.ansible.com/ansible/template_module.html
 ###########################################################
@@ -133,3 +144,6 @@
       state=restarted
       # Note: Verify nginx via SSH command line:
       # systemctl status nginx
+      # journalctl -xe
+      # cat /etc/systemd/system/multi-user.target.wants/nginx.service
+      # /usr/sbin/nginx -t -c /etc/nginx/nginx.conf
