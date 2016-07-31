@@ -67,7 +67,7 @@
       mode=0644
 
 
-# Enable and start docker
+# Enable and start ngonx
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
 
@@ -76,5 +76,5 @@
       name=haproxy
       enabled=yes
       state=restarted
-      # Note: Verify docker via SSH command line:
+      # Note: Verify nginx via SSH command line:
       # systemctl status haproxy
