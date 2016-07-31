@@ -153,4 +153,5 @@
       # cat /etc/systemd/system/multi-user.target.wants/nginx.service
       # /usr/sbin/nginx -t -c /etc/nginx/nginx.conf
       # lsof -P | grep IPv4
+      # lsof -P | grep IPv4 | sort -t: -k2,2n
       # https://www.nginx.com/resources/admin-guide/tcp-load-balancing/
