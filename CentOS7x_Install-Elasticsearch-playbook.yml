@@ -113,3 +113,5 @@
       # curl 'IPAddressHere:9200/_cat/nodes?v' # Get nodes
       # curl 'IPAddressHere:9200/_cat/indices?v' # Get indices
       # curl -XGET 'http://IPAddressHere:9200/_cluster/health?pretty=true'
+      # curl -XGET 'http://IPAddressHere:9200/_cluster/state?pretty'
+      # curl -XGET http://IPAddressHere:9200/_cluster/settings?pretty
