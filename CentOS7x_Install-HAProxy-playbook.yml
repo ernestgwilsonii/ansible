@@ -57,11 +57,11 @@
 # REF: http://docs.ansible.com/ansible/template_module.html
 ###########################################################
 
-# /usr/local/etc/haproxy/haproxy.cfg
-  - name: Fill in the variables and copy templates/HAProxy/haproxy.cfg.j2 to remote /usr/local/etc/haproxy/haproxy.cfg
+# /etc/haproxy/haproxy.cfg
+  - name: Fill in the variables and copy templates/HAProxy/haproxy.cfg.j2 to remote /etc/haproxy/haproxy.cfg
     template:
       src=templates/HAProxy/haproxy.cfg.j2
-      dest=/usr/local/etc/haproxy/haproxy.cfg
+      dest=/etc/haproxy/haproxy.cfg
       owner=root
       group=root
       mode=0644
