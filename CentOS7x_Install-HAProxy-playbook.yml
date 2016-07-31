@@ -52,14 +52,6 @@
       state=enabled
       zone=public
 
-  - name: Update firewall to allow port TCP 8080 for incoming HAProxy stats connections
-    firewalld:
-      port=8080/tcp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
-
 
 # Use the template module to populate files with data
 # REF: http://docs.ansible.com/ansible/template_module.html
