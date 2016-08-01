@@ -1,0 +1,11 @@
+cluster.name: elasticsearch
+bootstrap.mlockall: true
+node.master: true
+node.data: false
+node.client: false
+discovery.zen.ping.unicast.hosts: ["elasticsearch-master-node1:9300","elasticsearch-master-node2:9300","elasticsearch-master-node3:9300"]
+discovery.zen.minimum_master_nodes: 2
+discovery.zen.ping.timeout: 30s
+discovery.zen.ping.multicast.enabled: true
+discovery.zen.ping.multicast.group: 224.2.2.4
+discovery.zen.ping.multicast.port: 54328
