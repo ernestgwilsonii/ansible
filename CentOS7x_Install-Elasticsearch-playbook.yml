@@ -76,6 +76,22 @@
       state=enabled
       zone=public
 
+  - name: Enable IPv4 Multicast for the default Elasticsearch group 224.2.2.4
+    firewalld:
+      rich_rule='rule family="ipv4" destination address="224.2.2.4" protocol value="ip" accept'
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+  - name: Update firewall to allow port UDP 54328 for incoming Elasticsearch multicast discovery connections
+    firewalld:
+      port=54328/udp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
 
 # Use the template module to populate files with data
 # REF: http://docs.ansible.com/ansible/template_module.html
