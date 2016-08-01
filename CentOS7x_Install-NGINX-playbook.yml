@@ -2,7 +2,7 @@
 
 ################################################################################
 #  description: Installs NGINX on CentOS7x
-#  usage: ansible-playbook CentOS7x_Install-NGINX-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  usage: ansible-playbook CentOS7x_Install-NGINX-playbook.yml --extra-vars 'HostOrGroup: YourServerOrGroupNameGoesHere'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
@@ -40,13 +40,13 @@
 
   - name: Install nginx
     yum:
-      name=nginx
-      state=latest
+      name: nginx
+      state: latest
 
   - name: Install lsof
     yum:
-      name=lsof
-      state=latest
+      name: lsof
+      state: latest
 
 
 # Restart firewalld to make sure it is running OK before changing any rules
@@ -55,9 +55,9 @@
 
   - name: Ensure the firewalld service is enabled and re-started before changing any rules
     service:
-      name=firewalld
-      enabled=yes
-      state=restarted
+      name: firewalld
+      enabled: yes
+      state: restarted
 
 
 # Update the firewalld configuration
@@ -66,51 +66,51 @@
 
   - name: Update firewall to allow port UDP 53 for incoming NGINX DNS connections
     firewalld:
-      port=53/udp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+      port: 53/udp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
   - name: Update firewall to allow port TCP 80 for incoming NGINX HTTP connections
     firewalld:
-      port=80/tcp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+      port: 80/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
   - name: Update firewall to allow port TCP 162 for incoming NGINX snmptrap connections
     firewalld:
-      port=162/udp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+      port: 162/udp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
   - name: Update firewall to allow port UDP 514 for incoming NGINX Syslog connections
     firewalld:
-      port=514/udp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+      port: 514/udp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
   - name: Update firewall to allow port TCP 514 for incoming NGINX Syslog connections
     firewalld:
-      port=514/tcp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+      port: 514/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
   - name: Update firewall to allow port TCP 5044 for incoming NGINX Beatsconnections
     firewalld:
-      port=5044/tcp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+      port: 5044/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
 
 # Use the file module to delete unwanted files
@@ -131,11 +131,11 @@
 # /etc/nginx/nginx.conf
   - name: Fill in the variables and copy templates/NGINX/nginx.conf.j2 to remote /etc/nginx/nginx.conf
     template:
-      src=templates/NGINX/nginx.conf.j2
-      dest=/etc/nginx/nginx.conf
-      owner=root
-      group=root
-      mode=0644
+      src: templates/NGINX/nginx.conf.j2
+      dest: /etc/nginx/nginx.conf
+      owner: root
+      group: root
+      mode: 0644
 
 
 # Enable and start nginx
@@ -144,9 +144,9 @@
 
   - name: Enable and start the nginx service
     service:
-      name=nginx
-      enabled=yes
-      state=restarted
+      name: nginx
+      enabled: yes
+      state: restarted
       # Note: Verify nginx via SSH command line:
       # systemctl status nginx
       # journalctl -xe
