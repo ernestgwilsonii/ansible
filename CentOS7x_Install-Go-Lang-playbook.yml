@@ -37,7 +37,7 @@
   - name: Install Go
     unarchive:
       src: https://storage.googleapis.com/golang/go1.6.3.linux-amd64.tar.gz
-      dest: /usr/local/go
+      dest: /usr/local
       copy: no
 
 
