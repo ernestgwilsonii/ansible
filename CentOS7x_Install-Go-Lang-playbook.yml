@@ -19,6 +19,17 @@
   tasks:
 
 
+# file - Sets attributes of files and directories
+# http://docs.ansible.com/ansible/file_module.html
+##################################################
+
+  - name: Create directory /usr/local/go
+    file:
+      path: /usr/local/go
+      state: directory
+      mode: 0755
+
+
 # unarchive - Unpacks an archive after (optionally) copying it from the local machine
 # REF: http://docs.ansible.com/ansible/unarchive_module.html
 ############################################################
@@ -27,7 +38,6 @@
     unarchive:
       src: https://storage.googleapis.com/golang/go1.6.3.linux-amd64.tar.gz
       dest: /usr/local/go
-      creates: yes
 
 
 # Update various configuration files
