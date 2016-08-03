@@ -38,6 +38,7 @@
     unarchive:
       src: https://storage.googleapis.com/golang/go1.6.3.linux-amd64.tar.gz
       dest: /usr/local/go
+      copy: no
 
 
 # Update various configuration files
@@ -49,4 +50,3 @@
       dest: /root/.bashrc
       state: present
       line: 'export PATH=$PATH:/usr/local/go/bin'
-      copy: no
