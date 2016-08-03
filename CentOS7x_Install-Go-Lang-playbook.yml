@@ -23,10 +23,11 @@
 # REF: http://docs.ansible.com/ansible/unarchive_module.html
 ############################################################
 
-  - name: Install the Java JRE runtime java
+  - name: Install Go
     unarchive:
       src: https://storage.googleapis.com/golang/go1.6.3.linux-amd64.tar.gz
       dest: /usr/local/go
+      creates: yes
 
 
 # Update various configuration files
