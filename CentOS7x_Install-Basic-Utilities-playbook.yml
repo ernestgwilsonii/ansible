@@ -73,7 +73,7 @@
       name=openvpn
       state=
   
-    - name: Install net-snmp-utils
+  - name: Install net-snmp-utils
     yum:
       name=net-snmp-utils
       state=latest
