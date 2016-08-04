@@ -25,7 +25,7 @@
 
   - name: Install Server with GUI group packages
     yum:
-      name="Development Tools"
+      name="@Development Tools"
       state=present
       # Note: RHEL7x has two (2) types of group lists "package groups" and "environment groups"
       # Use: yum group list
