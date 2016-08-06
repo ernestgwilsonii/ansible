@@ -38,9 +38,9 @@
     template:
       src=templates/Redis/redis.conf.j2
       dest=/etc/redis.conf
-      owner=root
+      owner=redis
       group=root
-      mode=0644
+      mode=0600
 
 
 # Restart firewalld to make sure it is running OK before changing any rules
