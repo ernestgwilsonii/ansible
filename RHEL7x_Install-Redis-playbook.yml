@@ -2,7 +2,7 @@
 
 ################################################################################
 #  description: Installs Redis on RHEL7x
-#  usage: ansible-playbook RHEL7x_Install-Redis-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  usage: ansible-playbook RHEL7x_Install-Redis-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere RedisPassword=DesiredPasswordHere'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
