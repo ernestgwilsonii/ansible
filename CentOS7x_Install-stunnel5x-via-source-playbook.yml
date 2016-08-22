@@ -2,7 +2,7 @@
 
 ################################################################################
 #  description: Installs stunnel 5x via source on CentOS7x
-#  usage: ansible-playbook CentOS7x_Install-Python3x-via-Source-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  usage: ansible-playbook CentOS7x_Install-stunnel5x-via-source-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
@@ -23,7 +23,7 @@
 # REF: http://docs.ansible.com/ansible/yum_module.html
 ######################################################
 
-  - name: Install Server with GUI group packages
+  - name: Install Development Tools group packages
     yum:
       name="@Development Tools"
       state=present
