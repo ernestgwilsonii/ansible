@@ -91,6 +91,24 @@
       group: root
       mode: 0644
 
+# /usr/local/etc/stunnel/conf.d/redis-server.conf
+  - name: Fill in the variables and copy templates/stunnel/redis-server.conf.j2 to remote /usr/local/etc/stunnel/conf.d/redis-server.conf
+    template:
+      src: templates/stunnel/redis-server.conf.j2
+      dest: /usr/local/etc/stunnel/conf.d/redis-server.conf
+      owner: root
+      group: root
+      mode: 0644
+
+# /usr/local/etc/stunnel/redis-private.pem
+  - name: Fill in the variables and copy templates/stunnel/redis-private.pem.j2 to remote /usr/local/etc/stunnel/redis-private.pem
+    template:
+      src: templates/stunnel/redis-private.pem.j2
+      dest: /usr/local/etc/stunnel/redis-private.pem
+      owner: root
+      group: root
+      mode: 0640
+
 
 # Enable but do not yet start stunnel
 # REF: http://docs.ansible.com/ansible/service_module.html
@@ -100,6 +118,6 @@
     service:
       name: stunnel.service
       enabled: yes
-      state: stopped
+      state: restarted
       # Note: Verify via SSH command line:
       # systemctl status stunnel.service
