@@ -1,0 +1,53 @@
+---
+
+################################################################################
+#  description: Installs stunnel 5x via source on CentOS7x
+#  usage: ansible-playbook CentOS7x_Install-Python3x-via-Source-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Install stunnel 5x via source on CentOS7x
+  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# Install yum packages
+# REF: http://docs.ansible.com/ansible/yum_module.html
+######################################################
+
+  - name: Install Server with GUI group packages
+    yum:
+      name="@Development Tools"
+      state=present
+      # Note: Two (2) types of group lists exist "package groups" and "environment groups"
+      # Use: yum group list
+      # REF: http://docs.ansible.com/ansible/yum_module.html#notes
+
+
+# unarchive - Unpacks an archive after (optionally) copying it from the local machine
+# REF: http://docs.ansible.com/ansible/unarchive_module.html
+############################################################
+
+  - name: Download and extract the source code into /tmp/stunnel-5.x
+    unarchive:
+      src: https://www.stunnel.org/downloads/stunnel-5.35.tar.gz
+      dest: /tmp
+      copy: no
+
+
+# Execute raw command(s)
+# REF: http://docs.ansible.com/ansible/raw_module.html
+##########################################################
+
+  #- name: Compile and install Python3x to /usr/local/bin/python3.5
+    #raw: cd /tmp/stunnel-5.35; ./configure --prefix=/usr/local && make altinstall
+    # SSH comman line verification:
+    # /usr/local/bin/python3.5 -V
