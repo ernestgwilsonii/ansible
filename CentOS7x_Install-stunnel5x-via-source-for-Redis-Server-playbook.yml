@@ -57,7 +57,7 @@
     # /usr/local/bin/stunnel -version
 
 
-# Use the file module to create a directory
+# Use the file module
 # REF: http://docs.ansible.com/ansible/file_module.html
 #######################################################
 
@@ -67,6 +67,12 @@
       path: /usr/local/etc/stunnel/conf.d
       state: directory
       mode: 0644
+
+# /usr/local/etc/stunnel/stunnel.conf-sample
+  - name: rm /usr/local/etc/stunnel/stunnel.conf-sample
+    file:
+      path: /usr/local/etc/stunnel/stunnel.conf-sample
+      state: absent
 
 
 # Use the template module to populate files with data
