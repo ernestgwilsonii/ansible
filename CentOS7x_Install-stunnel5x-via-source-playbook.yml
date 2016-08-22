@@ -31,6 +31,10 @@
       # Use: yum group list
       # REF: http://docs.ansible.com/ansible/yum_module.html#notes
 
+  - name: Install OpenSSL Development package needed to compile stunnel
+    yum:
+      name=openssl-devel.x86_64
+      state=latest
 
 # unarchive - Unpacks an archive after (optionally) copying it from the local machine
 # REF: http://docs.ansible.com/ansible/unarchive_module.html
@@ -48,6 +52,54 @@
 ##########################################################
 
   #- name: Compile and install Python3x to /usr/local/bin/python3.5
-    #raw: cd /tmp/stunnel-5.35; ./configure --prefix=/usr/local && make altinstall
+    raw: cd /tmp/stunnel-5.35; ./configure && make install
     # SSH comman line verification:
-    # /usr/local/bin/python3.5 -V
+    # /usr/local/bin/stunnel -version
+
+
+# Use the file module to create a directory
+# REF: http://docs.ansible.com/ansible/file_module.html
+#######################################################
+
+# /usr/local/etc/stunnel/conf.d
+  - name: mkdir /usr/local/etc/stunnel/conf.d
+    file:
+      path: /usr/local/etc/stunnel/conf.d
+      state: directory
+      mode: 0644
+
+
+# Use the template module to populate files with data
+# REF: http://docs.ansible.com/ansible/template_module.html
+###########################################################
+
+# /etc/systemd/system/stunnel.service
+  - name: Fill in the variables and copy templates/stunnel/stunnel.service.j2 to remote /etc/systemd/system/stunnel.service
+    template:
+      src: templates/stunnel/stunnel.service.j2
+      dest: /etc/systemd/system/stunnel.service
+      owner: root
+      group: root
+      mode: 0644
+
+# /usr/local/etc/stunnel/stunnel.conf
+  - name: Fill in the variables and copy templates/stunnel/stunnel.conf.j2 to remote /usr/local/etc/stunnel/stunnel.conf
+    template:
+      src: templates/stunnel/stunnel.conf.j2
+      dest: /usr/local/etc/stunnel/stunnel.conf
+      owner: root
+      group: root
+      mode: 0644
+
+
+# Enable but do not yet start stunnel
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Enable but do not yet start stunnel
+    service:
+      name: stunnel.service
+      enabled: yes
+      state: stopped
+      # Note: Verify via SSH command line:
+      # systemctl status stunnel.service

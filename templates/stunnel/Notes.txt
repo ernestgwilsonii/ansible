@@ -1,0 +1,43 @@
+################################################################################
+# Note 1: redis-private.pem #
+#############################
+# REF: https://redislabs.com/blog/using-stunnel-to-secure-redis
+# Manual PEM key generation steps if needed to re-key:
+mkdir -p /usr/local/etc/stunnel/
+openssl genrsa -out /usr/local/etc/stunnel/key.pem 4096
+openssl req -new -x509 -key /usr/local/etc/stunnel/key.pem -out /usr/local/etc/stunnel/cert.pem -days 3650
+
+# Now combine these into one PEM "cert" file
+cat /usr/local/etc/stunnel/key.pem /usr/local/etc/stunnel/cert.pem > /usr/local/etc/stunnel/redis-private.pem
+
+chmod 640 /usr/local/etc/stunnel/key.pem /usr/local/etc/stunnel/cert.pem /usr/local/etc/stunnel/redis-private.pem
+# redis-private.pem will need to be copied to all clients and servers that participate
+
+################################################################################
+# Note 2: psk.txt #
+###################
+# REF: https://www.stunnel.org/auth.html
+# PSK (Pre-Shared Key). It provides both client and server authentication. PSK is also the fastest TLS authentication.
+# PSK authentication requires stunnel version 5.09 or higher.
+
+# Server Configuration
+[PSK server]
+accept = <server_port>
+connect = <dst_port>
+ciphers = PSK
+PSKsecrets = psk.txt
+
+# The psk.txt file contains one line for each client:
+test1:oaP4EishaeSaishei6rio6xeeph3az
+test2:yah5uS4aijooxilier8iaphuwah1Lo
+
+# Client Configuration
+[PSK client 1]
+client = yes
+accept = 127.0.0.1:<src_port>
+connect = <server_host>:<server_port>
+PSKsecrets = psk1.txt
+
+# The psk1.txt file only needs a single line:
+test1:oaP4EishaeSaishei6rio6xeeph3az
+################################################################################

@@ -1,0 +1,25 @@
+; **************************************************************************
+; * Global options                                                         *
+; **************************************************************************
+
+; It is recommended to drop root privileges if stunnel is started by root
+setuid = nobody
+setgid = nobody
+
+; If you require a PID file:
+;pid = /var/run/stunnel.pid
+
+; Note: Logging goes to Syslog by default: tail -f /var/log/messages
+;foreground = yes
+;debug = info
+;output = /var/log/stunnel.log
+
+; These options provide additional security at some performance degradation
+options = SINGLE_ECDH_USE
+options = SINGLE_DH_USE
+
+; **************************************************************************
+; * Include all configuration file fragments from the specified folder     *
+; **************************************************************************
+
+include = /usr/local/etc/stunnel/conf.d

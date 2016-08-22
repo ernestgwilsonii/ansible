@@ -1,0 +1,11 @@
+[redisUS1]
+client = yes
+cert = /usr/local/etc/stunnel/redis-private.pem
+accept = 127.0.0.1:6379
+connect = 10.127.215.21:6379
+
+[redisUS2]
+client = yes
+cert = /usr/local/etc/stunnel/redis-private.pem
+accept = 127.0.0.1:6380
+connect = 10.127.215.22:6379

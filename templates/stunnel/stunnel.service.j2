@@ -1,0 +1,12 @@
+[Unit]
+Description=SSL tunnel for network daemons
+After=syslog.target
+
+[Service]
+ExecStart=/usr/local/bin/stunnel /usr/local/etc/stunnel/stunnel.conf
+ExecStop=kill -9 $(pgrep stunnel)
+ExecStatus=pgrep stunnel
+Type=forking
+
+[Install]
+WantedBy=multi-user.target
