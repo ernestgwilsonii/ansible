@@ -104,7 +104,7 @@
       state: enabled
       zone: public
 
-  - name: Update firewall to allow port TCP 5044 for incoming NGINX Beatsconnections
+  - name: Update firewall to allow port TCP 5044 for incoming NGINX Beats connections
     firewalld:
       port: 5044/tcp
       permanent: true
