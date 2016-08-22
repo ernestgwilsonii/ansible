@@ -100,17 +100,31 @@
       group: root
       mode: 0644
 
+
+# Use the copy module to copy various files into place
+# REF: http://docs.ansible.com/ansible/copy_module.html
+#######################################################
+
 # /usr/local/etc/stunnel/redis-private.pem
-  - name: Fill in the variables and copy templates/stunnel/redis-private.pem.j2 to remote /usr/local/etc/stunnel/redis-private.pem
-    template:
-      src: templates/stunnel/redis-private.pem.j2
+  - name: Copy files/stunnel/redis-private.pem to remote /usr/local/etc/stunnel/redis-private.pem
+    copy:
+      src: files/stunnel/redis-private.pem
       dest: /usr/local/etc/stunnel/redis-private.pem
       owner: root
       group: root
       mode: 0640
 
+# /usr/local/etc/stunnel/psk.txt
+  - name: Copy files/stunnel/psk.txt to remote /usr/local/etc/stunnel/psk.txt
+    copy:
+      src: files/stunnel/psk.txt
+      dest: /usr/local/etc/stunnel/psk.txt
+      owner: root
+      group: root
+      mode: 0640
 
-# Enable but do not yet start stunnel
+
+# Enable and start (or restart) stunnel
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
 
