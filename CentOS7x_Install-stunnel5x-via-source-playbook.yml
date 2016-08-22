@@ -51,7 +51,7 @@
 # REF: http://docs.ansible.com/ansible/raw_module.html
 ##########################################################
 
-  #- name: Compile and install Python3x to /usr/local/bin/python3.5
+  - name: Compile and install Python3x to /usr/local/bin/python3.5
     raw: cd /tmp/stunnel-5.35; ./configure && make install
     # SSH comman line verification:
     # /usr/local/bin/stunnel -version
