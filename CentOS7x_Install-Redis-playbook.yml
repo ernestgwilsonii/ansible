@@ -76,5 +76,5 @@
       name=redis
       enabled=yes
       state=restarted
-      # Note: Verify docker via SSH command line:
+      # Note: Verify redis via SSH command line:
       # systemctl status redis

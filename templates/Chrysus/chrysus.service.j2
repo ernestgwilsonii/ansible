@@ -1,0 +1,27 @@
+[Unit]
+Description=chrysus
+Requires=network.target
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/chrysus
+User=chrysus
+
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=chrysus
+
+Restart=always
+RestartSec=10
+
+# Chrysus Environment
+Environment=CHRYSUS_REDISHOST=127.0.0.1
+Environment=CHRYSUS_REDISPORT=6379
+Environment=CHRYSUS_REDISPASS={{CHRYSUS_REDISPASS|default ('RedisPasswordHere')}}
+Environment=CHRYSUS_REDISCHAN=incoming
+
+ExecStart=/usr/bin/node /opt/chrysus/node_modules/chrysus/chrysus.js
+
+[Install]
+WantedBy=multi-user.target
