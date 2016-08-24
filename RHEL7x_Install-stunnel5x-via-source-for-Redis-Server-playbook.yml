@@ -134,7 +134,7 @@
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
 
-  - name: Enable but do not yet start stunnel
+  - name: Enable and start stunnel
     service:
       name: stunnel.service
       enabled: yes

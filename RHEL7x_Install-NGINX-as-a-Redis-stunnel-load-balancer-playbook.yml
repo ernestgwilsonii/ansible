@@ -2,7 +2,7 @@
 
 ################################################################################
 #  description: Installs NGINX as a Redis stunnel load balancer on RHEL7x
-#  usage: ansible-playbook RHEL7x_Install-NGINX-as-a-Redis-stunnel-load-balancer-playbook.yml --extra-vars 'HostOrGroup: YourServerOrGroupNameGoesHere'
+#  usage: ansible-playbook RHEL7x_Install-NGINX-as-a-Redis-stunnel-load-balancer-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
