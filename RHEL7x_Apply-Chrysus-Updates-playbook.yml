@@ -27,6 +27,19 @@
     shell: cd /opt/chrysus; /usr/bin/npm install chrysus
 
 
+# Set attributes of files
+# REF: http://docs.ansible.com/ansible/file_module.html
+#######################################################
+
+  - name: Set directory permisions on /opt/chrysus
+    file:
+      path=/opt/chrysus
+      state=directory
+      owner=chrysus
+      group=wheel
+      recurse=yes
+
+
 # Restart the service
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
