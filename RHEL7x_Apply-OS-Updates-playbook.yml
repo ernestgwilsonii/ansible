@@ -40,14 +40,3 @@
 
   - name: Remove old kernels from the OS keeping only the last most recent two
     command: /usr/bin/package-cleanup --oldkernels --count=2 -y
-
-
-# Set attributes of files
-# REF: http://docs.ansible.com/ansible/file_module.html
-#######################################################
-
-  - name: Remove annoying warning message in cases where yum is run manually
-    file:
-      path=/etc/sysconfig/rhn/systemid
-      state=touch
-      mode=0644
