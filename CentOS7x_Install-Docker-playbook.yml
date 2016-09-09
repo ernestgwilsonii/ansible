@@ -181,7 +181,7 @@
 # https://github.com/docker/machine/releases
   - name: Download and install docker-machine
     get_url:
-      url=https://github.com/docker/machine/releases/download/v0.8.0/docker-machine-Linux-x86_64
+      url=https://github.com/docker/machine/releases/download/v0.8.1/docker-machine-Linux-x86_64
       dest=/usr/local/bin/docker-machine
       mode=777
 
