@@ -43,8 +43,8 @@
 
   - name: Install the Microsoft Visual Studio Code via remote rpm
     yum:
-      name=https://az764295.vo.msecnd.net/stable/6276dcb0ae497766056b4c09ea75be1d76a8b679/code-1.4.0-1470329130.el7.x86_64.rpm
-      state=present
+      name: https://az764295.vo.msecnd.net/stable/07d663dc1bd848161edf4cd4ce30cce410d3d877/code-1.5.1-1473370243.el7.x86_64.rpm
+      state: present
 
 
 # Restart firewalld to make sure it is running OK before changing any rules
