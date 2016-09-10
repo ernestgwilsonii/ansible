@@ -19,12 +19,26 @@
   tasks:
 
 
-# raw - Executes a low-down and dirty SSH command
-# REF: http://docs.ansible.com/ansible/raw_module.html
+# git - Deploy software (or files) from git checkouts
+# REF: http://docs.ansible.com/ansible/git_module.html
 ######################################################
 
-  - name: Update Chrysus Engine
-    shell: cd /opt/chrysus; /usr/bin/npm install chrysus
+  - name: Git clone Chrysus to /opt/chrysus 
+    git:
+      repo: https://github.com/chrysus-io/chrysus.git
+      dest: /opt/chrysus
+
+
+# Use npm to install and manage Node.js packages
+# REF: http://docs.ansible.com/ansible/npm_module.html
+######################################################
+
+  - name: Run npm install in /opt/chrysus
+    npm:
+      path: /opt/chrysus
+      state: latest
+      production: yes
+      global: no
 
 
 # Set attributes of files
@@ -33,11 +47,11 @@
 
   - name: Set directory permisions on /opt/chrysus
     file:
-      path=/opt/chrysus
-      state=directory
-      owner=chrysus
-      group=wheel
-      recurse=yes
+      path: /opt/chrysus
+      state: directory
+      owner: chrysus
+      group: wheel
+      recurse: yes
 
 
 # Restart the service
