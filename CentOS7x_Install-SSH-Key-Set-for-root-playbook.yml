@@ -13,9 +13,9 @@
 #####################################################
 
 - name: Install a public SSH key for root on CentOS7x
-  hosts: "{{ SourceHost|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  hosts: "{{ SourceHost|default ('FATAL ERROR --> SourceHost NOT SET! You must specify either a Host or a Group name!') }}"
   serial: "100%"
-  gather_facts: True
+  gather_facts: False
   tasks:
 
 
@@ -46,17 +46,9 @@
      - name: Copy the remote SSH public key file /root/.ssh/{{hostname.stdout}}_id_rsa.pub to the Ansible host as /tmp/{{hostname.stdout}}_id_rsa.pub
        fetch:
          src: /root/.ssh/{{hostname.stdout}}_id_rsa.pub
-         dest: /tmp/{{hostname.stdout}}_id_rsa.pub
+         dest: /tmp/{{SourceHost}}_id_rsa.pub
          fail_on_missing: yes
          validate_checksum: yes
-
-
-# set_fact - Set host facts from a task
-# REF: http://docs.ansible.com/ansible/set_fact_module.html
-###########################################################
-
-     - name: Save the SSH public key hostname {{hostname.stdout}} as a fact variable called publickeyhostname
-       set_fact: publickeyhostname="{{hostname.stdout}}"
 
 
 
@@ -75,8 +67,8 @@
 # REF: http://docs.ansible.com/ansible/authorized_key_module.html
 #################################################################
 
-     - name: Add the authorized public key /tmp/{{publickeyhostname}}_id_rsa.pub to the remote host in /root/.ssh/authorized_keys
+     - name: Add the authorized public key /tmp/{{SourceHost}}_id_rsa.pub to the remote host in /root/.ssh/authorized_keys
        authorized_key:
          user: root
-         key: /tmp/{{publickeyhostname}}_id_rsa.pub
+         key: /tmp/{{SourceHost}}_id_rsa.pub
          state: present
