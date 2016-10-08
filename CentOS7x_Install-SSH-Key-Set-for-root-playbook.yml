@@ -71,5 +71,6 @@
        authorized_key:
          user: root
          key: "{{ item }}"
-         with_file: /tmp/{{SourceHost}}/root/.ssh/{{SourceHost}}_id_rsa.pub
+         with_file:
+           - /tmp/{{SourceHost}}/root/.ssh/{{SourceHost}}_id_rsa.pub
          state: present
