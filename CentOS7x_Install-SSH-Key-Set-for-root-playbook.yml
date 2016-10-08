@@ -69,8 +69,8 @@
 
      - name: Add the authorized public key /tmp/{{SourceHost}}_id_rsa.pub to the remote host in /root/.ssh/authorized_keys
        authorized_key:
+         state: present
          user: root
          key: "{{ item }}"
-         with_file:
-           - /tmp/{{SourceHost}}/root/.ssh/{{SourceHost}}_id_rsa.pub
-         state: present
+       with_file:
+         - /tmp/{{SourceHost}}/root/.ssh/{{SourceHost}}_id_rsa.pub
