@@ -56,3 +56,14 @@
        when:
          - sshprivatekey.stat.exists == False
          - sshpublickey.stat.exists == False
+
+
+# file - Sets attributes of files
+# REF: http://docs.ansible.com/ansible/file_module.html
+#######################################################
+
+     - name: Generate SSH key set for {{hostname.stdout}} if it does not exist
+       file:
+         src: /root/.ssh/{{hostname.stdout}}_id_rsa
+         dest: /root/.ssh/id_rsa
+         state: link
