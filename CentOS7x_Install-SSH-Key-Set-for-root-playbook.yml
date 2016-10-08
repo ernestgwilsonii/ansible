@@ -46,7 +46,7 @@
      - name: Copy the remote SSH public key file /root/.ssh/{{hostname.stdout}}_id_rsa.pub to the Ansible host as /tmp/{{hostname.stdout}}_id_rsa.pub
        fetch:
          src: /root/.ssh/{{hostname.stdout}}_id_rsa.pub
-         dest: /tmp/{{SourceHost}}_id_rsa.pub
+         dest: /tmp/{{SourceHost}}
          fail_on_missing: yes
          validate_checksum: yes
 
@@ -70,5 +70,5 @@
      - name: Add the authorized public key /tmp/{{SourceHost}}_id_rsa.pub to the remote host in /root/.ssh/authorized_keys
        authorized_key:
          user: root
-         key: /tmp/{{SourceHost}}_id_rsa.pub
+         key: /tmp/{{SourceHost}}/{{SourceHost}}/root/.ssh/{{SourceHost}}_id_rsa.pub
          state: present
