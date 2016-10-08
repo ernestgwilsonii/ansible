@@ -62,7 +62,7 @@
 # REF: http://docs.ansible.com/ansible/file_module.html
 #######################################################
 
-     - name: Generate SSH key set for {{hostname.stdout}} if it does not exist
+     - name: Create a symbolic link on {{hostname.stdout}} from /root/.ssh/{{hostname.stdout}}_id_rsa to /root/.ssh/id_rsa if it does not exist
        file:
          src: /root/.ssh/{{hostname.stdout}}_id_rsa
          dest: /root/.ssh/id_rsa
