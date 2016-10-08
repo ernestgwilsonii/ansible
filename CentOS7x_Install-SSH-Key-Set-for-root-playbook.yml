@@ -1,0 +1,74 @@
+---
+
+################################################################################
+#  description: Installs a public SSH key for root on CentOS7x
+#  usage: ansible-playbook CentOS7x_Install-SSH-Key-Set-for-root-playbook.yml --extra-vars 'SourceHost=SourceHostNameGoesHere DestinationHostOrGroup=DestinationServerOrGroupNameGoesHere'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Install a public SSH key for root on CentOS7x
+  hosts: "{{ SourceHost|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+     - name: Get the hostname from the remote OS and use it to determine if a matching SSH key set name exists
+       command: hostname
+       register: hostname
+     - debug: msg="The public SSH key file this script needs should be /root/.ssh/{{hostname.stdout}}_id_rsa.pub"
+
+
+# stat - retrieve file or file system status
+# REF: http://docs.ansible.com/ansible/stat_module.html
+#######################################################
+
+     - name: Check if an SSH public key file exists with name /root/.ssh/{{hostname.stdout}}_id_rsa.pub
+       stat: path=/root/.ssh/{{hostname.stdout}}_id_rsa.pub
+       register: sshpublickey
+     - debug: msg="Existing status for SSH public key file /root/.ssh/{{hostname.stdout}}_id_rsa.pub is {{sshpublickey.stat.exists}}"
+
+
+# fetch - Fetches a file from remote nodes
+# REF: http://docs.ansible.com/ansible/fetch_module.html
+########################################################
+
+     - name: Copy the remote SSH public key file /root/.ssh/{{hostname.stdout}}_id_rsa.pub to the Ansible host as /tmp/{{hostname.stdout}}_id_rsa.pub
+       fetch:
+         src: /root/.ssh/{{hostname.stdout}}_id_rsa.pub
+         dest: /tmp/{{hostname.stdout}}_id_rsa.pub
+         fail_on_missing: yes
+         validate_checksum: yes
+
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Deploy the SSH public key for root on CentOS7x
+  hosts: "{{ DestinationHostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# authorized_key - Adds or removes an SSH authorized key
+# REF: http://docs.ansible.com/ansible/authorized_key_module.html
+#################################################################
+
+     - name: Add the authorized public key /tmp/{{hostname.stdout}}_id_rsa.pub to the remote host in /root/.ssh/authorized_keys
+       authorized_key:
+         user: root
+         key: /tmp/{{hostname.stdout}}_id_rsa.pub
+         state: present
