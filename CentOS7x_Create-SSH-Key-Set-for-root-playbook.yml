@@ -23,7 +23,7 @@
 # REF: http://docs.ansible.com/ansible/command_module.html
 ##########################################################
 
-     - name: Get hostname
+     - name: Get the hostname from the remote OS and use it to generate a meaningful key set name
        command: hostname
        register: hostname
      - debug: msg="Private SSH key file will be /root/.ssh/{{hostname.stdout}}_id_rsa"
