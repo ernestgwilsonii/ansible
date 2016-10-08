@@ -51,6 +51,15 @@
          validate_checksum: yes
 
 
+# set_fact - Set host facts from a task
+# REF: http://docs.ansible.com/ansible/set_fact_module.html
+###########################################################
+
+     - name: Save the SSH public key file name {{hostname.stdout}}_id_rsa.pub as a fact variable called publickeyfilename
+       set_fact:
+         publickeyfilename: {{hostname.stdout}}_id_rsa.pub
+
+
 
 # Ansible Playbook options
 # REF: http://docs.ansible.com/ansible/playbooks.html
@@ -70,5 +79,5 @@
      - name: Add the authorized public key /tmp/{{hostname.stdout}}_id_rsa.pub to the remote host in /root/.ssh/authorized_keys
        authorized_key:
          user: root
-         key: /tmp/{{hostname.stdout}}_id_rsa.pub
+         key: /tmp/{{publickeyfilename}}
          state: present
