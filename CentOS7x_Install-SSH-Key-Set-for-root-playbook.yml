@@ -15,7 +15,7 @@
 - name: Install a public SSH key for root on CentOS7x
   hosts: "{{ SourceHost|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
   serial: "100%"
-  gather_facts: False
+  gather_facts: True
   tasks:
 
 
