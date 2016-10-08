@@ -56,8 +56,7 @@
 ###########################################################
 
      - name: Save the SSH public key file hostname {{hostname.stdout}} as a fact variable called publickeyhostname
-       set_fact:
-         - publickeyhostname: {{hostname.stdout}}
+       set_fact: publickeyhostname="{{hostname.stdout}}"
 
 
 
