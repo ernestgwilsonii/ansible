@@ -66,7 +66,7 @@
 # REF: http://docs.ansible.com/ansible/authorized_key_module.html
 #################################################################
 
-     - name: Add the authorized public key /tmp/{{hostname.stdout}}_id_rsa.pub to the remote host in /root/.ssh/authorized_keys
+     - name: Add the authorized public key /tmp/{{SourceHost}}_id_rsa.pub to the remote host in /root/.ssh/authorized_keys
        authorized_key:
          user: root
          key: /tmp/{{SourceHost}}_id_rsa.pub
