@@ -55,7 +55,7 @@
 # REF: http://docs.ansible.com/ansible/set_fact_module.html
 ###########################################################
 
-     - name: Save the SSH public key file hostname {{hostname.stdout}} as a fact variable called publickeyhostname
+     - name: Save the SSH public key hostname {{hostname.stdout}} as a fact variable called publickeyhostname
        set_fact: publickeyhostname="{{hostname.stdout}}"
 
 
@@ -67,7 +67,7 @@
 - name: Deploy the SSH public key for root on CentOS7x
   hosts: "{{ DestinationHostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
   serial: "100%"
-  gather_facts: False
+  gather_facts: True
   tasks:
 
 
