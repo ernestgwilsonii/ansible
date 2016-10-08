@@ -55,9 +55,9 @@
 # REF: http://docs.ansible.com/ansible/set_fact_module.html
 ###########################################################
 
-     - name: Save the SSH public key file name {{hostname.stdout}}_id_rsa.pub as a fact variable called publickeyfilename
+     - name: Save the SSH public key file hostname {{hostname.stdout}} as a fact variable called publickeyhostname
        set_fact:
-         publickeyfilename: {{hostname.stdout}}_id_rsa.pub
+         publickeyhostname: {{hostname.stdout}}
 
 
 
@@ -79,5 +79,5 @@
      - name: Add the authorized public key /tmp/{{hostname.stdout}}_id_rsa.pub to the remote host in /root/.ssh/authorized_keys
        authorized_key:
          user: root
-         key: /tmp/{{publickeyfilename}}
+         key: /tmp/{{publickeyhostname}}_id_rsa.pub
          state: present
