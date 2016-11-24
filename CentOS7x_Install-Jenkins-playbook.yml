@@ -77,11 +77,42 @@
 # REF: http://docs.ansible.com/ansible/yum_module.html
 ######################################################
 
-#  - name: Install Jenkins
-#    yum:
-#      name=jenkins
-#      state=latest
+  - name: Install Jenkins
+    yum:
+      name=jenkins
+      state=latest
 
 
+# Restart firewalld to make sure it is running OK before changing any rules
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Ensure the firewalld service is enabled and re-started before changing any rules
+    service:
+      name=firewalld
+      enabled=yes
+      state=restarted
 
 
+# Update the firewalld configuration
+# REF: http://docs.ansible.com/ansible/firewalld_module.html
+############################################################
+
+  - name: Update firewall to allow port TCP 8080 for incoming Jenkins connections
+    firewalld:
+      port=8080/tcp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+
+# Enable and start Jenkins service
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Enable and start Jenkins service
+    service:
+      name=jenkins
+      enabled=yes
+      state=restarted
