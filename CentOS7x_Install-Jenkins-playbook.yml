@@ -126,31 +126,3 @@
       enabled=yes
       state=restarted
 
-# https://github.com/geerlingguy/ansible-role-jenkins/issues/50
-
-
-  - name: Create custom init scripts directory.
-    file:
-      path: "{{ jenkins_home }}/init.groovy.d"
-      state: directory
-      owner: jenkins
-      group: jenkins
-      mode: 0775
-
-  - name: configure default users
-    template:
-      src: templates/Jenkins/basic-security.groovy
-      dest: "{{ jenkins_home }}/init.groovy.d/basic-security.groovy"
-    register: jenkins_users_config
-
-
-# Enable and start Jenkins service
-# REF: http://docs.ansible.com/ansible/service_module.html
-##########################################################
-
-  - name: Enable and start Jenkins service
-    service:
-      name=jenkins
-      enabled=yes
-      state=restarted
-
