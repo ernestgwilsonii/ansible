@@ -34,3 +34,9 @@
       ports:
       - "8080:8080"
       - "50000:50000"
+
+# docker ps
+# docker ps | grep jenkins | awk '{print $1}'
+# export JENKINS_CONTAINER_ID=`docker ps | grep jenkins | awk '{print $1}'`
+# docker cp $JENKINS_CONTAINER_ID:/var/jenkins_home/secrets/initialAdminPassword /tmp/jenkins_initialAdminPassword.txt
+# cat /tmp/jenkins_initialAdminPassword.txt
