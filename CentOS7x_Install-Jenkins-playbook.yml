@@ -16,10 +16,6 @@
   hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
   serial: "100%"
   gather_facts: False
-  vars:
-    jenkins_home: /var/lib/jenkins
-    jenkins_admin_username: admin
-    jenkins_admin_password: admin
   tasks:
 
 
@@ -29,18 +25,18 @@
 
   - name: Install the Java JRE runtime java
     yum:
-      name=java-1.8.0-openjdk
-      state=latest
+      name: java-1.8.0-openjdk
+      state: latest
 
   - name: Install the Java JDK compiler javac
     yum:
-      name=java-1.8.0-openjdk-devel
-      state=latest
+      name: java-1.8.0-openjdk-devel
+      state: latest
 
   - name: Install Groovy language for Java
     yum:
-      name=groovy
-      state=latest
+      name: groovy
+      state: latest
 
 
 # Update various configuration files
@@ -49,21 +45,53 @@
 
   - name: Set JAVA_HOME environment variable for root on next login
     lineinfile:
-      dest=/root/.bash_profile
-      state=present
-      line='export JAVA_HOME=/usr/lib/jvm/java-openjdk'
+      dest: /root/.bash_profile
+      state: present
+      line: 'export JAVA_HOME=/usr/lib/jvm/java-openjdk'
 
   - name: Set JRE_HOME environment variable for root on next login
     lineinfile:
-      dest=/root/.bash_profile
-      state=present
-      line='export JRE_HOME=/usr/lib/jvm/java-openjdk/jre'
+      dest: /root/.bash_profile
+      state: present
+      line: 'export JRE_HOME=/usr/lib/jvm/java-openjdk/jre'
 
   - name: Add Java to the path for root on next login
     lineinfile:
-      dest=/root/.bash_profile
-      state=present
-      line='export PATH=$PATH:/usr/lib/jvm/java-openjdk/bin:/usr/lib/jvm/java-openjdk/jre/bin'
+      dest: /root/.bash_profile
+      state: present
+      line: 'export PATH=$PATH:/usr/lib/jvm/java-openjdk/bin:/usr/lib/jvm/java-openjdk/jre/bin'
+
+
+# Restart firewalld to make sure it is running OK before changing any rules
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Ensure the firewalld service is enabled and re-started before changing any rules
+    service:
+      name: firewalld
+      enabled: yes
+      state: restarted
+
+
+# Update the firewalld configuration
+# REF: http://docs.ansible.com/ansible/firewalld_module.html
+############################################################
+
+  - name: Update firewall to allow port TCP 8080 for incoming Jenkins HTTP connections
+    firewalld:
+      port: 8080/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 49187 for incoming Jenkins JNLP connections
+    firewalld:
+      port: 49187/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
 
 # Install or configure repository used on the OS by yum
@@ -88,40 +116,8 @@
 
   - name: Install Jenkins
     yum:
-      name=jenkins
-      state=latest
-
-
-# Restart firewalld to make sure it is running OK before changing any rules
-# REF: http://docs.ansible.com/ansible/service_module.html
-##########################################################
-
-  - name: Ensure the firewalld service is enabled and re-started before changing any rules
-    service:
-      name=firewalld
-      enabled=yes
-      state=restarted
-
-
-# Update the firewalld configuration
-# REF: http://docs.ansible.com/ansible/firewalld_module.html
-############################################################
-
-  - name: Update firewall to allow port TCP 8080 for incoming Jenkins HTTP connections
-    firewalld:
-      port=8080/tcp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
-
-  - name: Update firewall to allow port TCP 49187 for incoming Jenkins JNLP connections
-    firewalld:
-      port=49187/tcp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+      name: jenkins
+      state: latest
 
 
 # Enable and start Jenkins service
@@ -130,9 +126,26 @@
 
   - name: Enable and start Jenkins service
     service:
-      name=jenkins
-      enabled=yes
-      state=restarted
+      name: jenkins
+      enabled: yes
+      state: restarted
+
+
+# wait_for - Waits for a condition before continuing
+# REF: http://docs.ansible.com/ansible/wait_for_module.html
+###########################################################
+
+  - name: Wait for file to exist before continuing /var/lib/jenkins/secrets/initialAdminPassword
+    wait_for:
+      path: /var/lib/jenkins/secrets/initialAdminPassword
+
+  - name: Wait for file to exist before continuing /var/lib/jenkins/config.xml
+    wait_for:
+      path: /var/lib/jenkins/config.xml
+
+  - name: Wait for file to exist before continuing /var/lib/jenkins/users/admin/config.xml
+    wait_for:
+      path: /var/lib/jenkins/users/admin/config.xml
 
 
 # lineinfile - Ensure a particular line is in a file, or replace an existing line using a back-referenced regular expression
@@ -146,13 +159,13 @@
       line: 'JENKINS_JAVA_OPTIONS="-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false"'
 
 
-# Enable and start Jenkins service
+# Restart Jenkins service
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
 
   - name: Restart Jenkins service
     service:
-      name=jenkins
-      enabled=yes
-      state=restarted
-
+      name: jenkins
+      enabled: yes
+      state: restarted
+      # cat /var/lib/jenkins/secrets/initialAdminPassword
