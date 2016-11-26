@@ -173,3 +173,15 @@
       enabled: yes
       state: restarted
       # cat /var/lib/jenkins/secrets/initialAdminPassword
+
+
+# jenkins_plugin - Add or remove Jenkins plugin
+# REF: http://docs.ansible.com/ansible/jenkins_plugin_module.html
+#################################################################
+# java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://10.127.215.25:8080/ list-plugins --username admin --password keyhere
+
+# java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://10.127.215.25:8080/ install-plugin github-oauth -deploy -restart --username admin --password keyhere
+  - name: Install Jenkins plugin github-oauth
+    jenkins_plugin:
+      name: github-oauth
+      state: latest
