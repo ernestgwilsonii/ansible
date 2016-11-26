@@ -190,7 +190,10 @@
 ###########################################################
 
   - name: Wait for localhost TCP port 8080 to respond before moving on
-    wait_for: host=login port=8080 delay=20
+    wait_for:
+      host: localhost
+      port: 8080
+      delay: 20
 
 
 # command - Executes a command on a remote node
