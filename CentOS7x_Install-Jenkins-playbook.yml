@@ -38,6 +38,10 @@
       name: groovy
       state: latest
 
+  - name: Install git
+    yum:
+      name: git
+      state: latest
 
 # Update various configuration files
 # REF: http://docs.ansible.com/ansible/lineinfile_module.html
