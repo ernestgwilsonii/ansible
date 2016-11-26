@@ -189,7 +189,7 @@
 # REF: http://docs.ansible.com/ansible/wait_for_module.html
 ###########################################################
 
-  - name: Wait for localhost TCP port 8080 to respond before moving on
+  - name: Wait for Jenkins TCP port 8080 to respond before moving on
     wait_for:
       host: localhost
       port: 8080
