@@ -175,13 +175,23 @@
       # cat /var/lib/jenkins/secrets/initialAdminPassword
 
 
-# jenkins_plugin - Add or remove Jenkins plugin
-# REF: http://docs.ansible.com/ansible/jenkins_plugin_module.html
-#################################################################
-# java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://10.127.215.25:8080/ list-plugins --username admin --password keyhere
+# Register Variables
+# REF: http://docs.ansible.com/ansible/playbooks_conditionals.html#register-variables
+#####################################################################################
 
-# java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://10.127.215.25:8080/ install-plugin github-oauth -deploy -restart --username admin --password keyhere
+  - name: Get the default admin password via cat /var/lib/jenkins/secrets/initialAdminPassword
+    shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+    register: jenkins_default_admin_password
+  - debug: msg="Default starting Jenkins password {{jenkins_default_admin_password.stdout}}"
+
+
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+# java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://IPHere:8080/ list-plugins --username admin --password keyhere
+# java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://IPHere:8080/ install-plugin github-oauth -deploy -restart --username admin --password keyhere
   - name: Install Jenkins plugin github-oauth
-    jenkins_plugin:
-      name: github-oauth
-      state: latest
+    command: java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080/ install-plugin github-oauth -deploy -restart --username admin --password {{jenkins_default_admin_password.stdout}}
+    args:
+      creates: /var/lib/jenkins/plugins/github-oauth
