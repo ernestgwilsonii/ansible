@@ -199,10 +199,16 @@
 # command - Executes a command on a remote node
 # REF: http://docs.ansible.com/ansible/command_module.html
 ##########################################################
-
 # java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://IPHere:8080/ list-plugins --username admin --password keyhere
+
 # java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://IPHere:8080/ install-plugin github-oauth -restart --username admin --password keyhere
   - name: Install Jenkins plugin github-oauth
     command: /usr/bin/java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080/ install-plugin github-oauth -restart --username admin --password {{jenkins_default_admin_password.stdout}}
     args:
       creates: /var/lib/jenkins/plugins/github-oauth
+
+# java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://IPHere:8080/ install-plugin build-pipeline-plugin -restart --username admin --password keyhere
+  - name: Install Jenkins plugin github-oauth
+    command: /usr/bin/java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080/ install-plugin build-pipeline-plugin -restart --username admin --password {{jenkins_default_admin_password.stdout}}
+    args:
+      creates: /var/lib/jenkins/plugins/build-pipeline-plugin
