@@ -208,71 +208,71 @@
       creates: /var/lib/jenkins/plugins/github-oauth
 
 
-# Restart Jenkins service
-# REF: http://docs.ansible.com/ansible/service_module.html
-##########################################################
+# # Restart Jenkins service
+# # REF: http://docs.ansible.com/ansible/service_module.html
+# ##########################################################
 
-  - name: Restart Jenkins service
-    service:
-      name: jenkins
-      enabled: yes
-      state: restarted
-      # cat /var/lib/jenkins/secrets/initialAdminPassword
-
-
-# wait_for - Waits for a condition before continuing
-# REF: http://docs.ansible.com/ansible/wait_for_module.html
-###########################################################
-
-  - name: Wait for Jenkins TCP port 8080 to respond before moving on
-    wait_for:
-      host: localhost
-      port: 8080
-      delay: 30
+#   - name: Restart Jenkins service
+#     service:
+#       name: jenkins
+#       enabled: yes
+#       state: restarted
+#       # cat /var/lib/jenkins/secrets/initialAdminPassword
 
 
-# command - Executes a command on a remote node
-# REF: http://docs.ansible.com/ansible/command_module.html
-##########################################################
-# java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://IPHere:8080/ list-plugins --username admin --password keyhere
+# # wait_for - Waits for a condition before continuing
+# # REF: http://docs.ansible.com/ansible/wait_for_module.html
+# ###########################################################
 
-# java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://IPHere:8080/ install-plugin build-pipeline-plugin -restart --username admin --password keyhere
-  - name: Install Jenkins plugin build-pipeline-plugin
-    command: /usr/bin/java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080/ install-plugin build-pipeline-plugin -restart --username admin --password {{jenkins_default_admin_password.stdout}}
-    args:
-      creates: /var/lib/jenkins/plugins/build-pipeline-plugin
-
-
-# Restart Jenkins service
-# REF: http://docs.ansible.com/ansible/service_module.html
-##########################################################
-
-  - name: Restart Jenkins service
-    service:
-      name: jenkins
-      enabled: yes
-      state: restarted
-      # cat /var/lib/jenkins/secrets/initialAdminPassword
+#   - name: Wait for Jenkins TCP port 8080 to respond before moving on
+#     wait_for:
+#       host: localhost
+#       port: 8080
+#       delay: 30
 
 
-# wait_for - Waits for a condition before continuing
-# REF: http://docs.ansible.com/ansible/wait_for_module.html
-###########################################################
+# # command - Executes a command on a remote node
+# # REF: http://docs.ansible.com/ansible/command_module.html
+# ##########################################################
+# # java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://IPHere:8080/ list-plugins --username admin --password keyhere
 
-  - name: Wait for Jenkins TCP port 8080 to respond before moving on
-    wait_for:
-      host: localhost
-      port: 8080
-      delay: 30
+# # java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://IPHere:8080/ install-plugin build-pipeline-plugin -restart --username admin --password keyhere
+#   - name: Install Jenkins plugin build-pipeline-plugin
+#     command: /usr/bin/java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080/ install-plugin build-pipeline-plugin -restart --username admin --password {{jenkins_default_admin_password.stdout}}
+#     args:
+#       creates: /var/lib/jenkins/plugins/build-pipeline-plugin
 
 
-# command - Executes a command on a remote node
-# REF: http://docs.ansible.com/ansible/command_module.html
-##########################################################
-# java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://IPHere:8080/ list-plugins --username admin --password keyhere
+# # Restart Jenkins service
+# # REF: http://docs.ansible.com/ansible/service_module.html
+# ##########################################################
 
-# java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://IPHere:8080/ install-plugin build-pipeline-plugin -restart --username admin --password keyhere
-  - name: Install Jenkins plugin blueocean
-    command: /usr/bin/java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080/ install-plugin blueocean -restart --username admin --password {{jenkins_default_admin_password.stdout}}
-    args:
-      creates: /var/lib/jenkins/plugins/blueocean
+#   - name: Restart Jenkins service
+#     service:
+#       name: jenkins
+#       enabled: yes
+#       state: restarted
+#       # cat /var/lib/jenkins/secrets/initialAdminPassword
+
+
+# # wait_for - Waits for a condition before continuing
+# # REF: http://docs.ansible.com/ansible/wait_for_module.html
+# ###########################################################
+
+#   - name: Wait for Jenkins TCP port 8080 to respond before moving on
+#     wait_for:
+#       host: localhost
+#       port: 8080
+#       delay: 30
+
+
+# # command - Executes a command on a remote node
+# # REF: http://docs.ansible.com/ansible/command_module.html
+# ##########################################################
+# # java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://IPHere:8080/ list-plugins --username admin --password keyhere
+
+# # java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://IPHere:8080/ install-plugin build-pipeline-plugin -restart --username admin --password keyhere
+#   - name: Install Jenkins plugin blueocean
+#     command: /usr/bin/java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080/ install-plugin blueocean -restart --username admin --password {{jenkins_default_admin_password.stdout}}
+#     args:
+#       creates: /var/lib/jenkins/plugins/blueocean
