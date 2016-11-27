@@ -195,9 +195,17 @@
       port: 8080
       delay: 30
 
-# Restart Jenkins service
-# REF: http://docs.ansible.com/ansible/service_module.html
+
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
 ##########################################################
+# java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://IPHere:8080/ list-plugins --username admin --password keyhere
+
+# java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://IPHere:8080/ install-plugin git -restart --username admin --password keyhere
+  - name: Install Jenkins plugin git
+    command: /usr/bin/java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080/ install-plugin git -restart --username admin --password {{jenkins_default_admin_password.stdout}}
+    args:
+      creates: /var/lib/jenkins/plugins/git
 
   - name: Restart Jenkins service
     service:
@@ -205,21 +213,11 @@
       enabled: yes
       state: restarted
 
-# wait_for - Waits for a condition before continuing
-# REF: http://docs.ansible.com/ansible/wait_for_module.html
-###########################################################
-
   - name: Wait for Jenkins TCP port 8080 to respond before moving on
     wait_for:
       host: localhost
       port: 8080
       delay: 30
-
-
-# command - Executes a command on a remote node
-# REF: http://docs.ansible.com/ansible/command_module.html
-##########################################################
-# java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://IPHere:8080/ list-plugins --username admin --password keyhere
 
 # java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://IPHere:8080/ install-plugin github -restart --username admin --password keyhere
   - name: Install Jenkins plugin github
