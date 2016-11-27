@@ -134,6 +134,11 @@
       enabled: yes
       state: restarted
 
+  - name: Wait for Jenkins TCP port 8080 to respond before moving on
+    wait_for:
+      host: localhost
+      port: 8080
+      delay: 30
 
 # wait_for - Waits for a condition before continuing
 # REF: http://docs.ansible.com/ansible/wait_for_module.html
