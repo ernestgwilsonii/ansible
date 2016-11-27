@@ -459,6 +459,42 @@
       port: 8080
       delay: 20
 
+# java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://IPHere:8080/ install-plugin greenballs -restart --username admin --password keyhere
+  - name: Install Jenkins plugin greenballs
+    command: /usr/bin/java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080/ install-plugin greenballs -restart --username admin --password {{jenkins_default_admin_password.stdout}}
+    args:
+      creates: /var/lib/jenkins/plugins/greenballs
+
+  - name: Restart Jenkins service
+    service:
+      name: jenkins
+      enabled: yes
+      state: restarted
+
+  - name: Wait for Jenkins TCP port 8080 to respond before moving on
+    wait_for:
+      host: localhost
+      port: 8080
+      delay: 20
+
+# java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://IPHere:8080/ install-plugin gravatar -restart --username admin --password keyhere
+  - name: Install Jenkins plugin gravatar
+    command: /usr/bin/java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080/ install-plugin gravatar -restart --username admin --password {{jenkins_default_admin_password.stdout}}
+    args:
+      creates: /var/lib/jenkins/plugins/gravatar
+
+  - name: Restart Jenkins service
+    service:
+      name: jenkins
+      enabled: yes
+      state: restarted
+
+  - name: Wait for Jenkins TCP port 8080 to respond before moving on
+    wait_for:
+      host: localhost
+      port: 8080
+      delay: 20
+
 # java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://IPHere:8080/ install-plugin nodejs -restart --username admin --password keyhere
   - name: Install Jenkins plugin nodejs
     command: /usr/bin/java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080/ install-plugin nodejs -restart --username admin --password {{jenkins_default_admin_password.stdout}}
