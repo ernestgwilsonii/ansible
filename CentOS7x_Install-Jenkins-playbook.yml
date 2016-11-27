@@ -364,7 +364,7 @@
       delay: 30
 
 
-- debug: msg="You may now log into Jenkins at http://{{ansible_ssh_host}}:8080 admin {{jenkins_default_admin_password.stdout}}"
+  - debug: msg=" You may now log into Jenkins at http://{{ansible_ssh_host}}:8080 admin {{jenkins_default_admin_password.stdout}} "
 
 
 # # Restart Jenkins service
