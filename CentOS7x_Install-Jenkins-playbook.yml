@@ -206,6 +206,7 @@
     command: /usr/bin/java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080/ install-plugin git -restart --username admin --password {{jenkins_default_admin_password.stdout}}
     args:
       creates: /var/lib/jenkins/plugins/git
+    ignore_errors: yes
 
   - name: Restart Jenkins service
     service:
