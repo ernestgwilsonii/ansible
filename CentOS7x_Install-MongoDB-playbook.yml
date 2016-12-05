@@ -1,0 +1,86 @@
+---
+
+################################################################################
+#  description: Installs MongoDB 3x on CentOS7x
+#  usage: ansible-playbook CentOS7x_Install-MongoDB-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Install MongoDB 3x on CentOS7x
+  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# Install or configure repository used on the OS by yum
+# REF: https://docs.ansible.com/ansible/yum_repository_module.html
+##################################################################
+
+# /etc/yum.repos.d/mongodb-org-3.4.repo
+  - name: Install repository for MongoDB Community Edition
+    yum_repository:
+      name: MongoDB
+      description: MongoDB Repository
+      file: mongodb-org-3.4
+      baseurl: https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.4/x86_64/
+      enabled: yes
+      gpgcheck: yes
+      gpgkey: https://www.mongodb.org/static/pgp/server-3.4.asc
+
+
+# Install yum packages
+# REF: http://docs.ansible.com/ansible/yum_module.html
+######################################################
+
+  - name: Install mongodb-org
+    yum:
+      name=mongodb-org
+      state=latest
+
+
+# Restart firewalld to make sure it is running OK before changing any rules
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Ensure the firewalld service is enabled and re-started before changing any rules
+    service:
+      name=firewalld
+      enabled=yes
+      state=restarted
+
+
+# Update the firewalld configuration
+# REF: http://docs.ansible.com/ansible/firewalld_module.html
+############################################################
+
+  - name: Update firewall to allow port TCP 27017 for incoming MongoDB connections
+    firewalld:
+      port=27017/tcp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+
+# Enable and start mongod service
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Enable and start the mongod service
+    service:
+      name=mongod.service
+      enabled=yes
+      state=restarted
+      # Note: Command line verification:
+      # systemctl status mongod.service
+      # systemctl status mongod.service -l
+      # service mongod status
+      # cat /var/log/messages | grep mongod
+
