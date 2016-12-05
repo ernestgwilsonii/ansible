@@ -69,6 +69,20 @@
       zone=public
 
 
+# Use the template module to populate files with data
+# REF: http://docs.ansible.com/ansible/template_module.html
+###########################################################
+
+# /etc/mongod.conf
+  - name: Fill in the variables and copy templates/MongoDB/mongod.conf.j2 to remote /etc/mongod.conf
+    template:
+      src=templates/MongoDB/mongod.conf.j2
+      dest=/etc/mongod.conf
+      owner=root
+      group=root
+      mode=0644
+
+
 # Enable and start mongod service
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
