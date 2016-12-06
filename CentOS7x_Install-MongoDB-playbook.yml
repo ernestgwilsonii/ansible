@@ -22,8 +22,8 @@
 # REF: http://docs.ansible.com/ansible/command_module.html
 ##########################################################
 
-  - name: openssl rand -base64 756 > /tmp/mongod-replication.key
-    command: openssl rand -base64 756 > /tmp/mongod-replication.key
+  - name: /usr/bin/openssl rand -base64 756 > /tmp/mongod-replication.key
+    command: /usr/bin/openssl rand -base64 756 > /tmp/mongod-replication.key
 
 
 # Ansible Playbook options
