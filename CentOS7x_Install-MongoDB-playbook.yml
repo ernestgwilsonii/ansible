@@ -45,6 +45,66 @@
       state=latest
 
 
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+     - name: openssl rand -base64 756 > /tmp/mongod-replication.key
+       command: openssl rand -base64 756 > /tmp/mongod-replication.key
+
+
+# Use the copy module to copy various files into place
+# REF: http://docs.ansible.com/ansible/copy_module.html
+#######################################################
+
+# /var/lib/mongo/mongod-replication.key
+  - name: Copy /tmp/mongod-replication.key to remote /var/lib/mongo/mongod-replication.key
+    copy:
+      src=/tmp/mongod-replication.key
+      dest=/var/lib/mongo/mongod-replication.key
+      owner=mongod
+      group=mongod
+      mode=0440
+
+
+# Use the file module
+# REF: http://docs.ansible.com/ansible/file_module.html
+#######################################################
+
+  - name: rm /tmp/mongod-replication.key
+    file:
+      path: /tmp/mongod-replication.key
+      state: absent
+
+
+# Update various configuration files
+# REF: http://docs.ansible.com/ansible/lineinfile_module.html
+#############################################################
+
+  - name: Ensure that boot-time transparent_hugepage/defrag is set to never
+    lineinfile:
+      dest=/etc/rc.local
+      state=present
+      line='echo never > /sys/kernel/mm/transparent_hugepage/defrag'
+
+  - name: Ensure that boot-time transparent_hugepage/enabled is set to never
+    lineinfile:
+      dest=/etc/rc.local
+      state=present
+      line='echo never > /sys/kernel/mm/transparent_hugepage/enabled'
+
+
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+     - name: Ensure current active running value transparent_hugepage/defrag is set to never
+       command: echo never > /sys/kernel/mm/transparent_hugepage/defrag
+
+     - name: Ensure current active running value transparent_hugepage/enabled is set to never
+       command: echo never > /sys/kernel/mm/transparent_hugepage/enabled
+
+
 # Restart firewalld to make sure it is running OK before changing any rules
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
@@ -79,7 +139,7 @@
       src=templates/MongoDB/mongod.conf.j2
       dest=/etc/mongod.conf
       owner=root
-      group=root
+      group=mongod
       mode=0644
 
 
@@ -98,5 +158,6 @@
       # service mongod status
       # ls /var/lib/mongo
       # cat /var/log/messages | grep mongod
+      # cat /usr/lib/systemd/system/mongod.service
       # cat /etc/mongod.conf
       # /var/log/mongodb/mongod.log

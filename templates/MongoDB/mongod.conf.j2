@@ -5,7 +5,6 @@
 
 # where to write logging data.
 systemLog:
-  
   syslogFacility: daemon
   destination: file
   logAppend: true
@@ -30,15 +29,17 @@ net:
   port: 27017
   bindIp: {{ansible_ssh_host}},127.0.0.1
 
-
-#security:
-
-#operationProfiling:
+security:
+  clusterAuthMode: keyFile
+  keyFile: /var/lib/mongo/mongod-replication.key
+  authorization: enabled
 
 replication:
   replSetName: repSet1
 
 #sharding:
+
+#operationProfiling:
 
 ## Enterprise-Only Options
 
