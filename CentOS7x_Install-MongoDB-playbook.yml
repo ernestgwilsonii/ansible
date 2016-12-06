@@ -18,12 +18,12 @@
   gather_facts: False
   tasks:
 
-# command - Executes a command on a remote node
-# REF: http://docs.ansible.com/ansible/command_module.html
+# Execute raw command(s)
+# REF: http://docs.ansible.com/ansible/raw_module.html
 ##########################################################
 
   - name: /usr/bin/openssl rand -base64 756 > /tmp/mongod-replication.key
-    command: /usr/bin/openssl rand -base64 756 > /tmp/mongod-replication.key
+    raw: /usr/bin/openssl rand -base64 756 > /tmp/mongod-replication.key
 
 
 # Ansible Playbook options
