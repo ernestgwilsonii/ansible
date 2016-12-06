@@ -98,11 +98,11 @@
 # REF: http://docs.ansible.com/ansible/command_module.html
 ##########################################################
 
-     - name: Ensure current active running value transparent_hugepage/defrag is set to never
-       command: echo never > /sys/kernel/mm/transparent_hugepage/defrag
+  - name: Ensure current active running value transparent_hugepage/defrag is set to never
+    command: echo never > /sys/kernel/mm/transparent_hugepage/defrag
 
-     - name: Ensure current active running value transparent_hugepage/enabled is set to never
-       command: echo never > /sys/kernel/mm/transparent_hugepage/enabled
+  - name: Ensure current active running value transparent_hugepage/enabled is set to never
+    command: echo never > /sys/kernel/mm/transparent_hugepage/enabled
 
 
 # Restart firewalld to make sure it is running OK before changing any rules
