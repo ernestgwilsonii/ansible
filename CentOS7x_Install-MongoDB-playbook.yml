@@ -12,6 +12,24 @@
 # REF: http://docs.ansible.com/ansible/playbooks.html
 #####################################################
 
+- name: Generate prerequistite MongoDB key
+  hosts: localhost
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: openssl rand -base64 756 > /tmp/mongod-replication.key
+    command: openssl rand -base64 756 > /tmp/mongod-replication.key
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
 - name: Install MongoDB 3x on CentOS7x
   hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
   serial: "100%"
@@ -45,14 +63,6 @@
       state=latest
 
 
-# command - Executes a command on a remote node
-# REF: http://docs.ansible.com/ansible/command_module.html
-##########################################################
-
-  - name: openssl rand -base64 756 > /tmp/mongod-replication.key
-    command: openssl rand -base64 756 > /tmp/mongod-replication.key
-
-
 # Use the copy module to copy various files into place
 # REF: http://docs.ansible.com/ansible/copy_module.html
 #######################################################
@@ -65,16 +75,6 @@
       owner=mongod
       group=mongod
       mode=0440
-
-
-# Use the file module
-# REF: http://docs.ansible.com/ansible/file_module.html
-#######################################################
-
-  - name: rm /tmp/mongod-replication.key
-    file:
-      path: /tmp/mongod-replication.key
-      state: absent
 
 
 # Update various configuration files
@@ -161,3 +161,23 @@
       # cat /usr/lib/systemd/system/mongod.service
       # cat /etc/mongod.conf
       # /var/log/mongodb/mongod.log
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Post deployment cleanup of the MongoDB key
+  hosts: localhost
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+# Use the file module
+# REF: http://docs.ansible.com/ansible/file_module.html
+#######################################################
+
+  - name: rm /tmp/mongod-replication.key
+    file:
+      path: /tmp/mongod-replication.key
+      state: absent
