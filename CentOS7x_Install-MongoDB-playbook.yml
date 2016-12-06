@@ -74,7 +74,7 @@
       dest=/var/lib/mongo/mongod-replication.key
       owner=mongod
       group=mongod
-      mode=0440
+      mode=0400
 
 
 # Update various configuration files
@@ -160,7 +160,7 @@
       # cat /var/log/messages | grep mongod
       # cat /usr/lib/systemd/system/mongod.service
       # cat /etc/mongod.conf
-      # /var/log/mongodb/mongod.log
+      # cat /var/log/mongodb/mongod.log
 
 
 # Ansible Playbook options
