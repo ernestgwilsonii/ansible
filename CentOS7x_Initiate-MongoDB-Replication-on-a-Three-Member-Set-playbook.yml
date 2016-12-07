@@ -2,7 +2,7 @@
 
 ################################################################################
 #  description: Installs MongoDB 3x on CentOS7x
-#  usage: ansible-playbook CentOS7x_Install-MongoDB-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere MongoAdminPassword=StartingAdminPasswordHere'
+#  usage: ansible-playbook CentOS7x_Initiate-MongoDB-Replication-on-a-Three-Member-Set-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
@@ -63,6 +63,20 @@
       state=latest
 
 
+# Use the copy module to copy various files into place
+# REF: http://docs.ansible.com/ansible/copy_module.html
+#######################################################
+
+# /var/lib/mongo/mongod-replication.key
+  - name: Copy temporary Ansible local file /tmp/mongod-replication.key to MongoDB remote /var/lib/mongo/mongod-replication.key
+    copy:
+      src=/tmp/mongod-replication.key
+      dest=/var/lib/mongo/mongod-replication.key
+      owner=mongod
+      group=mongod
+      mode=0400
+
+
 # Update various configuration files
 # REF: http://docs.ansible.com/ansible/lineinfile_module.html
 #############################################################
@@ -115,41 +129,12 @@
       zone=public
 
 
-# Enable and start mongod service
-# REF: http://docs.ansible.com/ansible/service_module.html
-##########################################################
-
-  - name: Enable and start the mongod service for the first time with the default configuration
-    service:
-      name=mongod.service
-      enabled=yes
-      state=restarted
-      # Note: Command line verification:
-      # systemctl status mongod.service
-      # systemctl status mongod.service -l
-      # service mongod status
-      # ls /var/lib/mongo
-      # cat /var/log/messages | grep mongod
-      # cat /usr/lib/systemd/system/mongod.service
-      # cat /etc/mongod.conf
-      # cat /var/log/mongodb/mongod.log
-
-
 # Use the template module to populate files with data
 # REF: http://docs.ansible.com/ansible/template_module.html
 ###########################################################
 
-# An "import" JS file will be used to create the initial starting admin user and set a starting password
-  - name: Copy a "MongoDB style JS import template" file needed to create the initial admin account 
-    template:
-      src=templates/MongoDB/addMongoAdmin.js.j2
-      dest=/tmp/addMongoAdmin.js
-      owner=root
-      group=mongod
-      mode=0644
-
-# /etc/mongod.conf - Enables security flag that requires usernames/passwords going forward and names a starting replica set
-  - name: Deploy modified production ready configuration templates/MongoDB/mongod.conf.j2 to remote /etc/mongod.conf
+# /etc/mongod.conf
+  - name: Fill in the variables and copy templates/MongoDB/mongod.conf.j2 to remote /etc/mongod.conf
     template:
       src=templates/MongoDB/mongod.conf.j2
       dest=/etc/mongod.conf
@@ -158,44 +143,11 @@
       mode=0644
 
 
-# command - Executes a command on a remote node
-# REF: http://docs.ansible.com/ansible/command_module.html
-##########################################################
-
-# Add a starting admin user and starting password to the "admin" database BEFORE security gets enabled!
-  - name: Create a starting "admin" user and setting the starting password to {{ MongoAdminPassword|default ('mongodb') }}
-    command: /usr/bin/mongo admin < /tmp/addMongoAdmin.js
-
-
-# Use the file module
-# REF: http://docs.ansible.com/ansible/file_module.html
-#######################################################
-
-  - name: rm /tmp/addMongoAdmin.js
-    file:
-      path: /tmp/addMongoAdmin.js
-      state: absent
-
-
-# Use the copy module to copy various files into place
-# REF: http://docs.ansible.com/ansible/copy_module.html
-#######################################################
-
-# /var/lib/mongo/mongod-replication.key
-  - name: Copy temporary Ansible local file /tmp/mongod-replication.key to MongoDB remote /var/lib/mongo/mongod-replication.key
-    copy:
-      src=/tmp/mongod-replication.key
-      dest=/var/lib/mongo/mongod-replication.key
-      owner=mongod
-      group=mongod
-      mode=0400
-
-
-# Re-start mongod service
+# Enable and start mongod service
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
 
-  - name: Re-start the mongod service with a production ready configuration in place
+  - name: Enable and start the mongod service
     service:
       name=mongod.service
       enabled=yes
