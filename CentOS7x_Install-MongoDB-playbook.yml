@@ -12,7 +12,7 @@
 # REF: http://docs.ansible.com/ansible/playbooks.html
 #####################################################
 
-- name: Generate prerequistite MongoDB key
+- name: Generate prerequistite MongoDB replication key on the Ansible host
   hosts: localhost
   serial: "100%"
   gather_facts: False
@@ -68,7 +68,7 @@
 #######################################################
 
 # /var/lib/mongo/mongod-replication.key
-  - name: Copy /tmp/mongod-replication.key to remote /var/lib/mongo/mongod-replication.key
+  - name: Copy temporary Ansible local file /tmp/mongod-replication.key to MongoDB remote /var/lib/mongo/mongod-replication.key
     copy:
       src=/tmp/mongod-replication.key
       dest=/var/lib/mongo/mongod-replication.key
@@ -167,7 +167,7 @@
 # REF: http://docs.ansible.com/ansible/playbooks.html
 #####################################################
 
-- name: Post deployment cleanup of the MongoDB key
+- name: Post deployment cleanup of the MongoDB replication key from the temporary location on the Ansible host
   hosts: localhost
   serial: "100%"
   gather_facts: False
