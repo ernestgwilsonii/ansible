@@ -158,13 +158,13 @@
       mode=0644
 
 
-# command - Executes a command on a remote node
-# REF: http://docs.ansible.com/ansible/command_module.html
+# Execute raw command(s)
+# REF: http://docs.ansible.com/ansible/raw_module.html
 ##########################################################
 
 # Add a starting admin user and starting password to the "admin" database BEFORE security gets enabled!
   - name: Create a starting "admin" user and setting the starting password to {{ MongoAdminPassword|default ('mongodb') }}
-    command: /usr/bin/mongo admin < /tmp/addMongoAdmin.js
+    raw: /usr/bin/mongo admin < /tmp/addMongoAdmin.js
 
 
 # Use the file module
