@@ -2,7 +2,7 @@
 
 ################################################################################
 #  description: Installs MongoDB 3x on CentOS7x
-#  usage: ansible-playbook CentOS7x_Install-MongoDB-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere MongoAdminPassword=StartingAdminPasswordHere'
+#  usage: ansible-playbook CentOS7x_Install-MongoDB-in-Replica-Mode-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere MongoAdminPassword=StartingAdminPasswordHere'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
@@ -149,9 +149,9 @@
       mode=0644
 
 # /etc/mongod.conf - Enables security flag that requires usernames/passwords going forward and names a starting replica set
-  - name: Deploy modified production ready configuration templates/MongoDB/mongod.conf.j2 to remote /etc/mongod.conf
+  - name: Deploy modified production ready configuration templates/MongoDB/replica-mode-mongod.conf.j2 to remote /etc/mongod.conf
     template:
-      src=templates/MongoDB/mongod.conf.j2
+      src=templates/MongoDB/replica-mode-mongod.conf.j2
       dest=/etc/mongod.conf
       owner=root
       group=mongod

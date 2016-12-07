@@ -1,8 +1,8 @@
 ---
 
 ################################################################################
-#  description: Installs MongoDB 3x on CentOS7x
-#  usage: ansible-playbook CentOS7x_Initiate-MongoDB-Replication-on-a-Three-Member-Set-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  description: Initiate MongoDB replication on three (3) speciic MongoDB 3x hosts on CentOS7x
+#  usage: ansible-playbook CentOS7x_Initiate-MongoDB-Replication-on-a-Three-Member-Set-playbook.yml --extra-vars 'ReplicaMaster=MongoReplicaMasterHostNameOrIpGoesHere ReplicaSlave1=MongoReplicaSlave1HostNameOrIpGoesHere ReplicaSlave2=MongoReplicaSlave2HostNameOrIpGoesHere MongoAdminPassword=mongodb'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
@@ -12,172 +12,40 @@
 # REF: http://docs.ansible.com/ansible/playbooks.html
 #####################################################
 
-- name: Generate prerequistite MongoDB replication key on the Ansible host
-  hosts: localhost
+- name: Preparing to start the intial MongoDB replication on three MongoDB hosts
+  hosts: ReplicaMaster
   serial: "100%"
   gather_facts: False
   tasks:
-
-# Execute raw command(s)
-# REF: http://docs.ansible.com/ansible/raw_module.html
-##########################################################
-
-  - name: /usr/bin/openssl rand -base64 756 > /tmp/mongod-replication.key
-    raw: /usr/bin/openssl rand -base64 756 > /tmp/mongod-replication.key
-
-
-# Ansible Playbook options
-# REF: http://docs.ansible.com/ansible/playbooks.html
-#####################################################
-
-- name: Install MongoDB 3x on CentOS7x
-  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
-  serial: "100%"
-  gather_facts: False
-  tasks:
-
-
-# Install or configure repository used on the OS by yum
-# REF: https://docs.ansible.com/ansible/yum_repository_module.html
-##################################################################
-
-# /etc/yum.repos.d/mongodb-org-3.4.repo
-  - name: Install repository for MongoDB Community Edition
-    yum_repository:
-      name: MongoDB
-      description: MongoDB Repository
-      file: mongodb-org-3.4
-      baseurl: https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.4/x86_64/
-      enabled: yes
-      gpgcheck: yes
-      gpgkey: https://www.mongodb.org/static/pgp/server-3.4.asc
-
-
-# Install yum packages
-# REF: http://docs.ansible.com/ansible/yum_module.html
-######################################################
-
-  - name: Install mongodb-org
-    yum:
-      name=mongodb-org
-      state=latest
-
-
-# Use the copy module to copy various files into place
-# REF: http://docs.ansible.com/ansible/copy_module.html
-#######################################################
-
-# /var/lib/mongo/mongod-replication.key
-  - name: Copy temporary Ansible local file /tmp/mongod-replication.key to MongoDB remote /var/lib/mongo/mongod-replication.key
-    copy:
-      src=/tmp/mongod-replication.key
-      dest=/var/lib/mongo/mongod-replication.key
-      owner=mongod
-      group=mongod
-      mode=0400
-
-
-# Update various configuration files
-# REF: http://docs.ansible.com/ansible/lineinfile_module.html
-#############################################################
-
-  - name: Ensure that boot-time transparent_hugepage/defrag is set to never
-    lineinfile:
-      dest=/etc/rc.local
-      state=present
-      line='echo never > /sys/kernel/mm/transparent_hugepage/defrag'
-
-  - name: Ensure that boot-time transparent_hugepage/enabled is set to never
-    lineinfile:
-      dest=/etc/rc.local
-      state=present
-      line='echo never > /sys/kernel/mm/transparent_hugepage/enabled'
-
-
-# command - Executes a command on a remote node
-# REF: http://docs.ansible.com/ansible/command_module.html
-##########################################################
-
-  - name: Ensure current active running value transparent_hugepage/defrag is set to never
-    command: echo never > /sys/kernel/mm/transparent_hugepage/defrag
-
-  - name: Ensure current active running value transparent_hugepage/enabled is set to never
-    command: echo never > /sys/kernel/mm/transparent_hugepage/enabled
-
-
-# Restart firewalld to make sure it is running OK before changing any rules
-# REF: http://docs.ansible.com/ansible/service_module.html
-##########################################################
-
-  - name: Ensure the firewalld service is enabled and re-started before changing any rules
-    service:
-      name=firewalld
-      enabled=yes
-      state=restarted
-
-
-# Update the firewalld configuration
-# REF: http://docs.ansible.com/ansible/firewalld_module.html
-############################################################
-
-  - name: Update firewall to allow port TCP 27017 for incoming MongoDB connections
-    firewalld:
-      port=27017/tcp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
 
 
 # Use the template module to populate files with data
 # REF: http://docs.ansible.com/ansible/template_module.html
 ###########################################################
 
-# /etc/mongod.conf
-  - name: Fill in the variables and copy templates/MongoDB/mongod.conf.j2 to remote /etc/mongod.conf
+# Copy the replication initialization script to the master /tmp/ directory
+  - name: Copy the initial replication script from Ansible to the host that will be the starting MongoDB replication master
     template:
-      src=templates/MongoDB/mongod.conf.j2
-      dest=/etc/mongod.conf
+      src=templates/MongoDB/initiateReplication.js.j2
+      dest=/tmp/initiateReplication.js
       owner=root
       group=mongod
       mode=0644
 
 
-# Enable and start mongod service
-# REF: http://docs.ansible.com/ansible/service_module.html
+# Execute raw command(s)
+# REF: http://docs.ansible.com/ansible/raw_module.html
 ##########################################################
 
-  - name: Enable and start the mongod service
-    service:
-      name=mongod.service
-      enabled=yes
-      state=restarted
-      # Note: Command line verification:
-      # systemctl status mongod.service
-      # systemctl status mongod.service -l
-      # service mongod status
-      # ls /var/lib/mongo
-      # cat /var/log/messages | grep mongod
-      # cat /usr/lib/systemd/system/mongod.service
-      # cat /etc/mongod.conf
-      # cat /var/log/mongodb/mongod.log
+  - name: Initializing MongoDB replication
+    raw: mongo --port 27017 -u "admin" -p "{{MongoAdminPassword|default ('mongodb')}}" --authenticationDatabase "admin" < /tmp/initiateReplication.js
 
-
-# Ansible Playbook options
-# REF: http://docs.ansible.com/ansible/playbooks.html
-#####################################################
-
-- name: Post deployment cleanup of the MongoDB replication key from the temporary location on the Ansible host
-  hosts: localhost
-  serial: "100%"
-  gather_facts: False
-  tasks:
 
 # Use the file module
 # REF: http://docs.ansible.com/ansible/file_module.html
 #######################################################
 
-  - name: rm /tmp/mongod-replication.key
+  - name: Remove the temporary file from the replication master - rm /tmp/initiateReplication.js
     file:
-      path: /tmp/mongod-replication.key
+      path: /tmp/initiateReplication.js
       state: absent
