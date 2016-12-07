@@ -13,7 +13,7 @@
 #####################################################
 
 - name: Preparing to start the intial MongoDB replication on three MongoDB hosts
-  hosts: {{ReplicaMaster}}
+  hosts: "{{ReplicaMaster}}"
   serial: "100%"
   gather_facts: False
   tasks:
