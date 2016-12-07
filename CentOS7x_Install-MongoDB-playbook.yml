@@ -191,6 +191,17 @@
       mode=0400
 
 
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: Ensure current active running value transparent_hugepage/defrag is set to never
+    command: echo never > /sys/kernel/mm/transparent_hugepage/defrag
+
+  - name: Ensure current active running value transparent_hugepage/enabled is set to never
+    command: echo never > /sys/kernel/mm/transparent_hugepage/enabled
+
+
 # Re-start mongod service
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
