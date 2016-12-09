@@ -28,6 +28,13 @@ processManagement:
 net:
   port: 27017
   bindIp: {{ansible_ssh_host}},127.0.0.1
+  ssl:
+    mode: requireSSL
+    PEMKeyFile: /etc/ssl/mongodb.pem
+    allowConnectionsWithoutCertificates: true
+    allowInvalidCertificates: true
+    allowInvalidHostnames: true
+    disabledProtocols: TLS1_0,TLS1_1
 
 security:
   clusterAuthMode: keyFile

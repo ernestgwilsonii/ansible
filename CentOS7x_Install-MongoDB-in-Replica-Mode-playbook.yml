@@ -190,6 +190,15 @@
       group=mongod
       mode=0400
 
+# /etc/ssl/mongodb.pem
+  - name: Copy starting self-signed certificate from Ansible files/MongoDB/mongodb.pem to MongoDB remote /etc/ssl/mongodb.pem
+    copy:
+      src=files/MongoDB/mongodb.pem
+      dest=/etc/ssl/mongodb.pem
+      owner=mongod
+      group=mongod
+      mode=0400
+
 
 # command - Executes a command on a remote node
 # REF: http://docs.ansible.com/ansible/command_module.html

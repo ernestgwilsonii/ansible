@@ -2,7 +2,7 @@
 
 ################################################################################
 #  description: Generates and installs a new replication key to a GROUP of MongoDB 3x servers on CentOS7x
-#  usage: CentOS7x_Generate-and-Install-new-MongoDB-Replication-Key-playbook.yml --extra-vars 'HostOrGroup=YourGroupNameGoesHere'
+#  usage: CentOS7x_Generate-and-Install-both-a-new-MongoDB-Replication-Key-and-a-new-Self-Signed-Certificate-playbook.yml --extra-vars 'HostOrGroup=YourGroupNameGoesHere'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
@@ -22,8 +22,17 @@
 # REF: http://docs.ansible.com/ansible/raw_module.html
 ##########################################################
 
+# Generate a new replication key
   - name: /usr/bin/openssl rand -base64 756 > /tmp/mongod-replication.key
     raw: /usr/bin/openssl rand -base64 756 > /tmp/mongod-replication.key
+
+# Generate a new self-signed certificate
+  - name: cd /tmp && /usr/bin/openssl req -nodes -newkey rsa:2048 -new -x509 -days 3650 -keyout mongodb-cert.key -out mongodb-cert.crt -subj '/C=US/ST=Washington/L=Seattle/O=CenturyLink/OU=Cloud/CN=*.centurylink.local/emailAddress=help@ctl.io'
+    raw: cd /tmp && /usr/bin/openssl req -nodes -newkey rsa:2048 -new -x509 -days 3650 -keyout mongodb-cert.key -out mongodb-cert.crt -subj '/C=US/ST=Washington/L=Seattle/O=CenturyLink/OU=Cloud/CN=*.centurylink.local/emailAddress=help@ctl.io'
+
+# Create a single usable file that the MongoDB configuration will use as the self-signed certificate
+  - name: cd /tmp && cat mongodb-cert.key mongodb-cert.crt > mongodb.pem
+    raw: cd /tmp && cat mongodb-cert.key mongodb-cert.crt > mongodb.pem
 
 
 # Ansible Playbook options
@@ -50,6 +59,15 @@
       group=mongod
       mode=0400
 
+# /etc/ssl/mongodb.pem
+  - name: Copy temporary Ansible local file /tmp/mongod-replication.key to MongoDB remote /var/lib/mongo/mongod-replication.key
+    copy:
+      src=/tmp/mongodb.pem
+      dest=/etc/ssl/mongodb.pem
+      owner=mongod
+      group=mongod
+      mode=0444
+
 
 # Enable and start mongod service
 # REF: http://docs.ansible.com/ansible/service_module.html
@@ -75,7 +93,7 @@
 # REF: http://docs.ansible.com/ansible/playbooks.html
 #####################################################
 
-- name: Post deployment cleanup of the MongoDB replication key from the temporary location on the Ansible host
+- name: Post deployment cleanup of the MongoDB replication key and self-signed certicate files from the temporary location on the Ansible host
   hosts: localhost
   serial: "100%"
   gather_facts: False
@@ -88,4 +106,19 @@
   - name: rm /tmp/mongod-replication.key
     file:
       path: /tmp/mongod-replication.key
+      state: absent
+
+  - name: rm /tmp/mongodb-cert.crt
+    file:
+      path: /tmp/mongodb-cert.crt
+      state: absent
+
+  - name: rm /tmp/mongodb-cert.key
+    file:
+      path: /tmp/mongodb-cert.key
+      state: absent
+
+  - name: rm /tmp/mongodb.pem
+    file:
+      path: /tmp/mongodb.pem
       state: absent
