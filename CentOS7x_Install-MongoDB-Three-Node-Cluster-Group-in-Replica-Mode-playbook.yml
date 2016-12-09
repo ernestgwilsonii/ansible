@@ -2,7 +2,7 @@
 
 ################################################################################
 #  description: Installs MongoDB 3x on CentOS7x
-#  usage: ansible-playbook CentOS7x_Install-MongoDB-in-Replica-Mode-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere MongoAdminPassword=StartingAdminPasswordHere'
+#  usage: ansible-playbook CentOS7x_Install-MongoDB-Three-Node-Cluster-Group-in-Replica-Mode-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere MongoAdminPassword=StartingAdminPasswordHere'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
