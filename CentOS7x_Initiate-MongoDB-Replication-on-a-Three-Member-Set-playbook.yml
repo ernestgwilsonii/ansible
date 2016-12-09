@@ -38,7 +38,7 @@
 ##########################################################
 
   - name: Initializing MongoDB replication
-    raw: mongo --port 27017 -u "admin" -p "{{MongoAdminPassword|default ('mongodb')}}" --authenticationDatabase "admin" < /tmp/initiateReplication.js
+    raw: mongo -ssl --sslAllowInvalidCertificates --port 27017 -u "admin" -p "{{MongoAdminPassword|default ('mongodb')}}" --authenticationDatabase "admin" < /tmp/initiateReplication.js
 
 
 # Use the file module
