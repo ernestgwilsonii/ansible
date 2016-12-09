@@ -115,6 +115,41 @@
       zone=public
 
 
+# Tweak settings in INI files
+# REF: http://docs.ansible.com/ansible/ini_file_module.html
+###########################################################
+
+# Set values in /usr/lib/systemd/system/mongod.service
+  - name: Specify After value of multi-user.target under the Unit section in /usr/lib/systemd/system/mongod.service
+    ini_file:
+      dest: /usr/lib/systemd/system/mongod.service
+      section: Unit
+      option: After
+      value: 'multi-user.target'
+
+# Set values in /usr/lib/systemd/system/mongod.service
+  - name: Remove the WantedBy value of multi-user.target under the Install section in /usr/lib/systemd/system/mongod.service
+    ini_file:
+      dest: /usr/lib/systemd/system/mongod.service
+      section: Install
+      option: WantedBy
+      state: absent
+
+
+# Use the copy module to copy various files into place
+# REF: http://docs.ansible.com/ansible/copy_module.html
+#######################################################
+
+# /usr/lib/tmpfiles.d/mongod.conf
+  - name: Copy the mongod.conf systemd tmpfiles.d configuration file from Ansible local file files/MongoDB/mongod.conf to MongoDB remote /usr/lib/tmpfiles.d/mongod.conf
+    copy:
+      src=files/MongoDB/mongod.conf
+      dest=/usr/lib/tmpfiles.d/mongod.conf
+      owner=mongod
+      group=mongod
+      mode=0644
+
+
 # Enable and start mongod service
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
