@@ -211,6 +211,11 @@
       path: /tmp/addMongoAdmin.js
       state: absent
 
+  - name: chmod 777 /etc/rc.d/rc.local
+    file:
+      path: /etc/rc.d/rc.local
+      mode: 0777
+
 
 # Use the copy module to copy various files into place
 # REF: http://docs.ansible.com/ansible/copy_module.html
