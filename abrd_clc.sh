@@ -4,7 +4,7 @@
 # Ansible Bootstrap Rapid Deployment - Uses CLC SDK and CLC Ansible module                      #
 #                                                                                               #
 # CentOS7x Usage:                                                                               #
-#   curl https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/abrd._clc.sh | bash - #
+#   curl https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/abrd_clc.sh | bash -  #
 #                                                                                               #
 #                                                          ErnestGWilsonII@gmail.com 2016-12-10 #
 #                                                            https://github.com/ernestgwilsonii #
