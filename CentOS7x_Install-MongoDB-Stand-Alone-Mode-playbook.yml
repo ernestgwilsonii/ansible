@@ -12,24 +12,6 @@
 # REF: http://docs.ansible.com/ansible/playbooks.html
 #####################################################
 
-- name: Generate prerequistite MongoDB replication key on the Ansible host
-  hosts: localhost
-  serial: "100%"
-  gather_facts: False
-  tasks:
-
-# Execute raw command(s)
-# REF: http://docs.ansible.com/ansible/raw_module.html
-##########################################################
-
-  - name: /usr/bin/openssl rand -base64 756 > /tmp/mongod-replication.key
-    raw: /usr/bin/openssl rand -base64 756 > /tmp/mongod-replication.key
-
-
-# Ansible Playbook options
-# REF: http://docs.ansible.com/ansible/playbooks.html
-#####################################################
-
 - name: Install MongoDB 3x on CentOS7x
   hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
   serial: "100%"
@@ -194,10 +176,10 @@
       group=mongod
       mode=0644
 
-# /etc/mongod.conf - Enables security flag that requires usernames/passwords going forward and names a starting replica set
-  - name: Deploy modified production ready configuration templates/MongoDB/replica-mode-mongod.conf.j2 to remote /etc/mongod.conf
+# /etc/mongod.conf - Enables security flag that requires usernames/passwords going forward
+  - name: Deploy modified production ready configuration templates/MongoDB/stand-alone-mode-mongod.conf.j2.txt to remote /etc/mongod.conf
     template:
-      src=templates/MongoDB/replica-mode-mongod.conf.j2
+      src=templates/MongoDB/stand-alone-mode-mongod.conf.j2.txt
       dest=/etc/mongod.conf
       owner=root
       group=mongod
@@ -275,23 +257,3 @@
       # cat /usr/lib/systemd/system/mongod.service
       # cat /etc/mongod.conf
       # cat /var/log/mongodb/mongod.log
-
-
-# Ansible Playbook options
-# REF: http://docs.ansible.com/ansible/playbooks.html
-#####################################################
-
-- name: Post deployment cleanup of the MongoDB replication key from the temporary location on the Ansible host
-  hosts: localhost
-  serial: "100%"
-  gather_facts: False
-  tasks:
-
-# Use the file module
-# REF: http://docs.ansible.com/ansible/file_module.html
-#######################################################
-
-  - name: rm /tmp/mongod-replication.key
-    file:
-      path: /tmp/mongod-replication.key
-      state: absent
