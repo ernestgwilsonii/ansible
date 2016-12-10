@@ -11,9 +11,6 @@
 #                                                   https://www.linkedin.com/in/ernestgwilsonii #
 #################################################################################################
 
-# Usage:
-#   curl https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/abrd._clc.sh | bash -
-
 # Update the base OS
 yum -y upgrade
 
