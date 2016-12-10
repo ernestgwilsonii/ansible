@@ -2,7 +2,7 @@
 
 ################################################################################
 #  description: Generates and installs a new replication key to a GROUP of MongoDB 3x servers on CentOS7x
-#  usage: CentOS7x_Generate-and-Install-both-a-new-MongoDB-Replication-Key-and-a-new-Self-Signed-Certificate-playbook.yml --extra-vars 'HostOrGroup=YourGroupNameGoesHere'
+#  usage: CentOS7x_Generate-and-Install-a-new-Self-Signed-Certificate-for-Stand-Alone-MongoDB-playbook.yml --extra-vars 'HostOrGroup=YourGroupNameGoesHere'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
@@ -22,10 +22,6 @@
 # REF: http://docs.ansible.com/ansible/raw_module.html
 ##########################################################
 
-# Generate a new replication key
-  - name: /usr/bin/openssl rand -base64 756 > /tmp/mongod-replication.key
-    raw: /usr/bin/openssl rand -base64 756 > /tmp/mongod-replication.key
-
 # Generate a new self-signed certificate
   - name: cd /tmp && /usr/bin/openssl req -nodes -newkey rsa:2048 -new -x509 -days 3650 -keyout mongodb-cert.key -out mongodb-cert.crt -subj '/C=US/ST=Washington/L=Seattle/O=CenturyLink/OU=Cloud/CN=*.centurylink.local/emailAddress=help@ctl.io'
     raw: cd /tmp && /usr/bin/openssl req -nodes -newkey rsa:2048 -new -x509 -days 3650 -keyout mongodb-cert.key -out mongodb-cert.crt -subj '/C=US/ST=Washington/L=Seattle/O=CenturyLink/OU=Cloud/CN=*.centurylink.local/emailAddress=help@ctl.io'
@@ -39,7 +35,7 @@
 # REF: http://docs.ansible.com/ansible/playbooks.html
 #####################################################
 
-- name: install a new replication key to a GROUP of MongoDB 3x servers on CentOS7x
+- name: Install a new self-signed SSL certificate for MongoDB server(s) in stand-alone mode on CentOS7x
   hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
   serial: "100%"
   gather_facts: False
@@ -49,15 +45,6 @@
 # Use the copy module to copy various files into place
 # REF: http://docs.ansible.com/ansible/copy_module.html
 #######################################################
-
-# /var/lib/mongo/mongod-replication.key
-  - name: Copy temporary Ansible local file /tmp/mongod-replication.key to MongoDB remote /var/lib/mongo/mongod-replication.key
-    copy:
-      src=/tmp/mongod-replication.key
-      dest=/var/lib/mongo/mongod-replication.key
-      owner=mongod
-      group=mongod
-      mode=0400
 
 # /etc/ssl/mongodb.pem
   - name: Copy temporary Ansible local file /tmp/mongodb.pem to MongoDB remote /etc/ssl/mongodb.pem
@@ -113,11 +100,6 @@
 # Use the file module
 # REF: http://docs.ansible.com/ansible/file_module.html
 #######################################################
-
-  - name: rm /tmp/mongod-replication.key
-    file:
-      path: /tmp/mongod-replication.key
-      state: absent
 
   - name: rm /tmp/mongodb-cert.crt
     file:
