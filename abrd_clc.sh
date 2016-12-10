@@ -70,9 +70,11 @@ echo "export ANSIBLE_LIBRARY=/usr/lib/python2.7/site-packages/clc_ansible_module
 echo "export ANSIBLE_HOST_KEY_CHECKING=False" >> /root/.bashrc
 
 # Verify your Ansible version
+cd /etc/ansible
 clear
 echo "################################################################################"
 ansible --version
+find /etc/ansible/
 
 # Instruct the human:
 echo "################################################################################"
