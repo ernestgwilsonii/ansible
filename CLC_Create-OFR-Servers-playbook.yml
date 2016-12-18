@@ -2,8 +2,8 @@
 
 ################################################################################
 #  description: Create Online Flight Recorder (OFR) servers in Control at CenturyLink Cloud
-#  usage: ansible-playbook CLC_Create-OFR-Servers-in-VA1-playbook.yml
-#  example: ansible-playbook CLC_Create-OFR-Servers-in-VA1-playbook.yml --extra-vars 'DC=VA1 Name=OFRTA Password=P@$$W0rd!'
+#  usage: ansible-playbook CLC_Create-OFR-Servers-playbook.yml
+#  example: ansible-playbook CLC_Create-OFR-Servers-playbook.yml --extra-vars 'DC=VA1 Name=OFRTA Password=P@$$W0rd!'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
