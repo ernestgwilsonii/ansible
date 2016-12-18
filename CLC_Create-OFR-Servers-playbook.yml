@@ -40,6 +40,18 @@
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
 
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Create Online Flight Recorder (OFR) servers in Control
+  hosts: localhost
+  gather_facts: False
+  connection: local
+  tasks:
+
+
 # OFR-Logstash servers
     - name: Create OFR-Logstash servers
       clc_server:
