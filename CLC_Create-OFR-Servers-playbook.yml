@@ -25,15 +25,16 @@
 #############################################################
 
 # OFR-NGINX servers
-    - name: Create OFR-NGINX servers
+    - name: Create OFR-NGINX server
       ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.101"
         description: "OFR NGIX HA server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
-        count: "2"
+        count: "1"
         group: "OFR-NGINX"
         cpu: "2"
         memory: "2"
@@ -41,16 +42,35 @@
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
 
-# OFR-Logstash servers
-    - name: Create OFR-Logstash servers
+    - name: Create OFR-NGINX server
       ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.102"
+        description: "OFR NGIX HA server"
+        template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
+        count: "1"
+        group: "OFR-NGINX"
+        cpu: "2"
+        memory: "2"
+        primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
+        secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
+        wait: True
+
+
+# OFR-Logstash servers
+    - name: Create OFR-Logstash server
+      ignore_errors: yes
+      clc_server:
+        location: "{{ DC|default ('VA1') }}"
+        password: "{{ Password|default ('P@$$W0rd!') }}"
+        name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.111"
         description: "OFR Logstash server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
-        count: "3"
+        count: "1"
         group: "OFR-Logstash"
         cpu: "2"
         memory: "2"
@@ -58,16 +78,52 @@
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
 
-# OFR-Kafka servers
-    - name: Create OFR-Kafka servers
+    - name: Create OFR-Logstash server
       ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.112"
+        description: "OFR Logstash server"
+        template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
+        count: "1"
+        group: "OFR-Logstash"
+        cpu: "2"
+        memory: "2"
+        primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
+        secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
+        wait: True
+
+    - name: Create OFR-Logstash server
+      ignore_errors: yes
+      clc_server:
+        location: "{{ DC|default ('VA1') }}"
+        password: "{{ Password|default ('P@$$W0rd!') }}"
+        name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.113"
+        description: "OFR Logstash server"
+        template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
+        count: "1"
+        group: "OFR-Logstash"
+        cpu: "2"
+        memory: "2"
+        primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
+        secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
+        wait: True
+
+
+# OFR-Kafka servers
+    - name: Create OFR-Kafka server
+      ignore_errors: yes
+      clc_server:
+        location: "{{ DC|default ('VA1') }}"
+        password: "{{ Password|default ('P@$$W0rd!') }}"
+        name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.121"
         description: "OFR Kafka server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
-        count: "3"
+        count: "1"
         group: "OFR-Kafka"
         cpu: "2"
         memory: "2"
@@ -75,16 +131,86 @@
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
 
-# OFR-ElasticsearchClientNodes servers
-    - name: Create OFR-ElasticsearchClientNodes servers
+    - name: Create OFR-Kafka server
       ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
-        description: "OFR Elasticsearch Client Node server"
+        ip_address: "{{IPNetStart}}.122"
+        description: "OFR Kafka server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
-        count: "3"
+        count: "1"
+        group: "OFR-Kafka"
+        cpu: "2"
+        memory: "2"
+        primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
+        secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
+        wait: True
+
+    - name: Create OFR-Kafka server
+      ignore_errors: yes
+      clc_server:
+        location: "{{ DC|default ('VA1') }}"
+        password: "{{ Password|default ('P@$$W0rd!') }}"
+        name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.123"
+        description: "OFR Kafka server"
+        template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
+        count: "1"
+        group: "OFR-Kafka"
+        cpu: "2"
+        memory: "2"
+        primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
+        secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
+        wait: True
+
+
+# OFR-ElasticsearchClientNodes servers
+    - name: Create OFR-ElasticsearchClientNodes server
+      ignore_errors: yes
+      clc_server:
+        location: "{{ DC|default ('VA1') }}"
+        password: "{{ Password|default ('P@$$W0rd!') }}"
+        name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.131"
+        description: "OFR Elasticsearch Cluster Client Node server"
+        template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
+        count: "1"
+        group: "OFR-ElasticsearchClientNodes"
+        cpu: "2"
+        memory: "4"
+        primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
+        secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
+        wait: True
+
+    - name: Create OFR-ElasticsearchClientNodes server
+      ignore_errors: yes
+      clc_server:
+        location: "{{ DC|default ('VA1') }}"
+        password: "{{ Password|default ('P@$$W0rd!') }}"
+        name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.132"
+        description: "OFR Elasticsearch Cluster Client Node server"
+        template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
+        count: "1"
+        group: "OFR-ElasticsearchClientNodes"
+        cpu: "2"
+        memory: "4"
+        primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
+        secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
+        wait: True
+
+    - name: Create OFR-ElasticsearchClientNodes server
+      ignore_errors: yes
+      clc_server:
+        location: "{{ DC|default ('VA1') }}"
+        password: "{{ Password|default ('P@$$W0rd!') }}"
+        name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.133"
+        description: "OFR Elasticsearch Cluster Client Node server"
+        template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
+        count: "1"
         group: "OFR-ElasticsearchClientNodes"
         cpu: "2"
         memory: "4"
@@ -93,15 +219,16 @@
         wait: True
 
 # OFR-ElasticsearchMasterNodes servers
-    - name: Create OFR-ElasticsearchMasterNodes servers
+    - name: Create OFR-ElasticsearchMasterNodes server
       ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
-        description: "OFR Elasticsearch Master Node server"
+        ip_address: "{{IPNetStart}}.141"
+        description: "OFR Elasticsearch Cluster Master Node server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
-        count: "3"
+        count: "1"
         group: "OFR-ElasticsearchMasterNodes"
         cpu: "2"
         memory: "4"
@@ -109,16 +236,52 @@
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
 
-# OFR-ElasticsearchDataNodes servers
-    - name: Create OFR-ElasticsearchDataNodes servers
+    - name: Create OFR-ElasticsearchMasterNodes server
       ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
-        description: "OFR Elasticsearch Data Node server"
+        ip_address: "{{IPNetStart}}.142"
+        description: "OFR Elasticsearch Cluster Master Node server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
-        count: "3"
+        count: "1"
+        group: "OFR-ElasticsearchMasterNodes"
+        cpu: "2"
+        memory: "4"
+        primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
+        secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
+        wait: True
+
+    - name: Create OFR-ElasticsearchMasterNodes server
+      ignore_errors: yes
+      clc_server:
+        location: "{{ DC|default ('VA1') }}"
+        password: "{{ Password|default ('P@$$W0rd!') }}"
+        name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.143"
+        description: "OFR Elasticsearch Cluster Master Node server"
+        template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
+        count: "1"
+        group: "OFR-ElasticsearchMasterNodes"
+        cpu: "2"
+        memory: "4"
+        primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
+        secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
+        wait: True
+
+
+# OFR-ElasticsearchDataNodes servers
+    - name: Create OFR-ElasticsearchDataNodes server
+      ignore_errors: yes
+      clc_server:
+        location: "{{ DC|default ('VA1') }}"
+        password: "{{ Password|default ('P@$$W0rd!') }}"
+        name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.151"
+        description: "OFR Elasticsearch Cluster Data Node server"
+        template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
+        count: "1"
         group: "OFR-ElasticsearchDataNodes"
         cpu: "2"
         memory: "4"
@@ -126,16 +289,86 @@
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
 
-# OFR-Kibana servers
-    - name: Create OFR-Kibana servers
+    - name: Create OFR-ElasticsearchDataNodes server
       ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.152"
+        description: "OFR Elasticsearch Cluster Data Node server"
+        template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
+        count: "1"
+        group: "OFR-ElasticsearchDataNodes"
+        cpu: "2"
+        memory: "4"
+        primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
+        secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
+        wait: True
+
+    - name: Create OFR-ElasticsearchDataNodes server
+      ignore_errors: yes
+      clc_server:
+        location: "{{ DC|default ('VA1') }}"
+        password: "{{ Password|default ('P@$$W0rd!') }}"
+        name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.153"
+        description: "OFR Elasticsearch Cluster Data Node server"
+        template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
+        count: "1"
+        group: "OFR-ElasticsearchDataNodes"
+        cpu: "2"
+        memory: "4"
+        primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
+        secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
+        wait: True
+
+    - name: Create OFR-ElasticsearchDataNodes server
+      ignore_errors: yes
+      clc_server:
+        location: "{{ DC|default ('VA1') }}"
+        password: "{{ Password|default ('P@$$W0rd!') }}"
+        name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.154"
+        description: "OFR Elasticsearch Cluster Data Node server"
+        template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
+        count: "1"
+        group: "OFR-ElasticsearchDataNodes"
+        cpu: "2"
+        memory: "4"
+        primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
+        secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
+        wait: True
+
+    - name: Create OFR-ElasticsearchDataNodes server
+      ignore_errors: yes
+      clc_server:
+        location: "{{ DC|default ('VA1') }}"
+        password: "{{ Password|default ('P@$$W0rd!') }}"
+        name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.155"
+        description: "OFR Elasticsearch Cluster Data Node server"
+        template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
+        count: "1"
+        group: "OFR-ElasticsearchDataNodes"
+        cpu: "2"
+        memory: "4"
+        primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
+        secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
+        wait: True
+
+
+# OFR-Kibana servers
+    - name: Create OFR-Kibana server
+      ignore_errors: yes
+      clc_server:
+        location: "{{ DC|default ('VA1') }}"
+        password: "{{ Password|default ('P@$$W0rd!') }}"
+        name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.161"
         description: "OFR Kibana server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
-        count: "3"
+        count: "1"
         group: "OFR-Kibana"
         cpu: "2"
         memory: "4"
@@ -143,16 +376,52 @@
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
 
-# OFR-Graylog servers
-    - name: Create OFR-Graylog servers
+    - name: Create OFR-Kibana server
       ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.162"
+        description: "OFR Kibana server"
+        template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
+        count: "1"
+        group: "OFR-Kibana"
+        cpu: "2"
+        memory: "4"
+        primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
+        secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
+        wait: True
+
+    - name: Create OFR-Kibana server
+      ignore_errors: yes
+      clc_server:
+        location: "{{ DC|default ('VA1') }}"
+        password: "{{ Password|default ('P@$$W0rd!') }}"
+        name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.163"
+        description: "OFR Kibana server"
+        template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
+        count: "1"
+        group: "OFR-Kibana"
+        cpu: "2"
+        memory: "4"
+        primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
+        secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
+        wait: True
+
+
+# OFR-Graylog servers
+    - name: Create OFR-Graylog server
+      ignore_errors: yes
+      clc_server:
+        location: "{{ DC|default ('VA1') }}"
+        password: "{{ Password|default ('P@$$W0rd!') }}"
+        name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.171"
         description: "OFR Graylog server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
-        count: "3"
+        count: "1"
         group: "OFR-Graylog"
         cpu: "2"
         memory: "4"
@@ -160,16 +429,52 @@
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
 
-# OFR-MongoDB servers
-    - name: Create OFR-MongoDB servers
+    - name: Create OFR-Graylog server
       ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
-        description: "OFR MongoDB server"
+        ip_address: "{{IPNetStart}}.172"
+        description: "OFR Graylog server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
-        count: "3"
+        count: "1"
+        group: "OFR-Graylog"
+        cpu: "2"
+        memory: "4"
+        primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
+        secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
+        wait: True
+
+    - name: Create OFR-Graylog server
+      ignore_errors: yes
+      clc_server:
+        location: "{{ DC|default ('VA1') }}"
+        password: "{{ Password|default ('P@$$W0rd!') }}"
+        name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.173"
+        description: "OFR Graylog server"
+        template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
+        count: "1"
+        group: "OFR-Graylog"
+        cpu: "2"
+        memory: "4"
+        primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
+        secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
+        wait: True
+
+
+# OFR-MongoDB servers
+    - name: Create OFR-MongoDB Cluster server
+      ignore_errors: yes
+      clc_server:
+        location: "{{ DC|default ('VA1') }}"
+        password: "{{ Password|default ('P@$$W0rd!') }}"
+        name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.181"
+        description: "OFR MongoDB Cluster server"
+        template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
+        count: "1"
         group: "OFR-MongoDB"
         cpu: "2"
         memory: "2"
@@ -177,13 +482,49 @@
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
 
-# OFR-StatsD servers
-    - name: Create OFR-StatsD servers
+    - name: Create OFR-MongoDB Cluster server
       ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.182"
+        description: "OFR MongoDB Cluster server"
+        template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
+        count: "1"
+        group: "OFR-MongoDB"
+        cpu: "2"
+        memory: "2"
+        primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
+        secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
+        wait: True
+
+    - name: Create OFR-MongoDB Cluster server
+      ignore_errors: yes
+      clc_server:
+        location: "{{ DC|default ('VA1') }}"
+        password: "{{ Password|default ('P@$$W0rd!') }}"
+        name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.183"
+        description: "OFR MongoDB Cluster server"
+        template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
+        count: "1"
+        group: "OFR-MongoDB"
+        cpu: "2"
+        memory: "2"
+        primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
+        secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
+        wait: True
+
+
+# OFR-StatsD servers
+    - name: Create OFR-StatsD server
+      ignore_errors: yes
+      clc_server:
+        location: "{{ DC|default ('VA1') }}"
+        password: "{{ Password|default ('P@$$W0rd!') }}"
+        name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.191"
         description: "OFR StatsD server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
         count: "1"
@@ -194,13 +535,15 @@
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
 
+
 # OFR-Graphite servers
-    - name: Create OFR-Graphite servers
+    - name: Create OFR-Graphite server
       ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
+        ip_address: "{{IPNetStart}}.201"
         description: "OFR Graphite server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
         count: "1"
