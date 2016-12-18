@@ -2,8 +2,8 @@
 
 ################################################################################
 #  description: Create Online Flight Recorder (OFR) servers in Control at CenturyLink Cloud
-#  usage: ansible-playbook CLC_Create-OFR-Servers-In-Control-playbook.yml
-#  example: ansible-playbook CLC_Create-OFR-Servers-In-Control-playbook.yml --extra-vars 'DC=VA1 Name=OFRTZ Password=P@$$W0rd!'
+#  usage: ansible-playbook CLC_Create-OFR-Servers-in-VA1-playbook.yml
+#  example: ansible-playbook CLC_Create-OFR-Servers-in-VA1-playbook.yml --extra-vars 'Name=OFRTA Password=P@$$W0rd!'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
@@ -27,15 +27,15 @@
 # OFR-NGIX servers
     - name: Create OFR-NGIX servers
       clc_server:
-        location: "{{ DC|default ('VA1') }}"
+        location: "VA1"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
-        description: "{{ Description|default ('OFR NGIX HA server') }}"
+        description: "OFR NGIX HA server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
-        count: "{{ Count|default ('2') }}"
-        group: "{{ Group|default ('OFR-NGIX') }}"
-        cpu: "{{ CPU|default ('2') }}"
-        memory: "{{ Memory|default ('2') }}"
+        count: "2"
+        group: "VA1_OFR-NGIX"
+        cpu: "2"
+        memory: "2"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
@@ -43,15 +43,15 @@
 # OFR-Logstash servers
     - name: Create OFR-Logstash servers
       clc_server:
-        location: "{{ DC|default ('VA1') }}"
+        location: "VA1"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
-        description: "{{ Description|default ('OFR Logstash server') }}"
+        description: "OFR NGIX HA server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
-        count: "{{ Count|default ('3') }}"
-        group: "{{ Group|default ('OFR-Logstash') }}"
-        cpu: "{{ CPU|default ('2') }}"
-        memory: "{{ Memory|default ('2') }}"
+        count: "3"
+        group: "VA1_OFR-Logstash"
+        cpu: "2"
+        memory: "2"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
@@ -59,15 +59,15 @@
 # OFR-Kafka servers
     - name: Create OFR-Kafka servers
       clc_server:
-        location: "{{ DC|default ('VA1') }}"
+        location: "VA1"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
-        description: "{{ Description|default ('OFR Kafka server') }}"
+        description: "OFR NGIX HA server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
-        count: "{{ Count|default ('3') }}"
-        group: "{{ Group|default ('OFR-Kafka') }}"
-        cpu: "{{ CPU|default ('2') }}"
-        memory: "{{ Memory|default ('2') }}"
+        count: "3"
+        group: "VA1_OFR-Kafka"
+        cpu: "2"
+        memory: "2"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
@@ -75,15 +75,15 @@
 # OFR-ElasticsearchClientNodes servers
     - name: Create OFR-ElasticsearchClientNodes servers
       clc_server:
-        location: "{{ DC|default ('VA1') }}"
+        location: "VA1"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
-        description: "{{ Description|default ('OFR Elasticsearch Client Node server') }}"
+        description: "OFR NGIX HA server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
-        count: "{{ Count|default ('3') }}"
-        group: "{{ Group|default ('OFR-ElasticsearchClientNodes') }}"
-        cpu: "{{ CPU|default ('2') }}"
-        memory: "{{ Memory|default ('4') }}"
+        count: "3"
+        group: "VA1_OFR-ElasticsearchClientNodes"
+        cpu: "2"
+        memory: "4"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
@@ -91,15 +91,15 @@
 # OFR-ElasticsearchMasterNodes servers
     - name: Create OFR-ElasticsearchMasterNodes servers
       clc_server:
-        location: "{{ DC|default ('VA1') }}"
+        location: "VA1"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
-        description: "{{ Description|default ('OFR Elasticsearch Master Node server') }}"
+        description: "OFR NGIX HA server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
-        count: "{{ Count|default ('3') }}"
-        group: "{{ Group|default ('OFR-ElasticsearchMasterNodes') }}"
-        cpu: "{{ CPU|default ('2') }}"
-        memory: "{{ Memory|default ('4') }}"
+        count: "3"
+        group: "VA1_OFR-ElasticsearchMasterNodes"
+        cpu: "2"
+        memory: "4"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
@@ -107,15 +107,15 @@
 # OFR-ElasticsearchDataNodes servers
     - name: Create OFR-ElasticsearchDataNodes servers
       clc_server:
-        location: "{{ DC|default ('VA1') }}"
+        location: "VA1"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
-        description: "{{ Description|default ('OFR Elasticsearch Data Node server') }}"
+        description: "OFR NGIX HA server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
-        count: "{{ Count|default ('3') }}"
-        group: "{{ Group|default ('OFR-ElasticsearchDataNodes') }}"
-        cpu: "{{ CPU|default ('2') }}"
-        memory: "{{ Memory|default ('4') }}"
+        count: "3"
+        group: "VA1_OFR-ElasticsearchDataNodes"
+        cpu: "2"
+        memory: "4"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
@@ -123,15 +123,15 @@
 # OFR-Kibana servers
     - name: Create OFR-Kibana servers
       clc_server:
-        location: "{{ DC|default ('VA1') }}"
+        location: "VA1"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
-        description: "{{ Description|default ('OFR Kibana server') }}"
+        description: "OFR NGIX HA server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
-        count: "{{ Count|default ('3') }}"
-        group: "{{ Group|default ('OFR-Kibana') }}"
-        cpu: "{{ CPU|default ('2') }}"
-        memory: "{{ Memory|default ('4') }}"
+        count: "3"
+        group: "VA1_OFR-Kibana"
+        cpu: "2"
+        memory: "4"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
@@ -139,15 +139,15 @@
 # OFR-Graylog servers
     - name: Create OFR-Graylog servers
       clc_server:
-        location: "{{ DC|default ('VA1') }}"
+        location: "VA1"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
-        description: "{{ Description|default ('OFR Graylog server') }}"
+        description: "OFR NGIX HA server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
-        count: "{{ Count|default ('3') }}"
-        group: "{{ Group|default ('OFR-Graylog') }}"
-        cpu: "{{ CPU|default ('2') }}"
-        memory: "{{ Memory|default ('4') }}"
+        count: "3"
+        group: "VA1_OFR-Graylog"
+        cpu: "2"
+        memory: "4"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
@@ -155,15 +155,15 @@
 # OFR-MongoDB servers
     - name: Create OFR-MongoDB servers
       clc_server:
-        location: "{{ DC|default ('VA1') }}"
+        location: "VA1"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
-        description: "{{ Description|default ('OFR MongoDB server') }}"
+        description: "OFR NGIX HA server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
-        count: "{{ Count|default ('3') }}"
-        group: "{{ Group|default ('OFR-MongoDB') }}"
-        cpu: "{{ CPU|default ('2') }}"
-        memory: "{{ Memory|default ('2') }}"
+        count: "3"
+        group: "VA1_OFR-MongoDB"
+        cpu: "2"
+        memory: "2"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
@@ -171,15 +171,15 @@
 # OFR-StatsD servers
     - name: Create OFR-StatsD servers
       clc_server:
-        location: "{{ DC|default ('VA1') }}"
+        location: "VA1"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
-        description: "{{ Description|default ('OFR StatsD server') }}"
+        description: "OFR NGIX HA server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
-        count: "{{ Count|default ('1') }}"
-        group: "{{ Group|default ('OFR-StatsD') }}"
-        cpu: "{{ CPU|default ('2') }}"
-        memory: "{{ Memory|default ('2') }}"
+        count: "1"
+        group: "VA1_OFR-StatsD"
+        cpu: "2"
+        memory: "2"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
@@ -187,15 +187,15 @@
 # OFR-Graphite servers
     - name: Create OFR-Graphite servers
       clc_server:
-        location: "{{ DC|default ('VA1') }}"
+        location: "VA1"
         password: "{{ Password|default ('P@$$W0rd!') }}"
         name: "{{ Name|default ('OFRTZ') }}"
-        description: "{{ Description|default ('OFR Graphite server') }}"
+        description: "OFR NGIX HA server"
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
-        count: "{{ Count|default ('1') }}"
-        group: "{{ Group|default ('OFR-Graphite') }}"
-        cpu: "{{ CPU|default ('2') }}"
-        memory: "{{ Memory|default ('2') }}"
+        count: "1"
+        group: "VA1_OFR-Graphite"
+        cpu: "2"
+        memory: "2"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
