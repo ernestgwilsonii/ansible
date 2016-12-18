@@ -1,0 +1,128 @@
+---
+
+################################################################################
+#  description: Ensure the Online Flight Recorder (OFR) server groups exist in Control at CenturyLink Cloud
+#  usage: ansible-playbook CLC_Ensure-OFR-Server-Groups-Exist-in-Control-playbook.yml --extra-vars 'DC=YourDCGoesHere'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Ensure the Online Flight Recorder (OFR) server groups exist in Control
+  hosts: localhost
+  gather_facts: False
+  connection: local
+  tasks:
+
+
+# clc_group - Create/delete Server Groups at Centurylink Cloud
+# REF: http://docs.ansible.com/ansible/clc_group_module.html
+############################################################
+
+    - name: Ensure the OFR servers group exists in Control in "{{DC}}" 
+      clc_group:
+        location: "{{DC}}"
+        name: "OFR"
+        description: "Online Flight Recorder"
+        state: present
+      register: clc
+
+    - name: Ensure the NGINX server group exists below the OFR group in Control in "{{DC}}" 
+      clc_group:
+        location: "{{DC}}"
+        name: "NGINX"
+        description: "NGINX in HA with Keepalived"
+        parent: "OFR"
+        state: present
+
+    - name: Ensure the Logstash server group exists below the OFR group in Control in "{{DC}}" 
+      clc_group:
+        location: "{{DC}}"
+        name: "Logstash"
+        description: "Logstash"
+        parent: "OFR"
+        state: present
+
+    - name: Ensure the Kafka server group exists below the OFR group in Control in "{{DC}}" 
+      clc_group:
+        location: "{{DC}}"
+        name: "Kafka"
+        description: "Kafka"
+        parent: "OFR"
+        state: present
+
+    - name: Ensure the Elasticsearch server group exists below the OFR group in Control in "{{DC}}" 
+      clc_group:
+        location: "{{DC}}"
+        name: "Elasticsearch"
+        description: "Elasticsearch"
+        parent: "OFR"
+        state: present
+
+    - name: Ensure the ElasticsearchClientNodes server group exists below the Elasticsearch group in Control in "{{DC}}" 
+      clc_group:
+        location: "{{DC}}"
+        name: "ElasticsearchClientNodes"
+        description: "Elasticsearch Client Nodes"
+        parent: "Elasticsearch"
+        state: present
+
+    - name: Ensure the ElasticsearchMasterNodes server group exists below the Elasticsearch group in Control in "{{DC}}" 
+      clc_group:
+        location: "{{DC}}"
+        name: "ElasticsearchMasterNodes"
+        description: "Elasticsearch Master Nodes"
+        parent: "Elasticsearch"
+        state: present
+
+    - name: Ensure the ElasticsearchDataNodes server group exists below the Elasticsearch group in Control in "{{DC}}" 
+      clc_group:
+        location: "{{DC}}"
+        name: "ElasticsearchDataNodes"
+        description: "Elasticsearch Data Nodes"
+        parent: "Elasticsearch"
+        state: present
+
+    - name: Ensure the Kibana server group exists below the OFR group in Control in "{{DC}}" 
+      clc_group:
+        location: "{{DC}}"
+        name: "Kibana"
+        description: "Kibana"
+        parent: "OFR"
+        state: present
+
+    - name: Ensure the Graylog server group exists below the OFR group in Control in "{{DC}}" 
+      clc_group:
+        location: "{{DC}}"
+        name: "Graylog"
+        description: "Graylog"
+        parent: "OFR"
+        state: present
+
+    - name: Ensure the MongoDB server group exists below the Graylog group in Control in "{{DC}}" 
+      clc_group:
+        location: "{{DC}}"
+        name: "MongoDB"
+        description: "MongoDB"
+        parent: "Graylog"
+        state: present
+
+    - name: Ensure the StatsD server group exists below the OFR group in Control in "{{DC}}" 
+      clc_group:
+        location: "{{DC}}"
+        name: "StatsD"
+        description: "StatsD"
+        parent: "OFR"
+        state: present
+
+    - name: Ensure the Graphite server group exists below the StatsD group in Control in "{{DC}}" 
+      clc_group:
+        location: "{{DC}}"
+        name: "Graphite"
+        description: "Graphite"
+        parent: "StatsD"
+        state: present
