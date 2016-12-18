@@ -38,19 +38,7 @@
         memory: "2"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
-        wait: True
-
-
-# Ansible Playbook options
-# REF: http://docs.ansible.com/ansible/playbooks.html
-#####################################################
-
-- name: Create Online Flight Recorder (OFR) servers in Control
-  hosts: localhost
-  gather_facts: False
-  connection: local
-  tasks:
-
+        wait: False
 
 # OFR-Logstash servers
     - name: Create OFR-Logstash servers
@@ -66,7 +54,7 @@
         memory: "2"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
-        wait: True
+        wait: False
 
 # OFR-Kafka servers
     - name: Create OFR-Kafka servers
@@ -82,7 +70,7 @@
         memory: "2"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
-        wait: True
+        wait: False
 
 # OFR-ElasticsearchClientNodes servers
     - name: Create OFR-ElasticsearchClientNodes servers
@@ -98,7 +86,7 @@
         memory: "4"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
-        wait: True
+        wait: False
 
 # OFR-ElasticsearchMasterNodes servers
     - name: Create OFR-ElasticsearchMasterNodes servers
@@ -114,7 +102,7 @@
         memory: "4"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
-        wait: True
+        wait: False
 
 # OFR-ElasticsearchDataNodes servers
     - name: Create OFR-ElasticsearchDataNodes servers
@@ -130,7 +118,7 @@
         memory: "4"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
-        wait: True
+        wait: False
 
 # OFR-Kibana servers
     - name: Create OFR-Kibana servers
@@ -146,7 +134,7 @@
         memory: "4"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
-        wait: True
+        wait: False
 
 # OFR-Graylog servers
     - name: Create OFR-Graylog servers
@@ -162,7 +150,7 @@
         memory: "4"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
-        wait: True
+        wait: False
 
 # OFR-MongoDB servers
     - name: Create OFR-MongoDB servers
@@ -178,7 +166,7 @@
         memory: "2"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
-        wait: True
+        wait: False
 
 # OFR-StatsD servers
     - name: Create OFR-StatsD servers
@@ -194,7 +182,7 @@
         memory: "2"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
-        wait: True
+        wait: False
 
 # OFR-Graphite servers
     - name: Create OFR-Graphite servers
@@ -210,4 +198,4 @@
         memory: "2"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
-        wait: True
+        wait: False
