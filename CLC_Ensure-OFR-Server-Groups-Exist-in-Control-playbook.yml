@@ -35,7 +35,7 @@
       clc_group:
         location: "{{DC}}"
         name: "OFR-NGINX"
-        description: "NGINX in HA with Keepalived"
+        description: "NGINX in HA with Keepalived group"
         parent: "OFR"
         state: present
 
@@ -43,7 +43,7 @@
       clc_group:
         location: "{{DC}}"
         name: "OFR-Logstash"
-        description: "Logstash"
+        description: "Logstash group"
         parent: "OFR"
         state: present
 
@@ -51,7 +51,7 @@
       clc_group:
         location: "{{DC}}"
         name: "OFR-Kafka"
-        description: "Kafka"
+        description: "Kafka group"
         parent: "OFR"
         state: present
 
@@ -59,7 +59,7 @@
       clc_group:
         location: "{{DC}}"
         name: "OFR-Elasticsearch"
-        description: "Elasticsearch"
+        description: "Elasticsearch group"
         parent: "OFR"
         state: present
 
@@ -67,7 +67,7 @@
       clc_group:
         location: "{{DC}}"
         name: "OFR-ElasticsearchClientNodes"
-        description: "Elasticsearch Client Nodes"
+        description: "Elasticsearch Client Nodes group"
         parent: "OFR-Elasticsearch"
         state: present
 
@@ -75,7 +75,7 @@
       clc_group:
         location: "{{DC}}"
         name: "OFR-ElasticsearchMasterNodes"
-        description: "Elasticsearch Master Nodes"
+        description: "Elasticsearch Master Nodes group"
         parent: "OFR-Elasticsearch"
         state: present
 
@@ -83,7 +83,7 @@
       clc_group:
         location: "{{DC}}"
         name: "OFR-ElasticsearchDataNodes"
-        description: "Elasticsearch Data Nodes"
+        description: "Elasticsearch Data Nodes group"
         parent: "OFR-Elasticsearch"
         state: present
 
@@ -91,7 +91,7 @@
       clc_group:
         location: "{{DC}}"
         name: "OFR-Kibana"
-        description: "Kibana"
+        description: "Kibana group"
         parent: "OFR"
         state: present
 
@@ -99,7 +99,7 @@
       clc_group:
         location: "{{DC}}"
         name: "OFR-Graylog"
-        description: "Graylog"
+        description: "Graylog group"
         parent: "OFR"
         state: present
 
@@ -107,7 +107,7 @@
       clc_group:
         location: "{{DC}}"
         name: "OFR-MongoDB"
-        description: "MongoDB Cluster for Graylog"
+        description: "MongoDB Cluster for Graylog group"
         parent: "OFR-Graylog"
         state: present
 
@@ -115,7 +115,7 @@
       clc_group:
         location: "{{DC}}"
         name: "OFR-StatsD"
-        description: "StatsD"
+        description: "StatsD group"
         parent: "OFR"
         state: present
 
@@ -123,6 +123,6 @@
       clc_group:
         location: "{{DC}}"
         name: "OFR-Graphite"
-        description: "Graphite for StatsD"
+        description: "Graphite for StatsD group"
         parent: "OFR-StatsD"
         state: present
