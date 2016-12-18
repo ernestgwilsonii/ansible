@@ -26,6 +26,7 @@
 
 # OFR-NGINX servers
     - name: Create OFR-NGINX servers
+      ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
@@ -42,6 +43,7 @@
 
 # OFR-Logstash servers
     - name: Create OFR-Logstash servers
+      ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
@@ -58,6 +60,7 @@
 
 # OFR-Kafka servers
     - name: Create OFR-Kafka servers
+      ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
@@ -74,6 +77,7 @@
 
 # OFR-ElasticsearchClientNodes servers
     - name: Create OFR-ElasticsearchClientNodes servers
+      ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
@@ -90,6 +94,7 @@
 
 # OFR-ElasticsearchMasterNodes servers
     - name: Create OFR-ElasticsearchMasterNodes servers
+      ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
@@ -106,6 +111,7 @@
 
 # OFR-ElasticsearchDataNodes servers
     - name: Create OFR-ElasticsearchDataNodes servers
+      ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
@@ -122,6 +128,7 @@
 
 # OFR-Kibana servers
     - name: Create OFR-Kibana servers
+      ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
@@ -138,6 +145,7 @@
 
 # OFR-Graylog servers
     - name: Create OFR-Graylog servers
+      ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
@@ -154,6 +162,7 @@
 
 # OFR-MongoDB servers
     - name: Create OFR-MongoDB servers
+      ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
@@ -170,6 +179,7 @@
 
 # OFR-StatsD servers
     - name: Create OFR-StatsD servers
+      ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
@@ -186,6 +196,7 @@
 
 # OFR-Graphite servers
     - name: Create OFR-Graphite servers
+      ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
