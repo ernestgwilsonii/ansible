@@ -34,7 +34,7 @@
     - name: Ensure the NGINX server group exists below the OFR group in Control in "{{DC}}" 
       clc_group:
         location: "{{DC}}"
-        name: "NGINX"
+        name: "OFR-NGINX"
         description: "NGINX in HA with Keepalived"
         parent: "OFR"
         state: present
@@ -42,7 +42,7 @@
     - name: Ensure the Logstash server group exists below the OFR group in Control in "{{DC}}" 
       clc_group:
         location: "{{DC}}"
-        name: "Logstash"
+        name: "OFR-Logstash"
         description: "Logstash"
         parent: "OFR"
         state: present
@@ -50,7 +50,7 @@
     - name: Ensure the Kafka server group exists below the OFR group in Control in "{{DC}}" 
       clc_group:
         location: "{{DC}}"
-        name: "Kafka"
+        name: "OFR-Kafka"
         description: "Kafka"
         parent: "OFR"
         state: present
@@ -58,7 +58,7 @@
     - name: Ensure the Elasticsearch server group exists below the OFR group in Control in "{{DC}}" 
       clc_group:
         location: "{{DC}}"
-        name: "Elasticsearch"
+        name: "OFR-Elasticsearch"
         description: "Elasticsearch"
         parent: "OFR"
         state: present
@@ -66,31 +66,31 @@
     - name: Ensure the ElasticsearchClientNodes server group exists below the Elasticsearch group in Control in "{{DC}}" 
       clc_group:
         location: "{{DC}}"
-        name: "ElasticsearchClientNodes"
+        name: "OFR-ElasticsearchClientNodes"
         description: "Elasticsearch Client Nodes"
-        parent: "Elasticsearch"
+        parent: "OFR-Elasticsearch"
         state: present
 
     - name: Ensure the ElasticsearchMasterNodes server group exists below the Elasticsearch group in Control in "{{DC}}" 
       clc_group:
         location: "{{DC}}"
-        name: "ElasticsearchMasterNodes"
+        name: "OFR-ElasticsearchMasterNodes"
         description: "Elasticsearch Master Nodes"
-        parent: "Elasticsearch"
+        parent: "OFR-Elasticsearch"
         state: present
 
     - name: Ensure the ElasticsearchDataNodes server group exists below the Elasticsearch group in Control in "{{DC}}" 
       clc_group:
         location: "{{DC}}"
-        name: "ElasticsearchDataNodes"
+        name: "OFR-ElasticsearchDataNodes"
         description: "Elasticsearch Data Nodes"
-        parent: "Elasticsearch"
+        parent: "OFR-Elasticsearch"
         state: present
 
     - name: Ensure the Kibana server group exists below the OFR group in Control in "{{DC}}" 
       clc_group:
         location: "{{DC}}"
-        name: "Kibana"
+        name: "OFR-Kibana"
         description: "Kibana"
         parent: "OFR"
         state: present
@@ -98,7 +98,7 @@
     - name: Ensure the Graylog server group exists below the OFR group in Control in "{{DC}}" 
       clc_group:
         location: "{{DC}}"
-        name: "Graylog"
+        name: "OFR-Graylog"
         description: "Graylog"
         parent: "OFR"
         state: present
@@ -106,15 +106,15 @@
     - name: Ensure the MongoDB server group exists below the Graylog group in Control in "{{DC}}" 
       clc_group:
         location: "{{DC}}"
-        name: "MongoDB"
+        name: "OFR-MongoDB"
         description: "MongoDB Cluster for Graylog"
-        parent: "Graylog"
+        parent: "OFR-Graylog"
         state: present
 
     - name: Ensure the StatsD server group exists below the OFR group in Control in "{{DC}}" 
       clc_group:
         location: "{{DC}}"
-        name: "StatsD"
+        name: "OFR-StatsD"
         description: "StatsD"
         parent: "OFR"
         state: present
@@ -122,7 +122,7 @@
     - name: Ensure the Graphite server group exists below the StatsD group in Control in "{{DC}}" 
       clc_group:
         location: "{{DC}}"
-        name: "Graphite"
+        name: "OFR-Graphite"
         description: "Graphite for StatsD"
-        parent: "StatsD"
+        parent: "OFR-StatsD"
         state: present
