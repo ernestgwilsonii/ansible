@@ -1,7 +1,7 @@
 ---
 
 ################################################################################
-#  description: Ensure the Online Flight Recorder (OFR) server groups exist in Control at CenturyLink Cloud
+#  description: Ensure the Operations Flight Recorder (OFR) server groups exist in Control at CenturyLink Cloud
 #  usage: ansible-playbook CLC_Ensure-OFR-Server-Groups-Exist-in-Control-playbook.yml --extra-vars 'DC=YourDCGoesHere'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
@@ -12,7 +12,7 @@
 # REF: http://docs.ansible.com/ansible/playbooks.html
 #####################################################
 
-- name: Ensure the Online Flight Recorder (OFR) server groups exist in Control
+- name: Ensure the Operations Flight Recorder (OFR) server groups exist in Control
   hosts: localhost
   gather_facts: False
   connection: local
@@ -27,7 +27,7 @@
       clc_group:
         location: "{{DC}}"
         name: "OFR"
-        description: "Online Flight Recorder"
+        description: "Operations Flight Recorder"
         state: present
       register: clc
 

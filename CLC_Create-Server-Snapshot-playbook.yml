@@ -1,0 +1,63 @@
+---
+
+################################################################################
+#  description: Create VM server snapshots via Control at CenturyLink Cloud
+#  usage: ansible-playbook CLC_Create-Server-Snapshot-playbook.yml
+#  Example ONLY! This playbook must manually be edited to suit currently sorry!
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Create server snapshot
+  hosts: localhost
+  gather_facts: False
+  connection: local
+  tasks:
+
+
+# clc_server_snapshot - Create, Delete and Restore server snapshots in CenturyLink Cloud
+# REF: http://docs.ansible.com/ansible/clc_server_snapshot_module.html
+######################################################################
+
+# Create server snapshots
+    - name: Create each server snapshot
+      clc_server_snapshot:
+        server_ids:
+          - VA1EWTOFRTC01
+          - VA1EWTOFRTC02
+          - VA1EWTOFRTC03
+          - VA1EWTOFRTC04
+          - VA1EWTOFRTC05
+          - VA1EWTOFRTC06
+          - VA1EWTOFRTC07
+          - VA1EWTOFRTC08
+          - VA1EWTOFRTC09
+          - VA1EWTOFRTC10
+          - VA1EWTOFRTC11
+          - VA1EWTOFRTC12
+          - VA1EWTOFRTC13
+          - VA1EWTOFRTC14
+          - VA1EWTOFRTC15
+          - VA1EWTOFRTC16
+          - VA1EWTOFRTC17
+          - VA1EWTOFRTC18
+          - VA1EWTOFRTC19
+          - VA1EWTOFRTC20
+          - VA1EWTOFRTC21
+          - VA1EWTOFRTC22
+          - VA1EWTOFRTC23
+          - VA1EWTOFRTC24
+          - VA1EWTOFRTC25
+          - VA1EWTOFRTC26
+          - VA1EWTOFRTC27
+          - VA1EWTOFRTC28
+          - VA1EWTOFRTC29
+          - VA1EWTOFRTC30          
+        expiration_days: 10
+        wait: True
+        state: present
