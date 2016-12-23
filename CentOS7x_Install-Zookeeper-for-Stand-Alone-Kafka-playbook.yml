@@ -1,0 +1,138 @@
+---
+
+################################################################################
+#  description: Installs Zookeeper for a Stand-Alone Kafka on CentOS7x
+#  usage: ansible-playbook CentOS7x_Install-Zookeeper-for-Stand-Alone-Kafka-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Install Zookeeper for a Stand-Alone Kafka on CentOS7x
+  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# Create and manage user accounts
+# REF: http://docs.ansible.com/ansible/user_module.html
+#######################################################
+
+  - name: Add user zookeeper to the OS so Zookeeper does not run as root
+    user:
+      name=zookeeper
+      comment="Zookeeper"
+      group=zookeeper
+
+
+# file - Sets attributes of files and directories
+# http://docs.ansible.com/ansible/file_module.html
+##################################################
+
+  - name: Create directory /opt/zookeeper-3.4.9 if it does not exist
+    file:
+      path: /opt/zookeeper-3.4.9
+      state: directory
+      mode: 0755
+      owner: zookeeper
+      group: zookeeper
+
+  - name: Create directory /var/lib/zookeeper if it does not exist
+    file:
+      path: /var/lib/zookeeper
+      state: directory
+      mode: 0755
+      owner: zookeeper
+      group: zookeeper
+
+# unarchive - Unpacks an archive after (optionally) copying it from the local machine
+# REF: http://docs.ansible.com/ansible/unarchive_module.html
+############################################################
+
+  - name: Download and extract Zookeeper
+    unarchive:
+      src: http://apache.claz.org/zookeeper/zookeeper-3.4.9/zookeeper-3.4.9.tar.gz 
+      dest: /opt
+      copy: no
+      owner: zookeeper
+      group: zookeeper
+
+
+# Use the file module to create a directory and symbolic links if they don't exist
+# REF: http://docs.ansible.com/ansible/file_module.html
+##################################################################################
+
+  - name: Create symbolic link if it does not exist - ln -s /opt/zookeeper-3.4.9 /opt/zookeeper
+    file:
+      src: /opt/zookeeper-3.4.9
+      dest: /opt/zookeeper
+      state: link
+
+
+# copy - Copies files to remote locations
+# REF: http://docs.ansible.com/ansible/copy_module.html
+#######################################################
+
+# /opt/zookeeper/conf/zoo.cfg
+  - name: Copy zoo_sample.cfg to zoo.cfg - cp /opt/zookeeper/conf/zoo_sample.cfg /opt/zookeeper/conf/zoo.cfg
+    copy:
+      src: /opt/zookeeper/conf/zoo_sample.cfg
+      dest: /opt/zookeeper/conf/zoo.cfg
+      remote_src: True
+      owner: zookeeper
+      group: zookeeper
+      mode: 0644
+      backup: yes
+      force: no
+
+# /etc/systemd/system/zookeeper.service
+  - name: Copy files/Zookeeper/stand-alone-zookeeper.service to remote /etc/systemd/system/zookeeper.service
+    copy:
+      src: files/Zookeeper/stand-alone-zookeeper.service
+      dest: /etc/systemd/system/zookeeper.service
+      owner: root
+      group: root
+      mode: 0755
+
+
+# Restart firewalld to make sure it is running OK before changing any rules
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Ensure the firewalld service is enabled and re-started before changing any rules
+    service:
+      name=firewalld
+      enabled=yes
+      state=restarted
+
+
+# Update the firewalld configuration
+# REF: http://docs.ansible.com/ansible/firewalld_module.html
+############################################################
+
+  - name: Update firewall to allow port TCP 2181 for Zookeeper connections
+    firewalld:
+      port=2181/tcp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+
+# Enable and start (or restart)
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Enable and start zookeeper.service
+    service:
+      name: zookeeper.service
+      enabled: yes
+      state: restarted
+      # Note: Verify via SSH command line:
+      # systemctl status zookeeper.service
+      # ss -ntlup | grep 2181

@@ -1,0 +1,17 @@
+[Unit]
+Description=Apache Zookeeper server 
+Documentation=http://zookeeper.apache.org
+Requires=network.target remote-fs.target 
+After=network.target remote-fs.target
+
+[Service]
+Type=forking
+User=zookeeper
+Group=zookeeper
+ExecStart=/opt/zookeeper/bin/zkServer.sh start
+ExecStop=/opt/zookeeper/bin/zkServer.sh stop
+ExecReload=/opt/zookeeper/bin/zkServer.sh restart
+WorkingDirectory=/var/lib/zookeeper
+
+[Install]
+WantedBy=multi-user.target
