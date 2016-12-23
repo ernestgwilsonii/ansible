@@ -1,0 +1,129 @@
+---
+
+################################################################################
+#  description: Installs Kafka in Stand-Alone Mode on CentOS7x
+#  usage: ansible-playbook CentOS7x_Install-Kafka-in-Stand-Alone-Mode-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Install Kafka in Stand-Alone Mode on CentOS7x
+  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# group - Add or remove groups
+# REF: http://docs.ansible.com/ansible/group_module.html
+########################################################
+
+  - name: Create the kafka group on the OS if it does not already exist
+    group:
+      name: kafka
+      state: present
+
+
+# Create and manage user accounts
+# REF: http://docs.ansible.com/ansible/user_module.html
+#######################################################
+
+  - name: Add user kafka to the OS so Kafka does not run as root
+    user:
+      name: kafka
+      comment: "Kafka"
+      group: kafka
+
+
+# file - Sets attributes of files and directories
+# http://docs.ansible.com/ansible/file_module.html
+##################################################
+
+  - name: Create directory /opt/kafka_2.11-0.10.1.0 if it does not exist
+    file:
+      path: /opt/kafka_2.11-0.10.1.0
+      state: directory
+      mode: 0755
+      owner: kafka
+      group: kafka
+
+
+# unarchive - Unpacks an archive after (optionally) copying it from the local machine
+# REF: http://docs.ansible.com/ansible/unarchive_module.html
+############################################################
+
+  - name: Download and extract Kafka
+    unarchive:
+      src: http://apache.mirrors.pair.com/kafka/0.10.1.0/kafka_2.11-0.10.1.0.tgz
+      dest: /opt
+      copy: no
+      owner: kafka
+      group: kafka
+
+
+# Use the file module to create a directory and symbolic links if they don't exist
+# REF: http://docs.ansible.com/ansible/file_module.html
+##################################################################################
+
+  - name: Create symbolic link if it does not exist - ln -s /opt/kafka_2.11-0.10.1.0 /opt/kafka
+    file:
+      src: /opt/kafka_2.11-0.10.1.0
+      dest: /opt/kafka
+      state: link
+
+
+# copy - Copies files to remote locations
+# REF: http://docs.ansible.com/ansible/copy_module.html
+#######################################################
+
+# /etc/systemd/system/kafka.service
+  - name: Copy files/Kafka/stand-alone-kafka.service to remote /etc/systemd/system/kafka.service
+    copy:
+      src: files/Kafka/stand-alone-kafka.service
+      dest: /etc/systemd/system/kafka.service
+      owner: root
+      group: root
+      mode: 0755
+
+
+# Restart firewalld to make sure it is running OK before changing any rules
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Ensure the firewalld service is enabled and re-started before changing any rules
+    service:
+      name=firewalld
+      enabled=yes
+      state=restarted
+
+
+# Update the firewalld configuration
+# REF: http://docs.ansible.com/ansible/firewalld_module.html
+############################################################
+
+  - name: Update firewall to allow port TCP 9092 for Kafka connections
+    firewalld:
+      port=9092/tcp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+
+# Enable and start (or restart)
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Enable and start kafka.service
+    service:
+      name: kafka.service
+      enabled: yes
+      state: restarted
+      # Note: Verify via SSH command line:
+      # systemctl status kafka.service
+      # ss -ntlup | grep 9092
