@@ -19,15 +19,25 @@
   tasks:
 
 
+# group - Add or remove groups
+# REF: http://docs.ansible.com/ansible/group_module.html
+########################################################
+
+  - name: Create the zookeeper group on the OS if it does not already exist
+    group:
+      name: zookeeper
+      state: present
+
+
 # Create and manage user accounts
 # REF: http://docs.ansible.com/ansible/user_module.html
 #######################################################
 
   - name: Add user zookeeper to the OS so Zookeeper does not run as root
     user:
-      name=zookeeper
-      comment="Zookeeper"
-      group=zookeeper
+      name: zookeeper
+      comment: "Zookeeper"
+      group: zookeeper
 
 
 # file - Sets attributes of files and directories
