@@ -115,3 +115,6 @@
       # curl -XGET 'http://IPAddressHere:9200/_cluster/health?pretty=true'
       # curl -XGET 'http://IPAddressHere:9200/_cluster/state?pretty'
       # curl -XGET http://IPAddressHere:9200/_cluster/settings?pretty
+      # ss -ntlup | grep 9200
+      # ss -ntlup | grep 9300
+      

@@ -1,6 +1,6 @@
 cluster.name: elasticsearch
 node.name: {{ansible_ssh_host}}
-network.host: {{ansible_ssh_host}}
+network.host: 127.0.0.1,{{ansible_ssh_host}}
 node.master: true 
 node.data: true
 discovery.zen.ping.unicast.hosts: ["{{ansible_ssh_host}}:9300"]
