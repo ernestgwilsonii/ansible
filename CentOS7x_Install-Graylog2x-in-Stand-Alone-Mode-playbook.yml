@@ -1,0 +1,87 @@
+---
+
+################################################################################
+#  description: Installs Graylog 2x in Stand-Alone Mode on CentOS7x
+#  usage: ansible-playbook CentOS7x_Install-Graylog2x-in-Stand-Alone-Mode-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Install Graylog 2x in Stand-Alone Mode on CentOS7x
+  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# Install yum packages
+# REF: http://docs.ansible.com/ansible/yum_module.html
+######################################################
+
+  - name: Install Graylog2x via remote rpm
+    yum:
+      name: https://packages.graylog2.org/repo/packages/graylog-2.2-repository_latest.rpm
+      state: present
+
+  - name: Install graylog-server
+    yum:
+      name=graylog-server
+      state=latest
+
+  - name: Install pwgen
+    yum:
+      name=pwgen
+      state=latest
+
+
+# Restart firewalld to make sure it is running OK before changing any rules
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Ensure the firewalld service is enabled and re-started before changing any rules
+    service:
+      name=firewalld
+      enabled=yes
+      state=restarted
+
+
+# Update the firewalld configuration
+# REF: http://docs.ansible.com/ansible/firewalld_module.html
+############################################################
+
+  - name: Update firewall to allow port TCP 9000 for incoming Graylog Web connections
+    firewalld:
+      port=9000/tcp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+  - name: Update firewall to allow port TCP 12900 for incoming Graylog REST connections
+    firewalld:
+      port=12900/tcp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+
+# Enable and start graylog-server.service
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Enable and start the graylog-server.service service
+    service:
+      name=graylog-server.service
+      enabled=yes
+      state=restarted
+      # Note: Command line verification:
+      # systemctl status graylog-server.service
+      # cat /var/log/graylog-server/server.log
+      # Maybe: cat /var/log/elasticsearch/graylog2.log
+      # Login to the Graylog web interface as user admin http://ServerIPHere:9000/
