@@ -109,12 +109,11 @@
       # cat /var/log/elasticsearch/elasticsearch_index_search_slowlog.log
       # cat /var/log/elasticsearch/elasticsearch_index_indexing_slowlog.log
       # cat /var/log/elasticsearch/elasticsearch_deprecation.log
-      # curl 'IPAddressHere:9200/_cat/health?v' # Get health
-      # curl 'IPAddressHere:9200/_cat/nodes?v' # Get nodes
-      # curl 'IPAddressHere:9200/_cat/indices?v' # Get indices
-      # curl -XGET 'http://IPAddressHere:9200/_cluster/health?pretty=true'
-      # curl -XGET 'http://IPAddressHere:9200/_cluster/state?pretty'
-      # curl -XGET http://IPAddressHere:9200/_cluster/settings?pretty
+      # curl 'localhost:9200/_cat/health?v' # Get health
+      # curl 'localhost:9200/_cat/nodes?v' # Get nodes
+      # curl 'localhost:9200/_cat/indices?v' # Get indices
+      # curl -XGET 'http://localhost:9200/_cluster/health?pretty=true'
+      # curl -XGET 'http://localhost:9200/_cluster/state?pretty'
+      # curl -XGET http://localhost:9200/_cluster/settings?pretty
       # ss -ntlup | grep 9200
       # ss -ntlup | grep 9300
-      
