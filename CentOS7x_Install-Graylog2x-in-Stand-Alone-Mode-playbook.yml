@@ -2,7 +2,7 @@
 
 ################################################################################
 #  description: Installs Graylog 2x in Stand-Alone Mode on CentOS7x
-#  usage: ansible-playbook CentOS7x_Install-Graylog2x-in-Stand-Alone-Mode-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  usage: ansible-playbook CentOS7x_Install-Graylog2x-in-Stand-Alone-Mode-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere URLEncodedMongoAdminPassword=P%40%24%24W0rd!'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
@@ -82,6 +82,6 @@
       state=restarted
       # Note: Command line verification:
       # systemctl status graylog-server.service
+      # cat /etc/graylog/server/server.conf
       # cat /var/log/graylog-server/server.log
-      # Maybe: cat /var/log/elasticsearch/graylog2.log
       # Login to the Graylog web interface as user admin http://ServerIPHere:9000/
