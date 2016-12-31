@@ -43,13 +43,14 @@ pip install clc-sdk --upgrade
 # See: https://github.com/CenturyLinkCloud/clc-ansible-module
 pip install clc-ansible-module
 
-# Create a default directories
+# Create default starting directories
 mkdir -p /etc/ansible
 mkdir -p /etc/ansible/files/
 mkdir -p /etc/ansible/group_vars/
 mkdir -p /etc/ansible/host_vars/
 mkdir -p /etc/ansible/templates/
 mkdir -p /etc/ansible/vault/
+touch /etc/ansible/vault/vault_pass.txt
 
 # Create a default starting /etc/ansible/ansible.cfg
 echo "[defaults]" > /etc/ansible/ansible.cfg
@@ -63,11 +64,25 @@ echo "forks=100" >> /etc/ansible/ansible.cfg
 ln -s /usr/bin/clc_inv.py /etc/ansible/hosts
 ln -s /usr/bin/clc_inv.py /usr/local/bin/clc_inv.py
 
+# Add Ansible section to /root/.bashrc
+echo " " >> /root/.bashrc
+echo "# Ansible #" >> /root/.bashrc
+echo "########### " >> /root/.bashrc
+
 # Add ANSIBLE_LIBRARY variable to .bashrc
 echo "export ANSIBLE_LIBRARY=/usr/lib/python2.7/site-packages/clc_ansible_module" >> /root/.bashrc
 
 # Add ANSIBLE_HOST_KEY_CHECKING=False variable to .bashrc
 echo "export ANSIBLE_HOST_KEY_CHECKING=False" >> /root/.bashrc
+
+# Add ANSIBLE_HOST_KEY_CHECKING=False variable to .bashrc
+echo "export ANSIBLE_VAULT_PASSWORD_FILE=/etc/ansible/vault/vault_pass.txt" >> /root/.bashrc
+
+# Add ANSIBLE_HOST_KEY_CHECKING=False variable to .bashrc
+echo "export CLC_V2_API_USERNAME='YourControlUsernameGoesHere'" >> /root/.bashrc
+
+# Add ANSIBLE_HOST_KEY_CHECKING=False variable to .bashrc
+echo "export CLC_V2_API_PASSWD='YourControlPasswordGoesHere'" >> /root/.bashrc
 
 # Verify your Ansible version
 cd /etc/ansible
@@ -78,11 +93,17 @@ find /etc/ansible/
 
 # Instruct the human:
 echo "################################################################################"
+echo "# Welcome to Ansible! #"
+echo "#######################"
 echo ""
-echo " # Next type:"
-echo " ############"
+echo " # Next steps type:"
+echo " ##################"
 echo " export CLC_V2_API_USERNAME='YourControlUsernameGoesHere'"
 echo " export CLC_V2_API_PASSWD='YourControlPasswordGoesHere'"
+echo ""
+echo "   # Note: Edit your .bashrc file to make these automagic next time!"
+echo "   #       vi /root/.bashrc"
+echo ""
 echo ""
 echo " # Then type:"
 echo " ############"
