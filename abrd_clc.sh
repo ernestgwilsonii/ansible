@@ -6,7 +6,7 @@
 # CentOS7x Usage:                                                                               #
 #   curl https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/abrd_clc.sh | bash -  #
 #                                                                                               #
-#                                                          ErnestGWilsonII@gmail.com 2016-12-10 #
+#                                                          ErnestGWilsonII@gmail.com 2016-12-31 #
 #                                                            https://github.com/ernestgwilsonii #
 #                                                   https://www.linkedin.com/in/ernestgwilsonii #
 #################################################################################################
@@ -15,12 +15,12 @@
 yum -y upgrade
 
 # Install a compiler and some pre-requisites into the OS
-yum -y install python-setuptools gcc libffi-devel python-devel openssl-devel krb5-devel krb5-libs krb5-workstation git sshpass
+yum -y install python-setuptools gcc libffi-devel python-devel openssl-devel krb5-devel krb5-libs krb5-workstation git sshpass tree
 
-# Install pip
+# Install Python pip
 easy_install pip
 
-# Install some pre-requisites
+# Install some Python module pre-requisites
 pip install pybuilder
 pip install mock
 pip install nose
@@ -43,7 +43,7 @@ pip install clc-sdk --upgrade
 # See: https://github.com/CenturyLinkCloud/clc-ansible-module
 pip install clc-ansible-module
 
-# Create default starting directories
+# Create default starting kit
 mkdir -p /etc/ansible
 mkdir -p /etc/ansible/files/
 mkdir -p /etc/ansible/group_vars/
@@ -51,6 +51,9 @@ mkdir -p /etc/ansible/host_vars/
 mkdir -p /etc/ansible/templates/
 mkdir -p /etc/ansible/vault/
 touch /etc/ansible/vault/vault_pass.txt
+touch /etc/ansible/.gitignore
+echo "hosts" > /etc/ansible/.gitignore
+echo "vault" > /etc/ansible/.gitignore
 
 # Create a default starting /etc/ansible/ansible.cfg
 echo "[defaults]" > /etc/ansible/ansible.cfg
@@ -75,39 +78,43 @@ echo "export ANSIBLE_LIBRARY=/usr/lib/python2.7/site-packages/clc_ansible_module
 # Add ANSIBLE_HOST_KEY_CHECKING=False variable to .bashrc
 echo "export ANSIBLE_HOST_KEY_CHECKING=False" >> /root/.bashrc
 
-# Add ANSIBLE_HOST_KEY_CHECKING=False variable to .bashrc
+# Add ANSIBLE_VAULT_PASSWORD_FILE=/etc/ansible/vault/vault_pass.txt variable to .bashrc
 echo "export ANSIBLE_VAULT_PASSWORD_FILE=/etc/ansible/vault/vault_pass.txt" >> /root/.bashrc
 
-# Add ANSIBLE_HOST_KEY_CHECKING=False variable to .bashrc
+# Add CLC_V2_API_USERNAME variable to .bashrc
+echo "# Edit these as you see fit:" >> /root/.bashrc
 echo "export CLC_V2_API_USERNAME='YourControlUsernameGoesHere'" >> /root/.bashrc
 
-# Add ANSIBLE_HOST_KEY_CHECKING=False variable to .bashrc
+# Add CLC_V2_API_PASSWD variable to .bashrc
 echo "export CLC_V2_API_PASSWD='YourControlPasswordGoesHere'" >> /root/.bashrc
+echo "cd /etc/ansible" >> /root/.bashrc
 
 # Verify your Ansible version
-cd /etc/ansible
 clear
-echo "################################################################################"
-ansible --version
-find /etc/ansible/
-
-# Instruct the human:
 echo "################################################################################"
 echo "# Welcome to Ansible! #"
 echo "#######################"
 echo ""
-echo " # Next steps type:"
-echo " ##################"
-echo " cd /etc/ansible"
+echo "ansible --version"
+ansible --version
+echo ""
+tree /etc/ansible/
+
+# Instruct the human:
+echo "################################################################################"
+echo ""
+echo " # Please take these next steps so Ansible can work with Control and type:"
+echo " #########################################################################"
 echo " export CLC_V2_API_USERNAME='YourControlUsernameGoesHere'"
 echo " export CLC_V2_API_PASSWD='YourControlPasswordGoesHere'"
 echo ""
 echo "   # Note: Edit your .bashrc file to make this automagic next time you login!"
-echo "   #       vi /root/.bashrc"
+echo "           vi /root/.bashrc"
 echo ""
 echo ""
 echo " # Then type:"
 echo " ############"
+echo " cd /etc/ansible"
 echo " ansible all --list-hosts"
 echo ""
 echo "################################################################################"
