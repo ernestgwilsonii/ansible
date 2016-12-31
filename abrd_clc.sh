@@ -43,17 +43,29 @@ pip install clc-sdk --upgrade
 # See: https://github.com/CenturyLinkCloud/clc-ansible-module
 pip install clc-ansible-module
 
-# Create default starting kit
+# Create default sample examplews starting kit
 mkdir -p /etc/ansible
 mkdir -p /etc/ansible/files/
 mkdir -p /etc/ansible/group_vars/
 mkdir -p /etc/ansible/host_vars/
 mkdir -p /etc/ansible/templates/
 mkdir -p /etc/ansible/vault/
-touch /etc/ansible/vault/vault_pass.txt
-touch /etc/ansible/.gitignore
+echo "ChangeMeToWhateverYouWantForYourAnsibleVaultEncryptionPassword" > /etc/ansible/vault/vault_pass.txt
 echo "hosts" > /etc/ansible/.gitignore
-echo "vault" > /etc/ansible/.gitignore
+echo "vault" >> /etc/ansible/.gitignore
+echo "ansible_ssh_user: \"root\"" > /etc/ansible/group_vars/CentOS7.yml
+echo "ansible_ssh_pass: \"YourCentOS7ServersGrouprootPasswordGoesHere\"" >> /etc/ansible/group_vars/CentOS7.yml
+echo "ansible_ssh_port: \"22\"" >> /etc/ansible/group_vars/CentOS7.yml
+echo "ansible_connection: \"ssh\"" >> /etc/ansible/group_vars/CentOS7.yml
+cd /etc/ansible
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Apply-OS-Updates-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Install-Basic-Utilities-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Install-Java8x-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Install-NodeJS-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Install-NTP-Services-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Install-RDP-Services-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CLC_Create-Servers-In-Control-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CLC_Ensure-Control-Group-Exists-playbook.yml
 
 # Create a default starting /etc/ansible/ansible.cfg
 echo "[defaults]" > /etc/ansible/ansible.cfg
