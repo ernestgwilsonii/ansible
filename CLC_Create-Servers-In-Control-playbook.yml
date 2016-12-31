@@ -25,6 +25,7 @@
 #############################################################
 
     - name: Create servers
+      ignore_errors: yes
       clc_server:
         location: "{{ DC|default ('VA1') }}"
         password: "{{ Password|default ('P@$$W0rd!') }}"
