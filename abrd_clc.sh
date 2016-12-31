@@ -82,7 +82,7 @@ ln -s /usr/bin/clc_inv.py /usr/local/bin/clc_inv.py
 # Add Ansible section to /root/.bashrc
 echo " " >> /root/.bashrc
 echo "# Ansible #" >> /root/.bashrc
-echo "########### " >> /root/.bashrc
+echo "###########" >> /root/.bashrc
 
 # Add ANSIBLE_LIBRARY variable to .bashrc
 echo "export ANSIBLE_LIBRARY=/usr/lib/python2.7/site-packages/clc_ansible_module" >> /root/.bashrc
@@ -95,11 +95,14 @@ echo "export ANSIBLE_VAULT_PASSWORD_FILE=/etc/ansible/vault/vault_pass.txt" >> /
 
 # Add CLC_V2_API_USERNAME variable to .bashrc
 echo "# Edit these as you see fit:" >> /root/.bashrc
+echo "############################" >> /root/.bashrc
 echo "export CLC_V2_API_USERNAME='YourControlUsernameGoesHere'" >> /root/.bashrc
 
 # Add CLC_V2_API_PASSWD variable to .bashrc
 echo "export CLC_V2_API_PASSWD='YourControlPasswordGoesHere'" >> /root/.bashrc
 echo "cd /etc/ansible" >> /root/.bashrc
+echo "###############" >> /root/.bashrc
+echo " " >> /root/.bashrc
 
 # Verify your Ansible version
 clear
