@@ -34,7 +34,7 @@
         template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
         count: "{{ Count|default ('1') }}"
         group: "{{ Group|default ('Default Group') }}"
-        cpu: "{{ CPU|default ('2') }}"
+        cpu: "{{ CPU|default ('4') }}"
         memory: "{{ Memory|default ('4') }}"
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
