@@ -1,0 +1,20 @@
+[Unit]
+Description=demon_checkForTeamUpdates
+Requires=network.target
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/demon_checkForTeamUpdates
+User=demon
+
+Restart=always
+RestartSec=10
+
+# Slack Webhook
+Environment=CHECKFORTEAMUPDATES_WEBHOOK={{ CHECKFORTEAMUPDATES_WEBHOOK|default ('https://hooks.slack.com/services/SomeSecretKeyGoesHere') }}
+
+ExecStart=/usr/bin/node /opt/demon_checkForTeamUpdates/index.js
+
+[Install]
+WantedBy=multi-user.target
