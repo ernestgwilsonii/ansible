@@ -8,6 +8,12 @@ Type=simple
 WorkingDirectory=/opt/demon_checkForTeamUpdates
 User=demon
 
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=demon_checkForTeamUpdates
+SyslogFacility=local0
+SyslogLevel=info
+
 Restart=always
 RestartSec=10
 

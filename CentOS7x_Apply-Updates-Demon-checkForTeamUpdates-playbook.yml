@@ -1,0 +1,99 @@
+---
+
+################################################################################
+#  description: Apply updates to Demon Robotic's checkForTeamUpdates on CentOS7x
+#  usage: ansible-playbook CentOS7x_Apply-Updates-Demon-checkForTeamUpdates-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Apply updates to Demon Robotic's checkForTeamUpdates on CentOS7x
+  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# Stop service
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Stop the demon_checkForTeamUpdates.service service
+    service:
+      name: demon_checkForTeamUpdates.service
+      state: stopped
+
+
+# file - Sets attributes of files and folders
+# REF: http://docs.ansible.com/ansible/file_module.html
+##################################################################################
+
+  - name: rm -rf /opt/demon_checkForTeamUpdates.old if it exists!
+    file:
+      path: /opt/demon_checkForTeamUpdates.old
+      state: absent
+
+
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+
+  - name: Rename the existing demon_checkForTeamUpdates to create a fallback backup in demon_checkForTeamUpdates.old
+    command: mv -f /opt/demon_checkForTeamUpdates /opt/demon_checkForTeamUpdates
+ 
+
+# git - Deploy software (or files) from git checkouts
+# REF: http://docs.ansible.com/ansible/git_module.html
+######################################################
+
+  - name: Update (git clone) demon_checkForTeamUpdates to /opt/demon_checkForTeamUpdates
+    git:
+      repo: https://ernestgwilsonii@bitbucket.org/ernestgwilsonii/checkforteamupdates.git
+      version: master
+      dest: /opt/demon_checkForTeamUpdates
+      accept_hostkey: yes
+      update: yes
+
+
+# Use npm to install and manage Node.js packages
+# REF: http://docs.ansible.com/ansible/npm_module.html
+######################################################
+
+  - name: Run npm install in demon_checkForTeamUpdates
+    npm:
+      path: /opt/demon_checkForTeamUpdates
+      state: latest
+      production: yes
+      global: no
+
+
+# Set attributes of files
+# REF: http://docs.ansible.com/ansible/file_module.html
+#######################################################
+
+  - name: Set directory permisions on demon_checkForTeamUpdates
+    file:
+      path: /opt/demon_checkForTeamUpdates
+      state: directory
+      owner: demon
+      group: wheel
+      recurse: yes
+
+
+# Enable and start the service
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Restart the demon_checkForTeamUpdates service
+    service:
+      name: demon_checkForTeamUpdates.service
+      state: restarted
+      # Note: Verify demon_checkForTeamUpdates via SSH command line:
+      # systemctl status demon_checkForTeamUpdates
+      # tail -f /var/log/messages | grep demon_checkForTeamUpdates

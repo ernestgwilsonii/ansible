@@ -78,7 +78,7 @@
       dest: /etc/systemd/system/demon_checkForTeamUpdates.service
       owner: root
       group: wheel
-      mode: 0755
+      mode: 0644
 
 
 # raw - Executes a low-down and dirty SSH command
@@ -100,3 +100,4 @@
       state: restarted
       # Note: Verify demon_checkForTeamUpdates.service via SSH command line:
       # systemctl status demon_checkForTeamUpdates.service
+      # tail -f /var/log/messages | grep demon_checkForTeamUpdates
