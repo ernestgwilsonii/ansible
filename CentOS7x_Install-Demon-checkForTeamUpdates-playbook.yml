@@ -101,3 +101,4 @@
       # Note: Verify demon_checkForTeamUpdates.service via SSH command line:
       # systemctl status demon_checkForTeamUpdates.service
       # tail -f /var/log/messages | grep demon_checkForTeamUpdates
+      # cat /etc/systemd/system/demon_checkForTeamUpdates.service
