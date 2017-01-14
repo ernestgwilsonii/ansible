@@ -45,7 +45,7 @@
 
 
   - name: Rename the existing demon_checkForTeamUpdates to create a fallback backup in demon_checkForTeamUpdates.old
-    command: mv -f /opt/demon_checkForTeamUpdates /opt/demon_checkForTeamUpdates
+    command: mv -f /opt/demon_checkForTeamUpdates /opt/demon_checkForTeamUpdates.old
  
 
 # git - Deploy software (or files) from git checkouts
