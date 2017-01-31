@@ -39,6 +39,17 @@
       state: present
 
 
+# file - Sets attributes of files and directories
+# http://docs.ansible.com/ansible/file_module.html
+##################################################
+
+  - name: Create directory /opt/dotnet if it does not exist
+    file:
+      path: /opt/dotnet
+      state: directory
+      mode: 0755
+
+
 # unarchive - Unpacks an archive after (optionally) copying it from the local machine
 # REF: http://docs.ansible.com/ansible/unarchive_module.html
 ############################################################
