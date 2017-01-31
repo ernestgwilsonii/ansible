@@ -19,6 +19,22 @@
   tasks:
 
 
+# Install or configure repository used on the OS by yum
+# REF: https://docs.ansible.com/ansible/yum_repository_module.html
+##################################################################
+
+# /etc/yum.repos.d/xamarin.repo
+  - name: Install repository Xamarin
+    yum_repository:
+      name: xamarin
+      description: Xamarin
+      file: xamarin
+      baseurl: http://download.mono-project.com/repo/centos/
+      enabled: yes
+      gpgcheck: no
+      gpgkey: http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+
+
 # Install yum packages
 # REF: http://docs.ansible.com/ansible/yum_module.html
 ######################################################
@@ -37,6 +53,22 @@
     yum:
       name: https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.15/powershell-6.0.0_alpha.15-1.el7.centos.x86_64.rpm
       state: present
+
+  - name: Install the mono-complete package
+    yum:
+      name=mono-complete
+      state=latest
+
+
+# get_url - Downloads files from HTTP, HTTPS, or FTP to node
+# http://docs.ansible.com/ansible/get_url_module.html
+#####################################################
+
+  - name: Download nuget.exe for .NET for use with mono
+    get_url:
+      url: https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+      dest: /usr/local/bin/nuget.exe
+      mode: 0444
 
 
 # file - Sets attributes of files and directories
