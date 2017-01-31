@@ -66,8 +66,8 @@
 # REF: http://docs.ansible.com/ansible/file_module.html
 ##################################################################################
 
-  - name: Create symbolic link if it does not exist - ln -s /opt/dotnet/dotnet /usr/local/bin
+  - name: Create symbolic link if it does not exist - ln -s /opt/dotnet/dotnet /usr/local/bin/dotnet
     file:
       src: /opt/dotnet/dotnet
-      dest: /usr/local/bin
+      dest: /usr/local/bin/dotnet
       state: link
