@@ -1,0 +1,62 @@
+---
+
+################################################################################
+#  description: Installs Microsoft .NET Core SDK and PowerShell on CentOS7x
+#  usage: ansible-playbook CentOS7x_Install-dotNETCore-and-PowerShell-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Install Microsoft .NET Core SDK and PowerShell on CentOS7x
+  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# Install yum packages
+# REF: http://docs.ansible.com/ansible/yum_module.html
+######################################################
+
+  - name: Install the libicu package
+    yum:
+      name=libicu
+      state=latest
+
+  - name: Install the libunwind package
+    yum:
+      name=libunwind
+      state=latest
+
+  - name: Install Microsoft PowerShell for Linux via remote rpm
+    yum:
+      name: https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.15/powershell-6.0.0_alpha.15-1.el7.centos.x86_64.rpm
+      state: present
+
+
+# unarchive - Unpacks an archive after (optionally) copying it from the local machine
+# REF: http://docs.ansible.com/ansible/unarchive_module.html
+############################################################
+
+# wget https://go.microsoft.com/fwlink/?LinkID=835019
+  - name: Download and extract dotnet-dev-centos-x64.1.0.0-preview2-1-003177.tar.gz
+    unarchive:
+      src: http://download.microsoft.com/download/A/F/6/AF610E6A-1D2D-47D8-80B8-F178951A0C72/Binaries/dotnet-dev-centos-x64.1.0.0-preview2-1-003177.tar.gz
+      dest: /opt/dotnet
+      copy: no
+
+
+# Use the file module to create a directory and symbolic links if they don't exist
+# REF: http://docs.ansible.com/ansible/file_module.html
+##################################################################################
+
+  - name: Create symbolic link if it does not exist - ln -s /opt/dotnet/dotnet /usr/local/bin
+    file:
+      src: /opt/dotnet/dotnet
+      dest: /usr/local/bin
+      state: link
