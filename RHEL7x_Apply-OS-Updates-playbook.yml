@@ -1,7 +1,7 @@
 ---
 
 ################################################################################
-#  description: Installs/applies OS updates and patches on RHEL7x
+#  description: Installs/applies OS updates and patches on CentOS7x
 #  usage: ansible-playbook RHEL7x_Apply-OS-Updates-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
