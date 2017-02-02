@@ -2,7 +2,7 @@
 
 ################################################################################
 #  description: Ensure a specific server group exists in Control in CenturyLink Cloud
-#  usage: ansible-playbook CLC_RHEL7x_Create-Servers-In-Control-playbook.yml --extra-vars 'DC=VA1 Password=SomePassword! Name=rh7t Description=RHEL7x Count=2 Group=RHEL7''
+#  usage: ansible-playbook CLC_RHEL7x_Create-Servers-In-Control-playbook.yml --extra-vars 'DC=VA1 Password=SomePassword! Name=rh7t Description=RHEL7x Count=2 Group=RHEL7'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
