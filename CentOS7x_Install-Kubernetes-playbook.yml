@@ -89,6 +89,38 @@
       state: enabled
       zone: public
 
+  - name: Update firewall to allow port TCP 6443 for incoming connections
+    firewalld:
+      port: 6443/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 9898 for incoming connections
+    firewalld:
+      port: 9898/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 10250 for incoming connections
+    firewalld:
+      port: 10250/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 15441 for incoming connections
+    firewalld:
+      port: 15441/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
   - name: Update firewall to allow port TCP 31869 for incoming connections
     firewalld:
       port: 31869/tcp
