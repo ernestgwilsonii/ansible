@@ -38,12 +38,6 @@
 # REF: http://docs.ansible.com/ansible/yum_module.html
 ######################################################
 
-  - name: Install bridge-utils
-    yum:
-      name=bridge-utils
-      state=latest
-      # brctl show
-
 # https://github.com/docker/docker/releases
   - name: Install docker-engine
     yum:
