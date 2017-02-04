@@ -41,29 +41,29 @@
 # https://github.com/docker/docker/releases
   - name: Install docker-engine
     yum:
-      name=docker-engine
-      state=latest
+      name: docker-engine
+      state: latest
 
 # https://lukemarsden.github.io/docs/getting-started-guides/kubeadm/
   - name: Install kubelet
     yum:
-      name=kubelet
-      state=latest
+      name: kubelet
+      state: latest
 
   - name: Install kubeadm
     yum:
-      name=kubeadm
-      state=latest
+      name: kubeadm
+      state: latest
 
   - name: Install kubectl
     yum:
-      name=kubectl
-      state=latest
+      name: kubectl
+      state: latest
 
   - name: Install kubernetes-cni
     yum:
-      name=kubernetes-cni
-      state=latest
+      name: kubernetes-cni
+      state: latest
 
 
 # Restart firewalld to make sure it is running OK before changing any rules
@@ -72,9 +72,9 @@
 
   - name: Ensure the firewalld service is enabled and re-started before changing any rules
     service:
-      name=firewalld
-      enabled=yes
-      state=restarted
+      name: firewalld
+      enabled: yes
+      state: restarted
 
 
 # Update the firewalld configuration
@@ -83,29 +83,29 @@
 
   - name: Update firewall to allow port TCP 80 for incoming connections
     firewalld:
-      port=80/tcp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+      port: 80/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
   - name: Update firewall to allow port TCP 31869 for incoming connections
     firewalld:
-      port=31869/tcp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+      port: 31869/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
 
 # Enable and start kubelet
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
 
-  - name: Enable and start the kubelet service
+  - name: Enable and start (or restart) the kubelet service
     service:
-      name=kubelet
-      enabled=yes
-      state=restarted
+      name: kubelet
+      enabled: yes
+      state: restarted
       # Note: Verify kubelet via SSH command line:
       # systemctl status kubelet

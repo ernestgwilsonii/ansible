@@ -41,20 +41,20 @@
 
   - name: Install bridge-utils
     yum:
-      name=bridge-utils
-      state=latest
+      name: bridge-utils
+      state: latest
       # brctl show
 
 # https://github.com/docker/docker/releases
   - name: Install docker-engine
     yum:
-      name=docker-engine
-      state=latest
+      name: docker-engine
+      state: latest
 
   - name: Install python-pip
     yum:
-      name=python-pip
-      state=latest
+      name: python-pip
+      state: latest
 
 
 # Restart firewalld to make sure it is running OK before changing any rules
@@ -63,9 +63,9 @@
 
   - name: Ensure the firewalld service is enabled and re-started before changing any rules
     service:
-      name=firewalld
-      enabled=yes
-      state=restarted
+      name: firewalld
+      enabled: yes
+      state: restarted
 
 
 # Update the firewalld configuration
@@ -74,94 +74,94 @@
 
   - name: Update firewall to allow port TCP 2375 for incoming Docker Cloud connections
     firewalld:
-      port=2375/tcp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+      port: 2375/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
   - name: Update firewall to allow port TCP 2376 for incoming docker-machine connections
     firewalld:
-      port=2376/tcp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+      port: 2376/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
   - name: Update firewall to allow port TCP 2377 for incoming Docker cluster management connections
     firewalld:
-      port=2377/tcp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+      port: 2377/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
   - name: Update firewall to allow port TCP 4789 for incoming Docker overlay network connections
     firewalld:
-      port=4789/tcp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+      port: 4789/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
   - name: Update firewall to allow port UDP 4789 for incoming Docker overlay network connections
     firewalld:
-      port=4789/udp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+      port: 4789/udp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
   - name: Update firewall to allow port TCP 6783 for incoming Docker overlay network connections
     firewalld:
-      port=6783/tcp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+      port: 6783/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
   - name: Update firewall to allow port UDP 6783 for incoming Docker overlay network connections
     firewalld:
-      port=6783/udp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+      port: 6783/udp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
   - name: Update firewall to allow port TCP 7946 for incoming Docker communication among nodes
     firewalld:
-      port=7946/tcp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+      port: 7946/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
   - name: Update firewall to allow port UDP 7946 for incoming Docker communication among nodes
     firewalld:
-      port=7946/udp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+      port: 7946/udp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
   - name: Update firewall to allow ports TCP 30000-32767 for incoming Docker swarm manager PublishedPort connections
     firewalld:
-      port=30000-32767/tcp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+      port: 30000-32767/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
 
 # Enable and start docker
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
 
-  - name: Enable and start the docker service
+  - name: Enable and start (or restart) the docker service
     service:
-      name=docker
-      enabled=yes
-      state=restarted
+      name: docker
+      enabled: yes
+      state: restarted
       # Note: Verify docker via SSH command line:
       # systemctl status docker
       # docker run hello-world
@@ -181,16 +181,18 @@
 # https://github.com/docker/machine/releases
   - name: Download and install docker-machine
     get_url:
-      url=https://github.com/docker/machine/releases/download/v0.9.0/docker-machine-Linux-x86_64
-      dest=/usr/local/bin/docker-machine
-      mode=777
+      url: https://github.com/docker/machine/releases/download/v0.9.0/docker-machine-Linux-x86_64
+      dest: /usr/local/bin/docker-machine
+      mode: 777
+      force: yes
 
 # https://github.com/docker/compose/releases
   - name: Download and install docker-compose
     get_url:
-      url=https://github.com/docker/compose/releases/download/1.10.1/docker-compose-Linux-x86_64
-      dest=/usr/local/bin/docker-compose
-      mode=777
+      url: https://github.com/docker/compose/releases/download/1.10.1/docker-compose-Linux-x86_64
+      dest: /usr/local/bin/docker-compose
+      mode: 777
+      force: yes
 
 
 # Execute command(s)
@@ -207,8 +209,8 @@
 
   - name: Use pip to install docker-cloud
     pip:
-      name=docker-cloud
+      name: docker-cloud
 
   - name: Use pip to install docker-py
     pip:
-      name=docker-py
+      name: docker-py
