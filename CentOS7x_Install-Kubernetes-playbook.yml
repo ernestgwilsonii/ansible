@@ -115,7 +115,7 @@
       state: enabled
       zone: public
 
-  - name: Update firewall to allow port TCP 6443 for incoming connections
+  - name: Update firewall to allow port TCP 6443 for incoming Kubernetes API connections
     firewalld:
       port: 6443/tcp
       permanent: true
@@ -123,7 +123,7 @@
       state: enabled
       zone: public
 
-  - name: Update firewall to allow port TCP 9898 for incoming connections
+  - name: Update firewall to allow port TCP 9898 for incoming Kubernetes Discovery connections
     firewalld:
       port: 9898/tcp
       permanent: true
