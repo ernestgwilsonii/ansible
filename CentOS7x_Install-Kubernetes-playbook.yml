@@ -44,6 +44,16 @@
       name: docker-engine
       state: latest
 
+  - name: Install git
+    yum:
+      name: git
+      state: latest
+
+  - name: Install jq
+    yum:
+      name: jq
+      state: latest
+
 # https://lukemarsden.github.io/docs/getting-started-guides/kubeadm/
   - name: Install kubelet
     yum:
@@ -80,6 +90,22 @@
 # Update the firewalld configuration
 # REF: http://docs.ansible.com/ansible/firewalld_module.html
 ############################################################
+
+  - name: Update firewall to allow port UDP 53 for incoming connections
+    firewalld:
+      port: 53/udp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 53 for incoming connections
+    firewalld:
+      port: 53/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
   - name: Update firewall to allow port TCP 80 for incoming connections
     firewalld:
