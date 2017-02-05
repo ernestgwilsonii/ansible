@@ -39,6 +39,11 @@
 # REF: http://docs.ansible.com/ansible/yum_module.html
 ######################################################
 
+  - name: Install bind-utils
+    yum:
+      name: bind-utils
+      state: latest
+
   - name: Install bridge-utils
     yum:
       name: bridge-utils

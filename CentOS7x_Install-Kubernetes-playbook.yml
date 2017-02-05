@@ -38,6 +38,11 @@
 # REF: http://docs.ansible.com/ansible/yum_module.html
 ######################################################
 
+  - name: Install bind-utils
+    yum:
+      name: bind-utils
+      state: latest
+
 # https://github.com/docker/docker/releases
   - name: Install docker-engine
     yum:
