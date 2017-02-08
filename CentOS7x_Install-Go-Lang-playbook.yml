@@ -45,8 +45,14 @@
 # REF: http://docs.ansible.com/ansible/lineinfile_module.html
 #############################################################
 
-  - name: Add /usr/local/go/bin to the PATH environment variable for root
+  - name: Add /usr/local/go/bin to the PATH environment variable in /root/.bashrc for root
     lineinfile:
       dest: /root/.bashrc
       state: present
       line: 'export PATH=$PATH:/usr/local/go/bin'
+
+  - name: Add export GOPATH=/usr/local environment variable in /root/.bashrc for root
+    lineinfile:
+      dest: /root/.bashrc
+      state: present
+      line: 'export GOPATH=/usr/local'
