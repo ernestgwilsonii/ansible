@@ -6,7 +6,7 @@ input {
 
 output {
   elasticsearch {
-    hosts => "10.127.215.26:9200"
+    hosts => "{{ElasticsearchIP}}:9200"
     manage_template => false
     index => "%{[@metadata][beat]}-%{+YYYY.MM.dd}"
     document_type => "%{[@metadata][type]}"
