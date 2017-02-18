@@ -1,7 +1,7 @@
 ---
 
 ################################################################################
-#  description: Installs Kibana 4x on CentOS7x
+#  description: Installs Kibana on CentOS7x
 #  usage: ansible-playbook CentOS7x_Install-Kibana-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
@@ -73,11 +73,11 @@
 # REF: http://docs.ansible.com/ansible/template_module.html
 ###########################################################
 
-# /opt/kibana/config/kibana.yml
-  - name: Fill in the variables and copy templates/Kibana/kibana.yml.j2 to remote /opt/kibana/config/kibana.yml
+# /etc/kibana/kibana.yml
+  - name: Fill in the variables and copy templates/Kibana/kibana.yml.j2 to remote /etc/kibana/kibana.yml
     template:
       src=templates/Kibana/kibana.yml.j2
-      dest=/opt/kibana/config/kibana.yml
+      dest=/etc/kibana/kibana.yml
       owner=root
       group=root
       mode=0644
