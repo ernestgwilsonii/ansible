@@ -150,3 +150,6 @@
       # cat /var/log/logstash/logstash.stdout
       # cat /etc/logrotate.d/logstash
       # cat /etc/logstash/logstash.yml
+      # cat /var/log/logstash/logstash-plain.log
+      # ss -ntlup | grep 5044 # Beats port
+      # ss -ntlup | grep 9600 # Logstash API endpoint port
