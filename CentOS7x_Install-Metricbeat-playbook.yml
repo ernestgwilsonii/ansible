@@ -23,12 +23,12 @@
 # REF: https://docs.ansible.com/ansible/yum_repository_module.html
 ##################################################################
 
-# /etc/yum.repos.d/kibana.repo
-  - name: Install repository kibana
+# /etc/yum.repos.d/elasticsearch.repo
+  - name: Install repository Elasticsearch
     yum_repository:
-      name: kibana
-      description: Kibana repository
-      file: kibana
+      name: elasticsearch
+      description: Elasticsearch repository
+      file: elasticsearch
       baseurl: https://artifacts.elastic.co/packages/5.x/yum
       enabled: yes
       gpgcheck: yes
@@ -45,18 +45,18 @@
       state=latest
 
 
-# # Use the template module to populate files with data
-# # REF: http://docs.ansible.com/ansible/template_module.html
-# ###########################################################
+# Use the template module to populate files with data
+# REF: http://docs.ansible.com/ansible/template_module.html
+###########################################################
 
-# # /etc/metricbeat/metricbeat.yml
-#   - name: Fill in the variables and copy templates/Metricbeat/metricbeat.yml.j2 to remote /etc/metricbeat/metricbeat.yml
-#     template:
-#       src=templates/Metricbeat/metricbeat.yml.j2
-#       dest=/etc/metricbeat/metricbeat.yml
-#       owner=root
-#       group=root
-#       mode=0644
+# /etc/metricbeat/metricbeat.yml
+  - name: Fill in the variables and copy templates/Metricbeat/metricbeat.yml.j2 to remote /etc/metricbeat/metricbeat.yml
+    template:
+      src=templates/Metricbeat/metricbeat.yml.j2
+      dest=/etc/metricbeat/metricbeat.yml
+      owner=root
+      group=root
+      mode=0644
 
 
 # Enable and start service
@@ -73,4 +73,4 @@
       # systemctl status metricbeat.service -l
       # service metricbeat status
       # cat /var/log/messages | grep metricbeat
-      # metricbeat -c /etc/metricbeat/metricbeat.yml -configtest
+      # metricbeat.sh -c /etc/metricbeat/metricbeat.yml -configtest

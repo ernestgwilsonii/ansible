@@ -23,16 +23,16 @@
 # REF: https://docs.ansible.com/ansible/yum_repository_module.html
 ##################################################################
 
-# /etc/yum.repos.d/logstash.repo
-  - name: Install repository logstash
+# /etc/yum.repos.d/elasticsearch.repo
+  - name: Install repository Elasticsearch
     yum_repository:
-      name: logstash
-      description: Logstash Repository
-      file: logstash
+      name: elasticsearch
+      description: Elasticsearch repository
+      file: elasticsearch
       baseurl: https://artifacts.elastic.co/packages/5.x/yum
       enabled: yes
       gpgcheck: yes
-      gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+      gpgkey: https://packages.elastic.co/GPG-KEY-elasticsearch
 
 
 # Install yum packages

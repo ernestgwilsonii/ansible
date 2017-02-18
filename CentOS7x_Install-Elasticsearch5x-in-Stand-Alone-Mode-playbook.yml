@@ -24,10 +24,10 @@
 ##################################################################
 
 # /etc/yum.repos.d/elasticsearch.repo
-  - name: Install repository elasticsearch
+  - name: Install repository Elasticsearch
     yum_repository:
-      name: elasticsearch-5.x
-      description: Elasticsearch repository for 5.x packages
+      name: elasticsearch
+      description: Elasticsearch repository
       file: elasticsearch
       baseurl: https://artifacts.elastic.co/packages/5.x/yum
       enabled: yes
