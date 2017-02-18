@@ -113,6 +113,15 @@
 # REF: http://docs.ansible.com/ansible/template_module.html
 ###########################################################
 
+# /etc/logstash/logstash.yml
+  - name: Fill in the variables and copy templates/Logstash/logstash.yml.j2 to remote /etc/logstash/logstash.yml
+    template:
+      src=templates/Logstash/logstash.yml.j2
+      dest=/etc/logstash/logstash.yml
+      owner=root
+      group=root
+      mode=0644
+
 # /etc/logstash/conf.d/logstash.conf
   - name: Fill in the variables and copy templates/Logstash/logstash.conf.j2 to remote /etc/logstash/conf.d/logstash.conf
     template:
