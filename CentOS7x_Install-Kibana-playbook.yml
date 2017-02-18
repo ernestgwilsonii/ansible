@@ -2,7 +2,7 @@
 
 ################################################################################
 #  description: Installs Kibana on CentOS7x
-#  usage: ansible-playbook CentOS7x_Install-Kibana-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  usage: ansible-playbook CentOS7x_Install-Kibana-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere ElasticsearchIP=IPAddressHere'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
