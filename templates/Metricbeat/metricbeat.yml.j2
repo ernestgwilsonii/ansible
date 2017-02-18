@@ -20,10 +20,10 @@ metricbeat.modules:
     - load
 
     # Per CPU core stats
-    #- core
+    - core
 
     # IO stats
-    #- diskio
+    - diskio
 
     # Per filesystem stats
     - filesystem
@@ -41,7 +41,7 @@ metricbeat.modules:
     - process
 
     # Sockets (linux only)
-    #- socket
+    - socket
   enabled: true
   period: 10s
   processes: ['.*']
@@ -69,7 +69,7 @@ metricbeat.modules:
 # Multiple outputs may be used.
 
 #-------------------------- Elasticsearch output ------------------------------
-output.elasticsearch:
+#output.elasticsearch:
   # Array of hosts to connect to.
   hosts: ["localhost:9200"]
 
@@ -79,9 +79,9 @@ output.elasticsearch:
   #password: "changeme"
 
 #----------------------------- Logstash output --------------------------------
-#output.logstash:
+output.logstash:
   # The Logstash hosts
-  #hosts: ["localhost:5044"]
+  hosts: ["{{LogstashIP}}:5044"]
 
   # Optional SSL. By default is off.
   # List of root certificates for HTTPS server verifications
