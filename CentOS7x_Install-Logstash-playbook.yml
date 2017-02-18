@@ -92,6 +92,22 @@
       state=enabled
       zone=public
 
+  - name: Update firewall to allow port TCP 9600 for incoming Logstash API endpoint connections
+    firewalld:
+      port=9600/tcp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
+  - name: Update firewall to allow port TCP 9601 for incoming Logstash API endpoint connections
+    firewalld:
+      port=9601/tcp
+      permanent=true
+      immediate=yes
+      state=enabled
+      zone=public
+
 
 # Use the template module to populate files with data
 # REF: http://docs.ansible.com/ansible/template_module.html
@@ -124,3 +140,4 @@
       # cat /var/log/logstash/logstash.err
       # cat /var/log/logstash/logstash.stdout
       # cat /etc/logrotate.d/logstash
+      # cat /etc/logstash/logstash.yml
