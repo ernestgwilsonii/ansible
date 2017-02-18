@@ -29,10 +29,10 @@
       name: logstash
       description: Logstash Repository
       file: logstash
-      baseurl: https://packages.elastic.co/logstash/2.3/centos
+      baseurl: https://artifacts.elastic.co/packages/5.x/yum
       enabled: yes
       gpgcheck: yes
-      gpgkey: https://packages.elastic.co/GPG-KEY-elasticsearch
+      gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
 
 
 # Install yum packages
