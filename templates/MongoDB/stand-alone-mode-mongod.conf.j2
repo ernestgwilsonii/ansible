@@ -24,12 +24,12 @@ processManagement:
   fork: true  # fork and run in background
   pidFilePath: /var/run/mongodb/mongod.pid  # location of pidfile
 
-# network interfaces
+# network interfaces requireSSL vs allowSSL
 net:
   port: 27017
   bindIp: {{ansible_ssh_host}},127.0.0.1
   ssl:
-    mode: requireSSL
+    mode: allowSSL
     PEMKeyFile: /etc/ssl/mongodb.pem
     allowConnectionsWithoutCertificates: true
     allowInvalidCertificates: true
