@@ -6,3 +6,5 @@ node.data: true
 discovery.zen.ping.unicast.hosts: ["{{ansible_ssh_host}}:9300"]
 discovery.zen.minimum_master_nodes: 1
 discovery.zen.ping_timeout: 30s
+http.cors.enabled: true
+http.cors.allow-origin: "*"
