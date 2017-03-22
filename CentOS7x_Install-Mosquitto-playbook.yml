@@ -70,11 +70,6 @@
       name=libmosquittopp-devel
       state=latest
 
-  - name: Install python-mosquitto
-    yum:
-      name=python-mosquitto
-      state=latest
-
 
 # Restart firewalld to make sure it is running OK before changing any rules
 # REF: http://docs.ansible.com/ansible/service_module.html
