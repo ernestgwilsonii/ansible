@@ -94,6 +94,14 @@
       state: enabled
       zone: public
 
+  - name: Update firewall to allow port TCP 8083 for incoming websockets mosquitto connections
+    firewalld:
+      port: 8083/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
   - name: Update firewall to allow port TCP 8883 for incoming encrypted mosquitto connections
     firewalld:
       port: 8883/tcp
@@ -140,3 +148,11 @@
       name=mosquitto.service
       enabled=yes
       state=restarted
+      # Remote SSH command line trouble-shooting commands:
+      # systemctl status mosquitto
+      # cat /usr/lib/systemd/system/mosquitto.service
+      # cat /etc/mosquitto/mosquitto.conf
+      # ss -ntlup | grep 1883
+      # lsof -P | grep IPv4 | sort -t: -k2,2n | grep 1883
+      # mosquitto_sub -h localhost -t test # Subscribe to a topic in one SSH session
+      # mosquitto_pub -h localhost -t test -m "hello world" # Publish to a topic in another SSH session

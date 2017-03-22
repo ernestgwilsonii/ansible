@@ -53,6 +53,11 @@
       name=htop
       state=latest
 
+  - name: Install lsof
+    yum:
+      name=lsof
+      state=latest
+
   - name: Install jq
     yum:
       name=jq
