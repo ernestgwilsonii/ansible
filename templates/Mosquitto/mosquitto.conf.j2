@@ -641,9 +641,14 @@ port 1883
 #address <host>[:<port>] [<host>[:<port>]]
 #topic <topic> [[[out | in | both] qos-level] local-prefix remote-prefix]
 
+# Example broker to broker "bridge" connection:
+#connection 10.127.215.33
+#address 10.127.215.33:1883
+#topic # both 2
+
 # Set the version of the MQTT protocol to use with for this bridge. Can be one
 # of mqttv31 or mqttv311. Defaults to mqttv31.
-#bridge_protocol_version mqttv31
+bridge_protocol_version mqttv31
 
 # If a bridge has topics that have "out" direction, the default behaviour is to
 # send an unsubscribe request to the remote broker on that topic. This means
@@ -693,12 +698,12 @@ port 1883
 # unless the notification_topic option is used.
 # If the message is 1 then the connection is active, or 0 if the connection has
 # failed.
-#notifications true
+notifications true
 
 # Choose the topic on which notification messages for this bridge are
 # published. If not set, messages are published on the topic
 # $SYS/broker/connection/<clientid>/state
-#notification_topic
+notification_topic bridge_status
 
 # Set the keepalive interval for this bridge connection, in
 # seconds.
@@ -741,7 +746,7 @@ port 1883
 # will be propagated correctly. Not all brokers support this feature so it may
 # be necessary to set try_private to false if your bridge does not connect
 # properly.
-#try_private true
+try_private true
 
 # Set the username to use when connecting to a broker that requires
 # authentication.

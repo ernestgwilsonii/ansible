@@ -23,6 +23,10 @@
 # REF: http://docs.ansible.com/ansible/command_module.html
 ##########################################################
 
+# https://github.com/ActiveState/appdirs/issues/89
+  - name: Use pip to update and ensure appdirs is at the latest version
+    command: /usr/bin/pip install --upgrade appdirs
+
   - name: Use pip to update and ensure pip is at the latest version
     command: /usr/bin/pip install --upgrade pip
 
