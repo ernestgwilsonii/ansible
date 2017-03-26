@@ -99,7 +99,7 @@ user mosquitto
 # persistent_client_expiration 1y
 #
 # The default if not set is to never expire persistent clients.
-#persistent_client_expiration
+persistent_client_expiration 14d
 
 # If a client is subscribed to multiple subscriptions that overlap, e.g. foo/#
 # and foo/+/baz , then MQTT expects that when the broker receives a message on
@@ -489,10 +489,10 @@ port 1883
 
 # If set to true, client connection and disconnection messages will be included
 # in the log.
-#connection_messages true
+connection_messages true
 
 # If set to true, add a timestamp value to each log message.
-#log_timestamp true
+log_timestamp true
 
 # =================================================================
 # Security
