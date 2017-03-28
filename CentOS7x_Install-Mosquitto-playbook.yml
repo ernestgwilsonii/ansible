@@ -162,7 +162,7 @@
       dest=/etc/mosquitto/certs/generate-CA.sh
       owner=root
       group=root
-      mode=0400
+      mode=0500
 
 
 # Use the template module to populate files with data
