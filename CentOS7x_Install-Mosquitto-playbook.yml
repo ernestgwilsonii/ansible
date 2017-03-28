@@ -164,7 +164,7 @@
       dest=/etc/mosquitto/certs/ca.srl
       owner=root
       group=root
-      mode=0444
+      mode=0640
 
   - name: Copy and decrypt generate-CA.sh from Ansible files/Mosquitto/certs/generate-CA.sh to Mosquitto remote /etc/mosquitto/certs/generate-CA.sh
     copy:
