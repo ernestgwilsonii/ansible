@@ -42,33 +42,33 @@
 
   - name: Install mosquitto
     yum:
-      name=mosquitto
-      state=latest
+      name: http://download.opensuse.org/repositories/home:/oojah:/mqtt/CentOS_CentOS-7/x86_64/mosquitto-1.4.10-3.1.x86_64.rpm
+      state: present
 
   - name: Install mosquitto-clients
     yum:
-      name=mosquitto-clients
-      state=latest
+      name: mosquitto-clients
+      state: latest
 
   - name: Install libmosquitto1
     yum:
-      name=libmosquitto1
-      state=latest
+      name: libmosquitto1
+      state: latest
 
   - name: Install libmosquitto-devel
     yum:
-      name=libmosquitto-devel
-      state=latest
+      name: http://download.opensuse.org/repositories/home:/oojah:/mqtt/CentOS_CentOS-7/x86_64/libmosquitto-devel-1.4.10-3.1.x86_64.rpm
+      state: latest
 
   - name: Install libmosquittopp1
     yum:
-      name=libmosquittopp1
-      state=latest
+      name: libmosquittopp1
+      state: latest
 
   - name: Install libmosquittopp-devel
     yum:
-      name=libmosquittopp-devel
-      state=latest
+      name: libmosquittopp-devel
+      state: latest
 
 
 # Restart firewalld to make sure it is running OK before changing any rules
