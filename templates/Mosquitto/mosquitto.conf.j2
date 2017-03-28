@@ -578,7 +578,6 @@ log_timestamp true
 
 
 
-
 # -----------------------------------------------------------------
 # Default authentication and topic access control
 # -----------------------------------------------------------------
@@ -669,7 +668,7 @@ log_timestamp true
 
 
 # =================================================================
-# Bridges
+# Bridge link 1 from {{ansible_ssh_host}} to n.n.n.n
 # =================================================================
 
 # A bridge is a way of connecting multiple MQTT brokers together.
@@ -769,7 +768,213 @@ log_timestamp true
 # Choose the topic on which notification messages for this bridge are
 # published. If not set, messages are published on the topic
 # $SYS/broker/connection/<clientid>/state
-#notification_topic bridge_status
+#notification_topic bridge_status_from_{{ansible_ssh_host}}_to_n.n.n.n
+
+# Set the keepalive interval for this bridge connection, in
+# seconds.
+#keepalive_interval 60
+
+# Set the start type of the bridge. This controls how the bridge starts and
+# can be one of three types: automatic, lazy and once. Note that RSMB provides
+# a fourth start type "manual" which isn't currently supported by mosquitto.
+#
+# "automatic" is the default start type and means that the bridge connection
+# will be started automatically when the broker starts and also restarted
+# after a short delay (30 seconds) if the connection fails.
+#
+# Bridges using the "lazy" start type will be started automatically when the
+# number of queued messages exceeds the number set with the "threshold"
+# parameter. It will be stopped automatically after the time set by the
+# "idle_timeout" parameter. Use this start type if you wish the connection to
+# only be active when it is needed.
+#
+# A bridge using the "once" start type will be started automatically when the
+# broker starts but will not be restarted if the connection fails.
+#start_type automatic
+
+# Set the amount of time a bridge using the automatic start type will wait
+# until attempting to reconnect.  Defaults to 30 seconds.
+#restart_timeout 30
+
+# Set the amount of time a bridge using the lazy start type must be idle before
+# it will be stopped. Defaults to 60 seconds.
+#idle_timeout 60
+
+# Set the number of messages that need to be queued for a bridge with lazy
+# start type to be restarted. Defaults to 10 messages.
+# Must be less than max_queued_messages.
+#threshold 10
+
+# If try_private is set to true, the bridge will attempt to indicate to the
+# remote broker that it is a bridge not an ordinary client. If successful, this
+# means that loop detection will be more effective and that retained messages
+# will be propagated correctly. Not all brokers support this feature so it may
+# be necessary to set try_private to false if your bridge does not connect
+# properly.
+#try_private true
+
+# Set the username to use when connecting to a broker that requires
+# authentication.
+# This replaces the old "username" option to avoid confusion. "username"
+# remains valid for the time being.
+#remote_username
+
+# Set the password to use when connecting to a broker that requires
+# authentication. This option is only used if remote_username is also set.
+# This replaces the old "password" option to avoid confusion. "password"
+# remains valid for the time being.
+#remote_password
+
+# -----------------------------------------------------------------
+# Certificate based SSL/TLS support
+# -----------------------------------------------------------------
+# Either bridge_cafile or bridge_capath must be defined to enable TLS support
+# for this bridge.
+# bridge_cafile defines the path to a file containing the
+# Certificate Authority certificates that have signed the remote broker
+# certificate.
+# bridge_capath defines a directory that will be searched for files containing
+# the CA certificates. For bridge_capath to work correctly, the certificate
+# files must have ".crt" as the file ending and you must run "c_rehash <path to
+# capath>" each time you add/remove a certificate.
+#bridge_cafile
+#bridge_capath
+#bridge_cafile /etc/mosquitto/certs/ca.crt
+
+# Path to the PEM encoded client certificate, if required by the remote broker.
+#bridge_certfile
+#bridge_certfile /etc/mosquitto/certs/{{hostname.stdout}}.local.crt
+
+# Path to the PEM encoded client private key, if required by the remote broker.
+#bridge_keyfile
+#bridge_keyfile /etc/mosquitto/certs/{{hostname.stdout}}.local.key
+
+# When using certificate based encryption, bridge_insecure disables
+# verification of the server hostname in the server certificate. This can be
+# useful when testing initial server configurations, but makes it possible for
+# a malicious third party to impersonate your server through DNS spoofing, for
+# example. Use this option in testing only. If you need to resort to using this
+# option in a production environment, your setup is at fault and there is no
+# point using encryption.
+#bridge_insecure true
+
+# -----------------------------------------------------------------
+# PSK based SSL/TLS support
+# -----------------------------------------------------------------
+# Pre-shared-key encryption provides an alternative to certificate based
+# encryption. A bridge can be configured to use PSK with the bridge_identity
+# and bridge_psk options. These are the client PSK identity, and pre-shared-key
+# in hexadecimal format with no "0x". Only one of certificate and PSK based
+# encryption can be used on one
+# bridge at once.
+#bridge_identity mqtt
+#bridge_psk deadbeef
+
+
+
+
+# =================================================================
+# Bridge link 2 from {{ansible_ssh_host}} to n.n.n.n
+# =================================================================
+
+# A bridge is a way of connecting multiple MQTT brokers together.
+# Create a new bridge using the "connection" option as described below. Set
+# options for the bridges using the remaining parameters. You must specify the
+# address and at least one topic to subscribe to.
+# Each connection must have a unique name.
+# The address line may have multiple host address and ports specified. See
+# below in the round_robin description for more details on bridge behaviour if
+# multiple addresses are used.
+# The direction that the topic will be shared can be chosen by
+# specifying out, in or both, where the default value is out.
+# The QoS level of the bridged communication can be specified with the next
+# topic option. The default QoS level is 0, to change the QoS the topic
+# direction must also be given.
+# The local and remote prefix options allow a topic to be remapped when it is
+# bridged to/from the remote broker. This provides the ability to place a topic
+# tree in an appropriate location.
+# For more details see the mosquitto.conf man page.
+# Multiple topics can be specified per connection, but be careful
+# not to create any loops.
+# If you are using bridges with cleansession set to false (the default), then
+# you may get unexpected behaviour from incoming topics if you change what
+# topics you are subscribing to. This is because the remote broker keeps the
+# subscription for the old topic. If you have this problem, connect your bridge
+# with cleansession set to true, then reconnect with cleansession set to false
+# as normal.
+#connection <name>
+#address <host>[:<port>] [<host>[:<port>]]
+#topic <topic> [[[out | in | both] qos-level] local-prefix remote-prefix]
+
+# Example broker to broker "bridge" unencrypted connection TCP 1833:
+#connection 10.127.215.33
+#address 10.127.215.33:1883
+#topic # both 2
+
+# Example broker to broker "bridge" encrypted connection TCP 8883:
+#connection 10.127.215.33
+#address 10.127.215.33:8883
+#topic # both 2
+
+
+# Set the version of the MQTT protocol to use with for this bridge. Can be one
+# of mqttv31 or mqttv311. Defaults to mqttv31.
+#bridge_protocol_version mqttv31
+
+# If a bridge has topics that have "out" direction, the default behaviour is to
+# send an unsubscribe request to the remote broker on that topic. This means
+# that changing a topic direction from "in" to "out" will not keep receiving
+# incoming messages. Sending these unsubscribe requests is not always
+# desirable, setting bridge_attempt_unsubscribe to false will disable sending
+# the unsubscribe request.
+#bridge_attempt_unsubscribe true
+
+# If the bridge has more than one address given in the address/addresses
+# configuration, the round_robin option defines the behaviour of the bridge on
+# a failure of the bridge connection. If round_robin is false, the default
+# value, then the first address is treated as the main bridge connection. If
+# the connection fails, the other secondary addresses will be attempted in
+# turn. Whilst connected to a secondary bridge, the bridge will periodically
+# attempt to reconnect to the main bridge until successful.
+# If round_robin is true, then all addresses are treated as equals. If a
+# connection fails, the next address will be tried and if successful will
+# remain connected until it fails
+#round_robin false
+
+# Set the client id to use on the remote end of this bridge connection. If not
+# defined, this defaults to 'name.hostname' where name is the connection name
+# and hostname is the hostname of this computer.
+# This replaces the old "clientid" option to avoid confusion. "clientid"
+# remains valid for the time being.
+#remote_clientid
+
+# Set the clientid to use on the local broker. If not defined, this defaults to
+# 'local.<clientid>'. If you are bridging a broker to itself, it is important
+# that local_clientid and clientid do not match.
+#local_clientid
+
+# Set the clean session variable for this bridge.
+# When set to true, when the bridge disconnects for any reason, all
+# messages and subscriptions will be cleaned up on the remote
+# broker. Note that with cleansession set to true, there may be a
+# significant amount of retained messages sent when the bridge
+# reconnects after losing its connection.
+# When set to false, the subscriptions and messages are kept on the
+# remote broker, and delivered when the bridge reconnects.
+#cleansession true
+
+# If set to true, publish notification messages to the local and remote brokers
+# giving information about the state of the bridge connection. Retained
+# messages are published to the topic $SYS/broker/connection/<clientid>/state
+# unless the notification_topic option is used.
+# If the message is 1 then the connection is active, or 0 if the connection has
+# failed.
+#notifications true
+
+# Choose the topic on which notification messages for this bridge are
+# published. If not set, messages are published on the topic
+# $SYS/broker/connection/<clientid>/state
+#notification_topic bridge_status_from_{{ansible_ssh_host}}_to_n.n.n.n
 
 # Set the keepalive interval for this bridge connection, in
 # seconds.
