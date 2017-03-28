@@ -138,7 +138,7 @@
       dest=/etc/mosquitto/certs/ca.crt
       owner=mosquitto
       group=root
-      mode=0400
+      mode=0444
 
   - name: Copy and decrypt ca.key from Ansible files/Mosquitto/certs/ca.key to Mosquitto remote /etc/mosquitto/certs/ca.key
     copy:
@@ -154,7 +154,7 @@
       dest=/etc/mosquitto/certs/ca.srl
       owner=root
       group=root
-      mode=0400
+      mode=0544
 
   - name: Copy and decrypt generate-CA.sh from Ansible files/Mosquitto/certs/generate-CA.sh to Mosquitto remote /etc/mosquitto/certs/generate-CA.sh
     copy:
@@ -162,7 +162,7 @@
       dest=/etc/mosquitto/certs/generate-CA.sh
       owner=root
       group=root
-      mode=0500
+      mode=0540
 
 
 # Use the template module to populate files with data
@@ -191,7 +191,16 @@
       # systemctl status mosquitto
       # cat /usr/lib/systemd/system/mosquitto.service
       # cat /etc/mosquitto/mosquitto.conf
+      # tail -f /var/log/messages
       # ss -ntlup | grep 1883
+      # ss -ntlup | grep 8883
+      # ss -ntlup | grep 9001
+      # ss -ntlup | grep 9883
       # lsof -P | grep IPv4 | sort -t: -k2,2n | grep 1883
       # mosquitto_sub -h localhost -t test # Subscribe to a topic in one SSH session
       # mosquitto_pub -h localhost -t test -m "hello world" # Publish to a topic in another SSH session
+      # mosquitto_sub -h localhost -v -t "#" # Subscribe to all
+      # mosquitto_sub --cafile /etc/mosquitto/certs/ca.crt -h localhost -p 8883 -v -t "#" # Encrypted subscribe to all
+      # mosquitto_pub --cafile /etc/mosquitto/certs/ca.crt -h localhost -t "test" -m "message" -p 8883 # Encrypted publish
+      # mosquitto_sub -t \$SYS/broker/bytes/\# -v --cafile /etc/mosquitto/certs/ca.crt -p 8883 # Encrypted read bytes
+
