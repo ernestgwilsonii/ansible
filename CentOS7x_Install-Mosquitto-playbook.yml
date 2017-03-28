@@ -45,14 +45,14 @@
       name: http://download.opensuse.org/repositories/home:/oojah:/mqtt/CentOS_CentOS-7/x86_64/mosquitto-1.4.10-3.1.x86_64.rpm
       state: present
 
-  - name: Install mosquitto-clients
-    yum:
-      name: http://download.opensuse.org/repositories/home:/oojah:/mqtt/CentOS_CentOS-7/x86_64/mosquitto-clients-1.4.10-3.1.x86_64.rpm
-      state: present
-
   - name: Install libmosquitto1
     yum:
       name: http://download.opensuse.org/repositories/home:/oojah:/mqtt/CentOS_CentOS-7/x86_64/libmosquitto1-1.4.10-3.1.x86_64.rpm
+      state: present
+
+  - name: Install mosquitto-clients
+    yum:
+      name: http://download.opensuse.org/repositories/home:/oojah:/mqtt/CentOS_CentOS-7/x86_64/mosquitto-clients-1.4.10-3.1.x86_64.rpm
       state: present
 
   - name: Install libmosquitto-devel
