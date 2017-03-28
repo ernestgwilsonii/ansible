@@ -164,7 +164,7 @@
       dest=/etc/mosquitto/certs/ca.srl
       owner=root
       group=root
-      mode=0544
+      mode=0444
 
   - name: Copy and decrypt generate-CA.sh from Ansible files/Mosquitto/certs/generate-CA.sh to Mosquitto remote /etc/mosquitto/certs/generate-CA.sh
     copy:
@@ -175,12 +175,12 @@
       mode=0540
 
 
-# command - Executes a command on a remote node
-# REF: http://docs.ansible.com/ansible/command_module.html
+# Execute raw command(s)
+# REF: http://docs.ansible.com/ansible/raw_module.html
 ##########################################################
 
   - name: Generate certs on remote via /etc/mosquitto/certs/generate-CA.sh
-    command: /etc/mosquitto/certs/generate-CA.sh
+    raw: cd /etc/mosquitto/certs && /etc/mosquitto/certs/generate-CA.sh
 
 
 # Use the template module to populate files with data
