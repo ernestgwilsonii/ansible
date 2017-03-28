@@ -119,6 +119,16 @@
       zone: public
 
 
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+     - name: Get the hostname from the remote OS and use it to set a variable
+       command: hostname
+       register: hostname
+     - debug: msg="Remote hostname is {{hostname.stdout}}"
+
+
 # Use the copy module to copy various files into place
 # REF: http://docs.ansible.com/ansible/copy_module.html
 #######################################################
@@ -165,6 +175,14 @@
       mode=0540
 
 
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+     - name: Generate certs on remote via /etc/mosquitto/certs/generate-CA.sh
+       command: /etc/mosquitto/certs/generate-CA.sh
+
+
 # Use the template module to populate files with data
 # REF: http://docs.ansible.com/ansible/template_module.html
 ###########################################################
@@ -203,4 +221,3 @@
       # mosquitto_sub --cafile /etc/mosquitto/certs/ca.crt -h localhost -p 8883 -v -t "#" # Encrypted subscribe to all
       # mosquitto_pub --cafile /etc/mosquitto/certs/ca.crt -h localhost -t "test" -m "message" -p 8883 # Encrypted publish
       # mosquitto_sub -t \$SYS/broker/bytes/\# -v --cafile /etc/mosquitto/certs/ca.crt -p 8883 # Encrypted read bytes
-

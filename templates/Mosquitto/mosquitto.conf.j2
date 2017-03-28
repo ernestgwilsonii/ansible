@@ -245,11 +245,11 @@ cafile /etc/mosquitto/certs/ca.crt
 
 # Path to the PEM encoded server certificate.
 #certfile
-certfile /etc/mosquitto/certs/HOSTNAME.local.crt
+certfile /etc/mosquitto/certs/{{hostname.stdout}}.local.crt
 
 # Path to the PEM encoded keyfile.
 #keyfile
-keyfile /etc/mosquitto/certs/HOSTNAME.local.key
+keyfile /etc/mosquitto/certs/{{hostname.stdout}}.local.key
 
 # By default an TLS enabled listener will operate in a similar fashion to a
 # https enabled web server, in that the server has a certificate signed by a CA
@@ -406,11 +406,11 @@ cafile /etc/mosquitto/certs/ca.crt
 
 # Path to the PEM encoded server certificate.
 #certfile
-certfile /etc/mosquitto/certs/HOSTNAME.local.crt
+certfile /etc/mosquitto/certs/{{hostname.stdout}}.local.crt
 
 # Path to the PEM encoded keyfile.
 #keyfile
-keyfile /etc/mosquitto/certs/HOSTNAME.local.key
+keyfile /etc/mosquitto/certs/{{hostname.stdout}}.local.key
 
 # By default an TLS enabled listener will operate in a similar fashion to a
 # https enabled web server, in that the server has a certificate signed by a CA
@@ -844,11 +844,11 @@ log_timestamp true
 
 # Path to the PEM encoded client certificate, if required by the remote broker.
 #bridge_certfile
-#bridge_certfile /etc/mosquitto/certs/HOSTNAME.local.crt
+#bridge_certfile /etc/mosquitto/certs/{{hostname.stdout}}.local.crt
 
 # Path to the PEM encoded client private key, if required by the remote broker.
 #bridge_keyfile
-#bridge_keyfile /etc/mosquitto/certs/HOSTNAME.local.key
+#bridge_keyfile /etc/mosquitto/certs/{{hostname.stdout}}.local.key
 
 # When using certificate based encryption, bridge_insecure disables
 # verification of the server hostname in the server certificate. This can be
