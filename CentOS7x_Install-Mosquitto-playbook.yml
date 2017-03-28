@@ -94,17 +94,25 @@
       state: enabled
       zone: public
 
-  - name: Update firewall to allow port TCP 8083 for incoming websockets mosquitto connections
+  - name: Update firewall to allow port TCP 8883 for incoming encrypted mosquitto connections
     firewalld:
-      port: 8083/tcp
+      port: 8883/tcp
       permanent: true
       immediate: yes
       state: enabled
       zone: public
 
-  - name: Update firewall to allow port TCP 8883 for incoming encrypted mosquitto connections
+  - name: Update firewall to allow port TCP 9001 for incoming websockets mosquitto connections
     firewalld:
-      port: 8883/tcp
+      port: 9001/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 9883 for incoming encrypted websockets mosquitto connections
+    firewalld:
+      port: 9883/tcp
       permanent: true
       immediate: yes
       state: enabled
@@ -126,25 +134,33 @@
 
   - name: Copy and decrypt ca.pem from Ansible files/Mosquitto/certs/ca.pem to Mosquitto remote /etc/mosquitto/certs/ca.pem
     copy:
-      src=files/Mosquitto/certs/ca.pem
-      dest=/etc/mosquitto/certs/ca.pem
+      src=files/Mosquitto/certs/ca.crt
+      dest=/etc/mosquitto/certs/ca.crt
       owner=mosquitto
       group=root
       mode=0400
 
-  - name: Copy and decrypt cert.pem from Ansible files/Mosquitto/certs/cert.pem to Mosquitto remote /etc/mosquitto/certs/cert.pem
+  - name: Copy and decrypt ca.key from Ansible files/Mosquitto/certs/ca.key to Mosquitto remote /etc/mosquitto/certs/ca.key
     copy:
-      src=files/Mosquitto/certs/cert.pem
-      dest=/etc/mosquitto/certs/cert.pem
-      owner=mosquitto
+      src=files/Mosquitto/certs/ca.key
+      dest=/etc/mosquitto/certs/ca.key
+      owner=root
       group=root
       mode=0400
 
-  - name: Copy and decrypt privkey.pem from Ansible files/Mosquitto/certs/privkey.pem to Mosquitto remote /etc/mosquitto/certs/privkey.pem
+  - name: Copy and decrypt ca.srl from Ansible files/Mosquitto/certs/ca.srl to Mosquitto remote /etc/mosquitto/certs/ca.srl
     copy:
-      src=files/Mosquitto/certs/privkey.pem
-      dest=/etc/mosquitto/certs/privkey.pem
-      owner=mosquitto
+      src=files/Mosquitto/certs/ca.srl
+      dest=/etc/mosquitto/certs/ca.srl
+      owner=root
+      group=root
+      mode=0400
+
+  - name: Copy and decrypt generate-CA.sh from Ansible files/Mosquitto/certs/generate-CA.sh to Mosquitto remote /etc/mosquitto/certs/generate-CA.sh
+    copy:
+      src=files/Mosquitto/certs/generate-CA.sh
+      dest=/etc/mosquitto/certs/generate-CA.sh
+      owner=root
       group=root
       mode=0400
 

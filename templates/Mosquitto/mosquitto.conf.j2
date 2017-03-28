@@ -166,7 +166,7 @@ protocol mqtt
 
 
 # =================================================================
-# TCP 8883 Encrypted SSL Certificate MQTT Listener
+# TCP 8883 Encrypted TLS/SSL Certificate MQTT Listener
 # =================================================================
 
 # Listen on a port/ip address combination. By using this variable
@@ -241,15 +241,176 @@ protocol mqtt
 # "c_rehash <path to capath>" each time you add/remove a certificate.
 #cafile
 #capath
-cafile /etc/mosquitto/certs/ca.pem
+cafile /etc/mosquitto/certs/ca.crt
 
 # Path to the PEM encoded server certificate.
 #certfile
-certfile /etc/mosquitto/certs/cert.pem
+certfile /etc/mosquitto/certs/HOSTNAME.local.crt
 
 # Path to the PEM encoded keyfile.
 #keyfile
-keyfile /etc/mosquitto/certs/privkey.pem
+keyfile /etc/mosquitto/certs/HOSTNAME.local.key
+
+# By default an TLS enabled listener will operate in a similar fashion to a
+# https enabled web server, in that the server has a certificate signed by a CA
+# and the client will verify that it is a trusted certificate. The overall aim
+# is encryption of the network traffic. By setting require_certificate to true,
+# the client must provide a valid certificate in order for the network
+# connection to proceed. This allows access to the broker to be controlled
+# outside of the mechanisms provided by MQTT.
+#require_certificate false
+
+# If require_certificate is true, you may set use_identity_as_username to true
+# to use the CN value from the client certificate as a username. If this is
+# true, the password_file option will not be used for this listener.
+#use_identity_as_username false
+
+# If you have require_certificate set to true, you can create a certificate
+# revocation list file to revoke access to particular client certificates. If
+# you have done this, use crlfile to point to the PEM encoded revocation file.
+#crlfile
+
+# If you wish to control which encryption ciphers are used, use the ciphers
+# option. The list of available ciphers can be optained using the "openssl
+# ciphers" command and should be provided in the same format as the output of
+# that command.
+#ciphers
+
+
+
+
+# =================================================================
+# Default TCP 9001 Unencrypted Websockets Listener
+# =================================================================
+
+# IP address/hostname to bind the default listener to. If not
+# given, the default listener will not be bound to a specific
+# address and so will be accessible to all network interfaces.
+# bind_address ip-address/host name
+#bind_address {{ansible_ssh_host}}
+
+# Port to use for the default listener.
+port 9001
+
+# The maximum number of client connections to allow. This is
+# a per listener setting.
+# Default is -1, which means unlimited connections.
+# Note that other process limits mean that unlimited connections
+# are not really possible. Typically the default maximum number of
+# connections possible is around 1024.
+#max_connections -1
+
+# Choose the protocol to use when listening.
+# This can be either mqtt or websockets.
+# Websockets support is currently disabled by default at compile time.
+# Certificate based TLS may be used with websockets, except that
+# only the cafile, certfile, keyfile and ciphers options are supported.
+protocol websockets
+
+# When a listener is using the websockets protocol, it is possible to serve
+# http data as well. Set http_dir to a directory which contains the files you
+# wish to serve. If this option is not specified, then no normal http
+# connections will be possible.
+#http_dir
+
+# Set use_username_as_clientid to true to replace the clientid that a client
+# connected with with its username. This allows authentication to be tied to
+# the clientid, which means that it is possible to prevent one client
+# disconnecting another by using the same clientid.
+# If a client connects with no username it will be disconnected as not
+# authorised when this option is set to true.
+# Do not use in conjunction with clientid_prefixes.
+# See also use_identity_as_username.
+#use_username_as_clientid
+
+
+
+
+# =================================================================
+# TCP 9883 Encrypted TLS/SSL Certificate Websockets Listener
+# =================================================================
+
+# Listen on a port/ip address combination. By using this variable
+# multiple times, mosquitto can listen on more than one port. If
+# this variable is used and neither bind_address nor port given,
+# then the default listener will not be started.
+# The port number to listen on must be given. Optionally, an ip
+# address or host name may be supplied as a second argument. In
+# this case, mosquitto will attempt to bind the listener to that
+# address and so restrict access to the associated network and
+# interface. By default, mosquitto will listen on all interfaces.
+# Note that for a websockets listener it is not possible to bind to a host
+# name.
+# listener port-number [ip address/host name]
+listener 9883
+
+# The maximum number of client connections to allow. This is
+# a per listener setting.
+# Default is -1, which means unlimited connections.
+# Note that other process limits mean that unlimited connections
+# are not really possible. Typically the default maximum number of
+# connections possible is around 1024.
+#max_connections -1
+
+# The listener can be restricted to operating within a topic hierarchy using
+# the mount_point option. This is achieved be prefixing the mount_point string
+# to all topics for any clients connected to this listener. This prefixing only
+# happens internally to the broker; the client will not see the prefix.
+#mount_point
+
+# Choose the protocol to use when listening.
+# This can be either mqtt or websockets.
+# Certificate based TLS may be used with websockets, except that only the
+# cafile, certfile, keyfile and ciphers options are supported.
+protocol websockets
+
+# When a listener is using the websockets protocol, it is possible to serve
+# http data as well. Set http_dir to a directory which contains the files you
+# wish to serve. If this option is not specified, then no normal http
+# connections will be possible.
+#http_dir
+
+# Set use_username_as_clientid to true to replace the clientid that a client
+# connected with with its username. This allows authentication to be tied to
+# the clientid, which means that it is possible to prevent one client
+# disconnecting another by using the same clientid.
+# If a client connects with no username it will be disconnected as not
+# authorised when this option is set to true.
+# Do not use in conjunction with clientid_prefixes.
+# See also use_identity_as_username.
+#use_username_as_clientid
+
+# -----------------------------------------------------------------
+# Certificate based SSL/TLS support
+# -----------------------------------------------------------------
+# The following options can be used to enable certificate based SSL/TLS support
+# for this listener. Note that the recommended port for MQTT over TLS is 8883,
+# but this must be set manually.
+#
+# See also the mosquitto-tls man page and the "Pre-shared-key based SSL/TLS
+# support" section. Only one of certificate or PSK encryption support can be
+# enabled for any listener.
+
+# At least one of cafile or capath must be defined to enable certificate based
+# TLS encryption. They both define methods of accessing the PEM encoded
+# Certificate Authority certificates that have signed your server certificate
+# and that you wish to trust.
+# cafile defines the path to a file containing the CA certificates.
+# capath defines a directory that will be searched for files
+# containing the CA certificates. For capath to work correctly, the
+# certificate files must have ".crt" as the file ending and you must run
+# "c_rehash <path to capath>" each time you add/remove a certificate.
+#cafile
+#capath
+cafile /etc/mosquitto/certs/ca.crt
+
+# Path to the PEM encoded server certificate.
+#certfile
+certfile /etc/mosquitto/certs/HOSTNAME.local.crt
+
+# Path to the PEM encoded keyfile.
+#keyfile
+keyfile /etc/mosquitto/certs/HOSTNAME.local.key
 
 # By default an TLS enabled listener will operate in a similar fashion to a
 # https enabled web server, in that the server has a certificate signed by a CA
@@ -365,13 +526,17 @@ log_type notice
 log_type information
 log_type subscribe
 log_type unsubscribe
+log_type websockets
+#log_type debug
+#log_type all
 
 # Change the websockets logging level. This is a global option, it is not
 # possible to set per listener. This is an integer that is interpreted by
 # libwebsockets as a bit mask for its lws_log_levels enum. See the
 # libwebsockets documentation for more details. "log_type websockets" must also
 # be enabled.
-#websockets_log_level 0
+# ERR is 0, WARN is 1, NOTICE is 2, INFO is 3, DEBUG is 4, PARSER is 5, HEADER is 6, EXT is 7, CLIENT is 8, LATENCY is 9, USER is 10, COUNT is 11
+websockets_log_level 0
 
 # If set to true, client connection and disconnection messages will be included
 # in the log.
@@ -549,7 +714,7 @@ log_timestamp true
 
 # Set the version of the MQTT protocol to use with for this bridge. Can be one
 # of mqttv31 or mqttv311. Defaults to mqttv31.
-bridge_protocol_version mqttv31
+#bridge_protocol_version mqttv31
 
 # If a bridge has topics that have "out" direction, the default behaviour is to
 # send an unsubscribe request to the remote broker on that topic. This means
@@ -591,7 +756,7 @@ bridge_protocol_version mqttv31
 # reconnects after losing its connection.
 # When set to false, the subscriptions and messages are kept on the
 # remote broker, and delivered when the bridge reconnects.
-cleansession true
+#cleansession true
 
 # If set to true, publish notification messages to the local and remote brokers
 # giving information about the state of the bridge connection. Retained
@@ -599,16 +764,16 @@ cleansession true
 # unless the notification_topic option is used.
 # If the message is 1 then the connection is active, or 0 if the connection has
 # failed.
-notifications true
+#notifications true
 
 # Choose the topic on which notification messages for this bridge are
 # published. If not set, messages are published on the topic
 # $SYS/broker/connection/<clientid>/state
-notification_topic bridge_status
+#notification_topic bridge_status
 
 # Set the keepalive interval for this bridge connection, in
 # seconds.
-keepalive_interval 60
+#keepalive_interval 60
 
 # Set the start type of the bridge. This controls how the bridge starts and
 # can be one of three types: automatic, lazy and once. Note that RSMB provides
@@ -626,11 +791,11 @@ keepalive_interval 60
 #
 # A bridge using the "once" start type will be started automatically when the
 # broker starts but will not be restarted if the connection fails.
-start_type automatic
+#start_type automatic
 
 # Set the amount of time a bridge using the automatic start type will wait
 # until attempting to reconnect.  Defaults to 30 seconds.
-restart_timeout 30
+#restart_timeout 30
 
 # Set the amount of time a bridge using the lazy start type must be idle before
 # it will be stopped. Defaults to 60 seconds.
@@ -647,7 +812,7 @@ restart_timeout 30
 # will be propagated correctly. Not all brokers support this feature so it may
 # be necessary to set try_private to false if your bridge does not connect
 # properly.
-try_private true
+#try_private true
 
 # Set the username to use when connecting to a broker that requires
 # authentication.
@@ -675,15 +840,15 @@ try_private true
 # capath>" each time you add/remove a certificate.
 #bridge_cafile
 #bridge_capath
-bridge_cafile /etc/mosquitto/certs/ca.pem
+#bridge_cafile /etc/mosquitto/certs/ca.crt
 
 # Path to the PEM encoded client certificate, if required by the remote broker.
 #bridge_certfile
-bridge_certfile /etc/mosquitto/certs/cert.pem
+#bridge_certfile /etc/mosquitto/certs/HOSTNAME.local.crt
 
 # Path to the PEM encoded client private key, if required by the remote broker.
 #bridge_keyfile
-bridge_keyfile /etc/mosquitto/certs/privkey.pem
+#bridge_keyfile /etc/mosquitto/certs/HOSTNAME.local.key
 
 # When using certificate based encryption, bridge_insecure disables
 # verification of the server hostname in the server certificate. This can be
@@ -692,7 +857,7 @@ bridge_keyfile /etc/mosquitto/certs/privkey.pem
 # example. Use this option in testing only. If you need to resort to using this
 # option in a production environment, your setup is at fault and there is no
 # point using encryption.
-bridge_insecure true
+#bridge_insecure true
 
 # -----------------------------------------------------------------
 # PSK based SSL/TLS support
