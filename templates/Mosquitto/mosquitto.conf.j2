@@ -239,16 +239,13 @@ protocol mqtt
 # containing the CA certificates. For capath to work correctly, the
 # certificate files must have ".crt" as the file ending and you must run
 # "c_rehash <path to capath>" each time you add/remove a certificate.
-#cafile
-#capath
+# capath or cafile is needed if SSL/TLS is desired
 cafile /etc/mosquitto/certs/ca.crt
 
 # Path to the PEM encoded server certificate.
-#certfile
 certfile /etc/mosquitto/certs/{{hostname.stdout}}.local.crt
 
 # Path to the PEM encoded keyfile.
-#keyfile
 keyfile /etc/mosquitto/certs/{{hostname.stdout}}.local.key
 
 # By default an TLS enabled listener will operate in a similar fashion to a
@@ -280,7 +277,7 @@ keyfile /etc/mosquitto/certs/{{hostname.stdout}}.local.key
 
 
 # =================================================================
-# Default TCP 9001 Unencrypted Websockets Listener
+# TCP 9001 Unencrypted Websockets Listener
 # =================================================================
 
 # IP address/hostname to bind the default listener to. If not
@@ -400,16 +397,13 @@ keyfile /etc/mosquitto/certs/{{hostname.stdout}}.local.key
 # containing the CA certificates. For capath to work correctly, the
 # certificate files must have ".crt" as the file ending and you must run
 # "c_rehash <path to capath>" each time you add/remove a certificate.
-#cafile
-#capath
+# capath or cafile is needed if SSL/TLS is desired
 #cafile /etc/mosquitto/certs/ca.crt
 
 # Path to the PEM encoded server certificate.
-#certfile
 #certfile /etc/mosquitto/certs/{{hostname.stdout}}.local.crt
 
 # Path to the PEM encoded keyfile.
-#keyfile
 #keyfile /etc/mosquitto/certs/{{hostname.stdout}}.local.key
 
 # By default an TLS enabled listener will operate in a similar fashion to a
@@ -700,16 +694,14 @@ log_timestamp true
 #address <host>[:<port>] [<host>[:<port>]]
 #topic <topic> [[[out | in | both] qos-level] local-prefix remote-prefix]
 
-# Example broker to broker "bridge" unencrypted connection TCP 1833:
-#connection 10.127.215.33
-#address 10.127.215.33:1883
-#topic # both 2
+# Example broker to broker "bridge" encrypted connection uses TCP 8883:
+# connection 10.127.215.101
+# address 10.127.215.101:8883
+# topic # both 2
 
-# Example broker to broker "bridge" encrypted connection TCP 8883:
-#connection 10.127.215.33
-#address 10.127.215.33:8883
+#connection n.n.n.n.33
+#address n.n.n.n:8883
 #topic # both 2
-
 
 # Set the version of the MQTT protocol to use with for this bridge. Can be one
 # of mqttv31 or mqttv311. Defaults to mqttv31.
@@ -837,16 +829,13 @@ log_timestamp true
 # the CA certificates. For bridge_capath to work correctly, the certificate
 # files must have ".crt" as the file ending and you must run "c_rehash <path to
 # capath>" each time you add/remove a certificate.
-#bridge_cafile
-#bridge_capath
+# bridge_capath or bridge_cafile is needed if SSL/TLS is desired
 #bridge_cafile /etc/mosquitto/certs/ca.crt
 
 # Path to the PEM encoded client certificate, if required by the remote broker.
-#bridge_certfile
 #bridge_certfile /etc/mosquitto/certs/{{hostname.stdout}}.local.crt
 
 # Path to the PEM encoded client private key, if required by the remote broker.
-#bridge_keyfile
 #bridge_keyfile /etc/mosquitto/certs/{{hostname.stdout}}.local.key
 
 # When using certificate based encryption, bridge_insecure disables
@@ -906,16 +895,14 @@ log_timestamp true
 #address <host>[:<port>] [<host>[:<port>]]
 #topic <topic> [[[out | in | both] qos-level] local-prefix remote-prefix]
 
-# Example broker to broker "bridge" unencrypted connection TCP 1833:
-#connection 10.127.215.33
-#address 10.127.215.33:1883
-#topic # both 2
+# Example broker to broker "bridge" encrypted connection uses TCP 8883:
+# connection 10.127.215.102
+# address 10.127.215.102:8883
+# topic # both 2
 
-# Example broker to broker "bridge" encrypted connection TCP 8883:
-#connection 10.127.215.33
-#address 10.127.215.33:8883
+#connection n.n.n.n
+#address n.n.n.n:8883
 #topic # both 2
-
 
 # Set the version of the MQTT protocol to use with for this bridge. Can be one
 # of mqttv31 or mqttv311. Defaults to mqttv31.
@@ -1042,17 +1029,13 @@ log_timestamp true
 # bridge_capath defines a directory that will be searched for files containing
 # the CA certificates. For bridge_capath to work correctly, the certificate
 # files must have ".crt" as the file ending and you must run "c_rehash <path to
-# capath>" each time you add/remove a certificate.
-#bridge_cafile
-#bridge_capath
+# ca# bridge_capath or bridge_cafile is needed if SSL/TLS is desiredpath>" each time you add/remove a certificate.
 #bridge_cafile /etc/mosquitto/certs/ca.crt
 
 # Path to the PEM encoded client certificate, if required by the remote broker.
-#bridge_certfile
 #bridge_certfile /etc/mosquitto/certs/{{hostname.stdout}}.local.crt
 
 # Path to the PEM encoded client private key, if required by the remote broker.
-#bridge_keyfile
 #bridge_keyfile /etc/mosquitto/certs/{{hostname.stdout}}.local.key
 
 # When using certificate based encryption, bridge_insecure disables
