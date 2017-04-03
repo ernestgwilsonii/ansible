@@ -48,7 +48,6 @@
   - name: Create directory /opt/node-red
     file:
       path: /opt/node-red
-      recurse: yes
       owner: nodered
       group: nodered
       state: present
