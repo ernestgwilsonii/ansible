@@ -94,7 +94,7 @@
 
   - name: Set directory permisions on /opt/node-red
     file:
-      path: /opt/node-red/node-red-0.16.2
+      dest: /opt/node-red/node-red-0.16.2
       state: directory
       recurse: yes
       follow: yes
