@@ -50,7 +50,7 @@
       path: /opt/node-red
       owner: nodered
       group: nodered
-      state: present
+      state: directory
 
 
 # Restart firewalld to make sure it is running OK before changing any rules
