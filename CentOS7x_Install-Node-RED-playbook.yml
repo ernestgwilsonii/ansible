@@ -41,18 +41,6 @@
       state: present
 
 
-# file - Sets attributes of files and directories
-# http://docs.ansible.com/ansible/file_module.html
-##################################################
-
-  - name: Create directory /opt/node-red
-    file:
-      path: /opt/node-red
-      owner: nodered
-      group: nodered
-      state: directory
-
-
 # Restart firewalld to make sure it is running OK before changing any rules
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
@@ -85,8 +73,21 @@
   - name: Download and extract the latest release of Node-RED
     unarchive:
       src: https://github.com/node-red/node-red/archive/0.16.2.tar.gz
-      dest: /opt/node-red
+      dest: /opt
       copy: no
+
+
+# file - Sets attributes of files and directories
+# http://docs.ansible.com/ansible/file_module.html
+##################################################
+
+  - name: Create symbolic link
+    file:
+      src: /opt/node-red/node-red-0.16.2
+      path: /opt/node-red
+      owner: nodered
+      group: nodered
+      state: link
 
 
 # Use npm to install and manage Node.js packages
@@ -117,7 +118,7 @@
 
   - name: Set directory permisions on /opt/node-red
     file:
-      path: /opt/node-red
+      path: /opt/node-red/node-red-0.16.2
       recurse: yes
       owner: nodered
       group: nodered
