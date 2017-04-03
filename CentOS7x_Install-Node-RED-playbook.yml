@@ -19,6 +19,65 @@
   tasks:
 
 
+# group - Add or remove groups
+# REF: http://docs.ansible.com/ansible/group_module.html
+########################################################
+
+  - name: Add group nodered to the OS (if not already present) for Node-RED
+    user:
+      name: nodered
+      state: present
+
+
+# Create and manage user accounts
+# REF: http://docs.ansible.com/ansible/user_module.html
+#######################################################
+
+  - name: Add user nodered to the OS (if not already present) so Node-RED does not run as root
+    user:
+      name: nodered
+      comment: nodered
+      group: nodered
+      state: present
+
+
+# file - Sets attributes of files and directories
+# http://docs.ansible.com/ansible/file_module.html
+##################################################
+
+  - name: Create directory /opt/node-red
+    file:
+      path: /opt/node-red
+      recurse: yes
+      owner: nodered
+      group: nodered
+      state: present
+
+
+# Restart firewalld to make sure it is running OK before changing any rules
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Ensure the firewalld service is enabled and re-started before changing any rules
+    service:
+      name: firewalld
+      enabled: yes
+      state: restarted
+
+
+# Update the firewalld configuration
+# REF: http://docs.ansible.com/ansible/firewalld_module.html
+############################################################
+
+  - name: Update firewall to allow port TCP 1880 for incoming Node-RED connections
+    firewalld:
+      port: 1880/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+
 # unarchive - Unpacks an archive after (optionally) copying it from the local machine
 # REF: http://docs.ansible.com/ansible/unarchive_module.html
 ############################################################
@@ -53,28 +112,6 @@
     shell: cd /opt/node-red && npm run build
 
 
-# group - Add or remove groups
-# REF: http://docs.ansible.com/ansible/group_module.html
-########################################################
-
-  - name: Add group nodered to the OS for Node-RED
-    user:
-      name: nodered
-      state: present
-
-
-# Create and manage user accounts
-# REF: http://docs.ansible.com/ansible/user_module.html
-#######################################################
-
-  - name: Add user nodered to the OS so Node-RED does not run as root
-    user:
-      name: nodered
-      comment: nodered
-      group: nodered
-      state: present
-
-
 # file - Sets attributes of files and directories
 # http://docs.ansible.com/ansible/file_module.html
 ##################################################
@@ -85,30 +122,6 @@
       recurse: yes
       owner: nodered
       group: nodered
-
-
-# Restart firewalld to make sure it is running OK before changing any rules
-# REF: http://docs.ansible.com/ansible/service_module.html
-##########################################################
-
-  - name: Ensure the firewalld service is enabled and re-started before changing any rules
-    service:
-      name: firewalld
-      enabled: yes
-      state: restarted
-
-
-# Update the firewalld configuration
-# REF: http://docs.ansible.com/ansible/firewalld_module.html
-############################################################
-
-  - name: Update firewall to allow port TCP 1880 for incoming Node-RED connections
-    firewalld:
-      port: 1880/tcp
-      permanent: true
-      immediate: yes
-      state: enabled
-      zone: public
 
 
 # Use the template module to populate files with data
