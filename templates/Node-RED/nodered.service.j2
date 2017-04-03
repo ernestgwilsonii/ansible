@@ -1,0 +1,24 @@
+[Unit]
+Description=nodered
+Requires=network.target
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/nodered
+User=nodered
+
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=chatops-prod
+SyslogFacility=local0
+SyslogLevel=info
+
+Restart=always
+RestartSec=10
+
+
+ExecStart=/usr/bin/node /opt/nodered/red.js
+
+[Install]
+WantedBy=multi-user.target
