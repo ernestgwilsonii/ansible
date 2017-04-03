@@ -84,7 +84,7 @@
   - name: Create symbolic link
     file:
       src: /opt/node-red/node-red-0.16.2
-      path: /opt/node-red
+      dest: /opt/node-red
       owner: nodered
       group: nodered
       state: link
