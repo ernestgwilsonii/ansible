@@ -1,0 +1,110 @@
+---
+
+################################################################################
+#  description: Installs node-gyp and Python2x with Development Tools on CentOS7x
+#  usage: ansible-playbook CentOS7x_Install-node-gyp-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Install node-gyp and Python2x with Development Tools on CentOS7x
+  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# Install yum packages
+# REF: http://docs.ansible.com/ansible/yum_module.html
+######################################################
+
+  - name: Install Development Tools group packages
+    yum:
+      name="@Development Tools"
+      state=present
+      # Note: RHEL7x has two (2) types of group lists "package groups" and "environment groups"
+      # Use: yum group list
+      # REF: http://docs.ansible.com/ansible/yum_module.html#notes
+
+
+# Install yum packages (listed in alphabetical order)
+# REF: http://docs.ansible.com/ansible/yum_module.html
+######################################################
+
+  - name: Install gcc
+    yum:
+      name: gcc
+      state: latest
+
+  - name: Install git
+    yum:
+      name: git
+      state: latest
+
+  - name: Install libffi-devel
+    yum:
+      name: libffi-devel
+      state: latest
+
+  - name: Install krb5-devel
+    yum:
+      name: krb5-devel
+      state: latest
+
+  - name: Install krb5-libs
+    yum:
+      name: krb5-libs
+      state: latest
+
+  - name: Install krb5-workstation
+    yum:
+      name: krb5-workstation
+      state: latest
+
+  - name: Install openssl-devel
+    yum:
+      name: openssl-devel
+      state: latest
+
+  - name: Install python
+    yum:
+      name: python
+      state: latest
+
+  - name: Install python-devel
+    yum:
+      name: python-devel
+      state: latest
+
+  - name: Install python-setuptools
+    yum:
+      name: python-setuptools
+      state: latest
+
+  - name: Install sshpass
+    yum:
+      name: sshpass
+      state: latest
+
+  - name: Install tree
+    yum:
+      name: tree
+      state: latest
+        
+
+# Execute raw command(s)
+# REF: http://docs.ansible.com/ansible/raw_module.html
+##########################################################
+
+  - name: /usr/bin/easy_install pip
+    raw: /usr/bin/easy_install pip
+
+  - name: Update node-gyp globally
+    raw: /usr/bin/npm install -g node-gyp
+    # node-gyp https://github.com/nodejs/node-gyp#installation
+    # node-gyp help
