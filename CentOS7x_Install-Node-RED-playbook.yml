@@ -41,30 +41,6 @@
       state: present
 
 
-# Restart firewalld to make sure it is running OK before changing any rules
-# REF: http://docs.ansible.com/ansible/service_module.html
-##########################################################
-
-  - name: Ensure the firewalld service is enabled and re-started before changing any rules
-    service:
-      name: firewalld
-      enabled: yes
-      state: restarted
-
-
-# Update the firewalld configuration
-# REF: http://docs.ansible.com/ansible/firewalld_module.html
-############################################################
-
-  - name: Update firewall to allow port TCP 1880 for incoming Node-RED connections
-    firewalld:
-      port: 1880/tcp
-      permanent: true
-      immediate: yes
-      state: enabled
-      zone: public
-
-
 # unarchive - Unpacks an archive after (optionally) copying it from the local machine
 # REF: http://docs.ansible.com/ansible/unarchive_module.html
 ############################################################
@@ -119,9 +95,34 @@
   - name: Set directory permisions on /opt/node-red
     file:
       path: /opt/node-red/node-red-0.16.2
+      state: directory
       recurse: yes
       owner: nodered
       group: nodered
+
+
+# Restart firewalld to make sure it is running OK before changing any rules
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Ensure the firewalld service is enabled and re-started before changing any rules
+    service:
+      name: firewalld
+      enabled: yes
+      state: restarted
+
+
+# Update the firewalld configuration
+# REF: http://docs.ansible.com/ansible/firewalld_module.html
+############################################################
+
+  - name: Update firewall to allow port TCP 1880 for incoming Node-RED connections
+    firewalld:
+      port: 1880/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
 
 
 # Use the template module to populate files with data
