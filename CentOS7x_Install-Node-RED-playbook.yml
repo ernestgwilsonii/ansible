@@ -97,6 +97,7 @@
       path: /opt/node-red/node-red-0.16.2
       state: directory
       recurse: yes
+      follow: yes
       owner: nodered
       group: nodered
 
@@ -105,8 +106,8 @@
 # REF: http://docs.ansible.com/ansible/raw_module.html
 ######################################################
 
-  - name: chown -R nodered:nodered /opt/node-red-0.16.2
-    shell: chown -R nodered:nodered /opt/node-red-0.16.2
+#  - name: chown -R nodered:nodered /opt/node-red-0.16.2
+#    shell: chown -R nodered:nodered /opt/node-red-0.16.2
 
 
 # Restart firewalld to make sure it is running OK before changing any rules
@@ -137,11 +138,11 @@
 # REF: http://docs.ansible.com/ansible/template_module.html
 ###########################################################
 
-# /etc/systemd/system/nodered.service
-  - name: Fill in the variables and copy templates/Node-RED/nodered.service.j2 to remote /etc/systemd/system/nodered.service
+# /etc/systemd/system/node-red.service
+  - name: Fill in the variables and copy templates/Node-RED/node-red.service.j2 to remote /etc/systemd/system/node-red.service
     template:
-      src: templates/Node-RED/nodered.service.j2
-      dest: /etc/systemd/system/nodered.service
+      src: templates/Node-RED/node-red.service.j2
+      dest: /etc/systemd/system/node-red.service
       owner: root
       group: wheel
       mode: 0644
@@ -151,15 +152,15 @@
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
 
-  - name: Ensure the Node-RED service (nodered) is enabled and started
+  - name: Ensure the Node-RED service (node-red) is enabled and started
     service:
-      name=nodered.service
+      name=node-red.service
       enabled=yes
       state=restarted
       # Remote SSH command line trouble-shooting commands:
-      # systemctl status nodered
-      # cat /etc/systemd/system/nodered.service
-      # ls -alF /opt/nodered
+      # systemctl status node-red
+      # cat /etc/systemd/system/node-red.service
+      # ls -alF /opt/node-red
       # tail -f /var/log/messages
       # ss -ntlup | grep 1880
       # lsof -P | grep IPv4 | sort -t: -k2,2n | grep 1880
