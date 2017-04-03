@@ -101,6 +101,14 @@
       group: nodered
 
 
+# raw - Executes a low-down and dirty SSH command
+# REF: http://docs.ansible.com/ansible/raw_module.html
+######################################################
+
+  - name: chown -R nodered:nodered /opt/node-red-0.16.2
+    shell: chown -R nodered:nodered /opt/node-red-0.16.2
+
+
 # Restart firewalld to make sure it is running OK before changing any rules
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
