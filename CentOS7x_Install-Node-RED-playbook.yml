@@ -19,6 +19,16 @@
   tasks:
 
 
+# Install yum packages (listed in alphabetical order)
+# REF: http://docs.ansible.com/ansible/yum_module.html
+######################################################
+
+  - name: Install lsof
+    yum:
+      name=lsof
+      state=latest
+
+
 # group - Add or remove groups
 # REF: http://docs.ansible.com/ansible/group_module.html
 ########################################################
@@ -152,6 +162,7 @@
       # systemctl status node-red
       # cat /etc/systemd/system/node-red.service
       # ls -alF /opt/node-red
-      # tail -f /var/log/messages
+      # ls -alF /opt/node-red/
+      # cat /var/log/messages
       # ss -ntlup | grep 1880
       # lsof -P | grep IPv4 | sort -t: -k2,2n | grep 1880
