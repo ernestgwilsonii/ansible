@@ -67,6 +67,7 @@
     yum:
       name: docker-engine-1.12.6-1.el7.centos
       state: present
+      # REF: https://yum.dockerproject.org/repo/main/centos/7/Packages/
 
   - name: Install python-pip
     yum:
