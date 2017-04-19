@@ -33,6 +33,11 @@
       name=yum-utils
       state=latest
 
+  - name: Install yum-cron if that package is not already present or update existing if needed
+    yum:
+      name=yum-cron
+      state=latest
+
 
 # Execute command(s)
 # REF: http://docs.ansible.com/ansible/command_module.html
