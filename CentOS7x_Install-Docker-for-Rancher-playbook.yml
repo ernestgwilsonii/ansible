@@ -1,0 +1,234 @@
+---
+
+################################################################################
+#  description: Installs Docker on CentOS7x
+#  usage: ansible-playbook CentOS7x_Install-Docker-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Install Docker on CentOS7x
+  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# Install or configure repository used on the OS by yum
+# REF: https://docs.ansible.com/ansible/yum_repository_module.html
+##################################################################
+
+# /etc/yum.repos.d/docker.repo
+  - name: Install repository dockerrepo
+    yum_repository:
+      name: dockerrepo
+      description: Docker Repository
+      file: docker
+      baseurl: https://yum.dockerproject.org/repo/main/centos/7
+      enabled: yes
+      gpgcheck: yes
+      gpgkey: https://yum.dockerproject.org/gpg
+
+
+# Install yum packages
+# REF: http://docs.ansible.com/ansible/yum_module.html
+######################################################
+
+  - name: Install bind-utils
+    yum:
+      name: bind-utils
+      state: latest
+
+  - name: Install bridge-utils
+    yum:
+      name: bridge-utils
+      state: latest
+      # brctl show
+
+# https://github.com/docker/docker/releases
+#  - name: Install docker-engine
+#    yum:
+#      name: docker-engine
+#      state: latest
+
+  - name: Install python-pip
+    yum:
+      name: python-pip
+      state: latest
+
+
+# Restart firewalld to make sure it is running OK before changing any rules
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Ensure the firewalld service is enabled and re-started before changing any rules
+    service:
+      name: firewalld
+      enabled: yes
+      state: restarted
+
+
+# Update the firewalld configuration
+# REF: http://docs.ansible.com/ansible/firewalld_module.html
+############################################################
+
+  - name: Update firewall to allow port TCP 2375 for incoming Docker Cloud connections
+    firewalld:
+      port: 2375/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 2376 for incoming docker-machine connections
+    firewalld:
+      port: 2376/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 2377 for incoming Docker cluster management connections
+    firewalld:
+      port: 2377/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 4789 for incoming Docker overlay network connections
+    firewalld:
+      port: 4789/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port UDP 4789 for incoming Docker overlay network connections
+    firewalld:
+      port: 4789/udp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 6783 for incoming Docker overlay network connections
+    firewalld:
+      port: 6783/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port UDP 6783 for incoming Docker overlay network connections
+    firewalld:
+      port: 6783/udp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 7946 for incoming Docker communication among nodes
+    firewalld:
+      port: 7946/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port UDP 7946 for incoming Docker communication among nodes
+    firewalld:
+      port: 7946/udp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow ports TCP 30000-32767 for incoming Docker swarm manager PublishedPort connections
+    firewalld:
+      port: 30000-32767/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+
+# Execute command(s)
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: Enable IPv4 Forwarding
+    command: /usr/sbin/sysctl -w net.ipv4.ip_forward=1
+
+# Download and install a specific supported Docker version for Rancher + Kubernetes (allows Kubernetes and Kubernetes dashboard to work)
+# REF: http://docs.rancher.com/rancher/v1.5/en/hosts/#supported-docker-versions
+  - name: Install Docker 1.12.x
+    command: /usr/bin/curl https://releases.rancher.com/install-docker/1.12.sh | /usr/bin/sh
+
+
+# Enable and start docker
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Enable and start (or restart) the docker service
+    service:
+      name: docker
+      enabled: yes
+      state: restarted
+      # Note: Verify docker via SSH command line:
+      # systemctl status docker
+      # docker run hello-world
+      #
+      # More advanced verification:
+      # docker run -it ubuntu bash
+      # cat /etc/lsb-release
+      #
+      # To run docker as a normal user, add that user to the docker group:
+      # usermod -aG docker your_username
+
+
+# get_url - Downloads files from HTTP, HTTPS, or FTP to node
+# REF: http://docs.ansible.com/ansible/get_url_module.html
+############################################################
+
+# https://github.com/docker/machine/releases
+  - name: Download and install docker-machine
+    get_url:
+      url: https://github.com/docker/machine/releases/download/v0.10.0/docker-machine-Linux-x86_64
+      dest: /usr/local/bin/docker-machine
+      mode: 777
+      force: yes
+
+# https://github.com/docker/compose/releases
+  - name: Download and install docker-compose
+    get_url:
+      url: https://github.com/docker/compose/releases/download/1.12.0/docker-compose-Linux-x86_64
+      dest: /usr/local/bin/docker-compose
+      mode: 777
+      force: yes
+
+
+# Execute command(s)
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: Use pip to update and ensure pip is at the latest version
+    command: /usr/bin/pip install --upgrade pip
+
+
+# Use pip to install and manage Python dependencies
+# REF: http://docs.ansible.com/ansible/pip_module.html
+######################################################
+
+  - name: Use pip to install docker-cloud
+    pip:
+      name: docker-cloud
+
+  - name: Use pip to install docker-py
+    pip:
+      name: docker-py
