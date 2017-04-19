@@ -19,6 +19,14 @@
   tasks:
 
 
+# Execute command(s)
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: Enable IPv4 Forwarding
+    command: /usr/sbin/sysctl -w net.ipv4.ip_forward=1
+
+
 # Install or configure repository used on the OS by yum
 # REF: https://docs.ansible.com/ansible/yum_repository_module.html
 ##################################################################
@@ -50,16 +58,33 @@
       state: latest
       # brctl show
 
+# Download and install a specific supported Docker version for Rancher + Kubernetes (allows Kubernetes and Kubernetes dashboard to work)
+# REF: http://docs.rancher.com/rancher/v1.5/en/hosts/#supported-docker-versions
+#  - name: Install Docker 1.12.x
+#    command: /usr/bin/curl https://releases.rancher.com/install-docker/1.12.sh | /usr/bin/sh
 # https://github.com/docker/docker/releases
-#  - name: Install docker-engine
-#    yum:
-#      name: docker-engine
-#      state: latest
+  - name: Install specific / approved docker-engine
+    yum:
+      name: docker-engine-1.12.6-1.el7.centos.x86_64.rpm 
+      state: present
 
   - name: Install python-pip
     yum:
       name: python-pip
       state: latest
+
+
+# Tweak settings in INI files
+# REF: http://docs.ansible.com/ansible/ini_file_module.html
+###########################################################
+
+# REF: http://docs.rancher.com/rancher/v1.5/en/hosts/#supported-docker-versions
+  - name: Set value in /etc/yum.conf to exclude auto upgrades of docker-engine so we stay on a compatible Rancher with Kubernetes version
+    ini_file:
+      dest: /etc/yum.conf
+      section: main
+      option: exclude
+      value: 'docker-engine'
 
 
 # Restart firewalld to make sure it is running OK before changing any rules
@@ -156,19 +181,6 @@
       immediate: yes
       state: enabled
       zone: public
-
-
-# Execute command(s)
-# REF: http://docs.ansible.com/ansible/command_module.html
-##########################################################
-
-  - name: Enable IPv4 Forwarding
-    command: /usr/sbin/sysctl -w net.ipv4.ip_forward=1
-
-# Download and install a specific supported Docker version for Rancher + Kubernetes (allows Kubernetes and Kubernetes dashboard to work)
-# REF: http://docs.rancher.com/rancher/v1.5/en/hosts/#supported-docker-versions
-  - name: Install Docker 1.12.x
-    command: /usr/bin/curl https://releases.rancher.com/install-docker/1.12.sh | /usr/bin/sh
 
 
 # Enable and start docker

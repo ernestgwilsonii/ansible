@@ -35,6 +35,14 @@
       gpgkey: https://yum.dockerproject.org/gpg
 
 
+# Execute command(s)
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: Enable IPv4 Forwarding
+    command: /usr/sbin/sysctl -w net.ipv4.ip_forward=1
+
+
 # Install yum packages
 # REF: http://docs.ansible.com/ansible/yum_module.html
 ######################################################
