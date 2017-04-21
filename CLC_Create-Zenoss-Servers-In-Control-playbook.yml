@@ -2,8 +2,8 @@
 
 ################################################################################
 #  description: Ensure a specific server group exists in Control in CenturyLink Cloud
-#  usage: ansible-playbook CLC_Create-Servers-In-Control-playbook.yml'
-#  example: ansible-playbook CLC_Create-Servers-In-Control-playbook.yml --extra-vars 'DC=VA1 Password=P@$$W0rd! Name=DCKR Description=Docker Count=6 Group=Docker'
+#  usage: ansible-playbook CLC_Create-Zenoss-Servers-In-Control-playbook.yml
+#  example: ansible-playbook CLC_Create-Zenoss-Servers-In-Control-playbook.yml --extra-vars 'DC=VA1 Password=P@$$W0rd! Name=ztkx Description=Zenoss Count=1 Memory=24 Group=Zenoss'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
