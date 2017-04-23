@@ -37,7 +37,7 @@
         cpu: "{{ CPU|default ('2') }}"
         memory: "{{ Memory|default ('8') }}"
         additional_disks:
-          - {sizeGB: 60, type: raw}
+          - {sizeGB: 62, type: raw}
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
