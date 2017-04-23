@@ -13,11 +13,6 @@
 # REF: http://docs.ansible.com/ansible/playbooks.html
 #####################################################
 
-
-# Ansible Playbook options
-# REF: http://docs.ansible.com/ansible/playbooks.html
-#####################################################
-
 - name: Prepare thinpool LVM on specified block device(s) for Docker
   hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
   serial: "100%"
