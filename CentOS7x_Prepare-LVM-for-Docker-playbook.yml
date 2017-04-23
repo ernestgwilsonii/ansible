@@ -35,12 +35,12 @@
 ##########################################################
 
 # Create LVM physical volume on {{BlkDev|default ('/dev/sdd')}}
-  - name: pvcreate {{BlkDev|default ('/dev/sdd')}}
-    command: /usr/sbin/pvcreate {{BlkDev|default ('/dev/sdd')}}
+  - name: "pvcreate {{BlkDev|default ('/dev/sdd')}}"
+    command:"/usr/sbin/pvcreate {{BlkDev|default ('/dev/sdd')}}"
 
 # Create LVM volume group vg_docker
-  - name: vgcreate vg_docker {{BlkDev|default ('/dev/sdd')}}
-    command: /usr/sbin/vgcreate vg_docker {{BlkDev|default ('/dev/sdd')}}
+  - name: "vgcreate vg_docker {{BlkDev|default ('/dev/sdd')}}"
+    command: "/usr/sbin/vgcreate vg_docker {{BlkDev|default ('/dev/sdd')}}"
        
 
 # lvol - Configure LVM logical volumes
@@ -51,7 +51,7 @@
     lvol:
       vg: vg_docker
       lv: lv_docker_thinpool
-      pvs: {{BlkDev|default ('/dev/sdd')}}
+      pvs: "{{BlkDev|default ('/dev/sdd')}}"
       size: 85%PVS
       opts: --thinpool vg_docker/lv_docker_thinpool
 
