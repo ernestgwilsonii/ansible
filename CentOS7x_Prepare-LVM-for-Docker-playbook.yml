@@ -36,7 +36,7 @@
 
 # Create LVM physical volume on {{BlkDev|default ('/dev/sdd')}}
   - name: "pvcreate {{BlkDev|default ('/dev/sdd')}}"
-    command:"/usr/sbin/pvcreate {{BlkDev|default ('/dev/sdd')}}"
+    command: "/usr/sbin/pvcreate {{BlkDev|default ('/dev/sdd')}}"
 
 # Create LVM volume group vg_docker
   - name: "vgcreate vg_docker {{BlkDev|default ('/dev/sdd')}}"
