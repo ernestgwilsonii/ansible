@@ -1,0 +1,88 @@
+---
+
+################################################################################
+#  description: Ensure a specific server group exists in Control in CenturyLink Cloud
+#  usage: ansible-playbook CentOS7x_Prepare-LVM-for-Docker-playbook.yml
+#  example: ansible-playbook CentOS7x_Prepare-LVM-for-Docker-playbook.yml --extra-vars 'HostOrGroup=Swarm1'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+ 
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Prepare thinpool LVM on specified block device(s) for Docker
+  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# Install yum packages
+# REF: http://docs.ansible.com/ansible/yum_module.html
+######################################################
+
+  - name: Install lvm2.x86_64
+    yum:
+      name: lvm2.x86_64
+      state: latest
+
+
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+# Create LVM physical volume on {{BlkDev|default ('/dev/sdd')}}
+  - name: pvcreate {{BlkDev|default ('/dev/sdd')}}
+    command: /usr/sbin/pvcreate {{BlkDev|default ('/dev/sdd')}}
+
+# Create LVM volume group vg_docker
+  - name: vgcreate vg_docker {{BlkDev|default ('/dev/sdd')}}
+    command: /usr/sbin/vgcreate vg_docker {{BlkDev|default ('/dev/sdd')}}
+       
+
+# lvol - Configure LVM logical volumes
+# REF: http://docs.ansible.com/ansible/lvol_module.html
+#######################################################
+
+  - name: Create thin logical volume vg_docker/lv_docker_thinpool on /dev/sdd
+    lvol:
+      vg: vg_docker
+      lv: lv_docker_thinpool
+      pvs: {{BlkDev|default ('/dev/sdd')}}
+      size: 85%PVS
+      opts: --thinpool vg_docker/lv_docker_thinpool
+
+
+# file - Sets attributes of files and directories
+# http://docs.ansible.com/ansible/file_module.html
+##################################################
+
+  - name: Create directory /etc/docker if it does not already exist
+    file:
+      path: /etc/docker
+      owner: root
+      group: root
+      mode: 0755
+      state: directory
+
+
+# Use the copy module to copy various files into place
+# REF: http://docs.ansible.com/ansible/copy_module.html
+#######################################################
+
+# /etc/docker/daemon.json
+  - name: Copy Docker configuration file daemon.json from Ansible files/Docker/etc_docker_daemon.json to Docker remote /etc/docker/daemon.json
+    copy:
+      src=files/Docker/etc_docker_daemon.json
+      dest=/etc/docker/daemon.json
+      owner=root
+      group=root
+      mode=0444
