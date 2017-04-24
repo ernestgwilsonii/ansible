@@ -74,6 +74,29 @@
 # REF: http://docs.ansible.com/ansible/copy_module.html
 #######################################################
 
+# /etc/lvm/profile/vg_docker-lv_docker_thinpool.profile
+  - name: Copy LVM configuration file vg_docker-lv_docker_thinpool.profile from Ansible files/Docker/vg_docker-lv_docker_thinpool.profile to Docker remote /etc/lvm/profile/vg_docker-lv_docker_thinpool.profile
+    copy:
+      src=files/Docker/vg_docker-lv_docker_thinpool.profile
+      dest=/etc/lvm/profile/vg_docker-lv_docker_thinpool.profile
+      owner=root
+      group=root
+      mode=0444
+
+
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+# Apply the desired autoextend LVM policy to the Docker thinpool
+  - name: "lvchange --metadataprofile vg_docker-lv_docker_thinpool vg_docker/lv_docker_thinpool"
+    command: "/usr/sbin/lvchange --metadataprofile vg_docker-lv_docker_thinpool vg_docker/lv_docker_thinpool"
+
+
+# Use the copy module to copy various files into place
+# REF: http://docs.ansible.com/ansible/copy_module.html
+#######################################################
+
 # /etc/docker/daemon.json
   - name: Copy Docker configuration file daemon.json from Ansible files/Docker/etc_docker_daemon.json to Docker remote /etc/docker/daemon.json
     copy:
