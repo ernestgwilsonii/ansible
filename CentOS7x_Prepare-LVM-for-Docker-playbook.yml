@@ -47,6 +47,7 @@
 # REF: http://docs.ansible.com/ansible/lvol_module.html
 #######################################################
 
+# lvcreate --thinpool vg_docker/lv_docker_thinpool -n lv_docker_thinpool vg_docker -l 85%VG
   - name: Create thin logical volume vg_docker/lv_docker_thinpool on /dev/sdd
     lvol:
       vg: vg_docker
