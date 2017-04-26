@@ -475,8 +475,33 @@
 # REF: http://docs.ansible.com/ansible/yum_module.html
 ######################################################
 
+  - name: Install htop
+    yum:
+      name: htop
+      state: latest
+
   - name: Install zenoss-core-service
     yum:
       name: zenoss-core-service
       state: latest
+
+
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: systemctl daemon-reload
+    command: "systemctl daemon-reload"
+
+# Enable and start docker
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Enable and start the serviced service
+    service:
+      name: serviced
+      enabled: yes
+      state: restarted
+      # serviced host add --register 10.127.215.21:4979 default
+      # htop
 
