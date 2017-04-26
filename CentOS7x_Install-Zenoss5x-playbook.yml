@@ -471,3 +471,12 @@
       # usermod -aG docker your_username
 
 
+# Install yum packages
+# REF: http://docs.ansible.com/ansible/yum_module.html
+######################################################
+
+  - name: Install zenoss-core-service
+    yum:
+      name: zenoss-core-service
+      state: latest
+
