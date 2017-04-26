@@ -80,10 +80,161 @@
       state: present
       # REF: https://yum.dockerproject.org/repo/main/centos/7/Packages/
 
+  - name: Install lvm2.x86_64
+    yum:
+      name: lvm2.x86_64
+      state: latest
+
   - name: Install python-pip
     yum:
       name: python-pip
       state: latest
+
+
+# Execute command(s)
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: Use pip to update and ensure pip is at the latest version
+    command: /usr/bin/pip install --upgrade pip
+
+
+# Use pip to install and manage Python dependencies
+# REF: http://docs.ansible.com/ansible/pip_module.html
+######################################################
+
+  - name: Use pip to install docker-py
+    pip:
+      name: docker-py
+
+
+# get_url - Downloads files from HTTP, HTTPS, or FTP to node
+# REF: http://docs.ansible.com/ansible/get_url_module.html
+############################################################
+
+# https://github.com/docker/machine/releases
+  - name: Download and install docker-machine
+    get_url:
+      url: https://github.com/docker/machine/releases/download/v0.10.0/docker-machine-Linux-x86_64
+      dest: /usr/local/bin/docker-machine
+      mode: 777
+      force: yes
+
+# https://github.com/docker/compose/releases
+  - name: Download and install docker-compose
+    get_url:
+      url: https://github.com/docker/compose/releases/download/1.12.0/docker-compose-Linux-x86_64
+      dest: /usr/local/bin/docker-compose
+      mode: 777
+      force: yes
+
+
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+# Create LVM physical volume on {{BlkDev|default ('/dev/sde')}}
+  - name: "pvcreate {{BlkDev|default ('/dev/sde')}}"
+    command: "/usr/sbin/pvcreate {{BlkDev|default ('/dev/sde')}}"
+
+# Create LVM volume group vg_zenoss
+  - name: "vgcreate vg_zenoss {{BlkDev|default ('/dev/sde')}}"
+    command: "/usr/sbin/vgcreate vg_zenoss {{BlkDev|default ('/dev/sde')}}"
+
+
+# file - Sets attributes of files and directories
+# http://docs.ansible.com/ansible/file_module.html
+##################################################
+
+  - name: Create directory /opt/serviced/var/backups if it does not already exist
+    file:
+      path: /opt/serviced/var/backups
+      owner: root
+      group: root
+      mode: 0755
+      state: directory
+
+  - name: Create directory /opt/serviced/var/isvcs if it does not already exist
+    file:
+      path: /opt/serviced/var/isvcs
+      owner: root
+      group: root
+      mode: 0755
+      state: directory
+
+  - name: Create directory /opt/serviced/var/volumes if it does not already exist
+    file:
+      path: /opt/serviced/var/volumes
+      owner: root
+      group: root
+      mode: 0755
+      state: directory
+
+
+# lvol - Configure LVM logical volumes
+# REF: http://docs.ansible.com/ansible/lvol_module.html
+#######################################################
+
+  - name: Create a 150GB logical volume lv_BACKUPS on vg_zenoss
+    lvol:
+      vg: vg_zenoss
+      lv: lv_BACKUPS
+      size: 150g
+
+  - name: Create a 50GB logical volume lv_ISVCS on vg_zenoss
+    lvol:
+      vg: vg_zenoss
+      lv: lv_ISVCS
+      size: 50g
+
+  - name: Create a  200GB logical volume lv_VOLUMES on vg_zenoss
+    lvol:
+      vg: vg_zenoss
+      lv: lv_VOLUMES
+      size: 200g
+
+
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: mkfs -t xfs /dev/vg_zenoss/lv_BACKUPS
+    command: "/sbin/mkfs -t xfs /dev/vg_zenoss/lv_BACKUPS"
+
+  - name: mkfs -t xfs /dev/vg_zenoss/lv_ISVCS
+    command: "/sbin/mkfs -t xfs /dev/vg_zenoss/lv_ISVCS"
+
+  - name: mkfs -t btrfs /dev/vg_zenoss/lv_VOLUMES
+    command: "/sbin/mkfs -t btrfs /dev/vg_zenoss/lv_VOLUMES"
+
+
+# mount - Control active and configured mount points
+# REF: http://docs.ansible.com/ansible/mount_module.html
+########################################################
+
+  - name: Mount path /opt/serviced/var/backups to LVM /dev/vg_zenoss/lv_BACKUPS as XFS
+    mount:
+      path: /opt/serviced/var/backups
+      src: /dev/vg_zenoss/lv_BACKUPS
+      fstype: xfs
+      opts: defaults
+      state: mounted
+
+  - name: Mount path /opt/serviced/var/isvcs to LVM /dev/vg_zenoss/lv_ISVCS as XFS
+    mount:
+      path: /opt/serviced/var/isvcs
+      src: /dev/vg_zenoss/lv_ISVCS
+      fstype: xfs
+      opts: defaults
+      state: mounted
+
+  - name: Mount path /opt/serviced/var/volumes to LVM /dev/vg_zenoss/lv_VOLUMES as XFS
+    mount:
+      path: /opt/serviced/var/volumes
+      src: /dev/vg_zenoss/lv_VOLUMES
+      fstype: xfs
+      opts: defaults
+      state: mounted
 
 
 # Tweak settings in INI files
@@ -114,6 +265,46 @@
 # REF: http://docs.ansible.com/ansible/firewalld_module.html
 ############################################################
 
+  - name: Update firewall to allow port TCP 22 for incoming Zenoss sshd connections
+    firewalld:
+      port: 22/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 443 for incoming Zenoss HTTPS connections
+    firewalld:
+      port: 443/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 2048 for incoming Zenoss Optional connections
+    firewalld:
+      port: 2048/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 2049 for incoming Zenoss NFS connections
+    firewalld:
+      port: 2049/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 2181 for incoming Zenoss Zookeeper connections
+    firewalld:
+      port: 2181/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
   - name: Update firewall to allow port TCP 2375 for incoming Docker Cloud connections
     firewalld:
       port: 2375/tcp
@@ -138,6 +329,22 @@
       state: enabled
       zone: public
 
+  - name: Update firewall to allow port TCP 2888 for incoming Zenoss Zookeeper connections
+    firewalld:
+      port: 2888/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 3888 for incoming Zenoss Zookeeper connections
+    firewalld:
+      port: 3888/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
   - name: Update firewall to allow port TCP 4789 for incoming Docker overlay network connections
     firewalld:
       port: 4789/tcp
@@ -149,6 +356,38 @@
   - name: Update firewall to allow port UDP 4789 for incoming Docker overlay network connections
     firewalld:
       port: 4789/udp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 4979 for incoming Zenoss serviced RPC connections
+    firewalld:
+      port: 4979/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 5000 for incoming Zenoss Docker registry connections
+    firewalld:
+      port: 5000/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 5042 for incoming Zenoss logstash connections
+    firewalld:
+      port: 5042/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 5043 for incoming Zenoss logstash connections
+    firewalld:
+      port: 5043/tcp
       permanent: true
       immediate: yes
       state: enabled
@@ -186,6 +425,22 @@
       state: enabled
       zone: public
 
+  - name: Update firewall to allow port TCP 8443 for incoming Zenoss metric consumer connections
+    firewalld:
+      port: 8443/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 22250 for incoming Zenoss mux connections
+    firewalld:
+      port: 22250/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
   - name: Update firewall to allow ports TCP 30000-32767 for incoming Docker swarm manager PublishedPort connections
     firewalld:
       port: 30000-32767/tcp
@@ -216,43 +471,3 @@
       # usermod -aG docker your_username
 
 
-# get_url - Downloads files from HTTP, HTTPS, or FTP to node
-# REF: http://docs.ansible.com/ansible/get_url_module.html
-############################################################
-
-# https://github.com/docker/machine/releases
-  - name: Download and install docker-machine
-    get_url:
-      url: https://github.com/docker/machine/releases/download/v0.10.0/docker-machine-Linux-x86_64
-      dest: /usr/local/bin/docker-machine
-      mode: 777
-      force: yes
-
-# https://github.com/docker/compose/releases
-  - name: Download and install docker-compose
-    get_url:
-      url: https://github.com/docker/compose/releases/download/1.12.0/docker-compose-Linux-x86_64
-      dest: /usr/local/bin/docker-compose
-      mode: 777
-      force: yes
-
-
-# Execute command(s)
-# REF: http://docs.ansible.com/ansible/command_module.html
-##########################################################
-
-  - name: Use pip to update and ensure pip is at the latest version
-    command: /usr/bin/pip install --upgrade pip
-
-
-# Use pip to install and manage Python dependencies
-# REF: http://docs.ansible.com/ansible/pip_module.html
-######################################################
-
-  - name: Use pip to install docker-cloud
-    pip:
-      name: docker-cloud
-
-  - name: Use pip to install docker-py
-    pip:
-      name: docker-py
