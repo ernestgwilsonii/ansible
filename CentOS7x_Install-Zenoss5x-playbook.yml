@@ -205,7 +205,7 @@
     command: "/sbin/mkfs -t xfs /dev/vg_zenoss/lv_ISVCS"
 
   - name: mkfs -t btrfs /dev/vg_zenoss/lv_VOLUMES
-    command: "/sbin/mkfs -t btrfs /dev/vg_zenoss/lv_VOLUMES"
+    command: "/sbin/mkfs -t xfs /dev/vg_zenoss/lv_VOLUMES"
 
 
 # mount - Control active and configured mount points
