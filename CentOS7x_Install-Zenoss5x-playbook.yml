@@ -543,8 +543,8 @@
       name: serviced
       enabled: yes
       state: restarted
-      # serviced host add --register {{ansible_ssh_host}}:4979 default
-      # http://{{ansible_ssh_host}}
+      # serviced host add --register IPAddressHere:4979 default
+      # http://IPAddressHere
       # df -h
       # htop
       # systemctl status serviced
