@@ -204,7 +204,7 @@
   - name: mkfs -t xfs /dev/vg_zenoss/lv_ISVCS
     command: "/sbin/mkfs -t xfs /dev/vg_zenoss/lv_ISVCS"
 
-  - name: mkfs -t btrfs /dev/vg_zenoss/lv_VOLUMES
+  - name: mkfs -t xfs /dev/vg_zenoss/lv_VOLUMES
     command: "/sbin/mkfs -t xfs /dev/vg_zenoss/lv_VOLUMES"
 
 
