@@ -486,12 +486,53 @@
       state: latest
 
 
+# copy - Copies files to remote locations
+# http://docs.ansible.com/ansible/copy_module.html
+##################################################
+
+  - name: Create directory /opt/serviced/var/backups if it does not already exist
+    copy:
+      remote_src: True
+      src: /etc/default/serviced
+      dest: /etc/default/serviced.SAMPLE
+      owner: root
+      group: serviced
+      mode: 0440
+
+
+# file - Sets attributes of files and directories
+# http://docs.ansible.com/ansible/file_module.html
+##################################################
+
+  - name: Delete file /etc/default/serviced
+    file:
+      path: /opt/serviced/var/backups
+      state: absent
+
+
+# Update various configuration files
+# REF: http://docs.ansible.com/ansible/lineinfile_module.html
+#############################################################
+
+  - name: Populate values in /etc/default/serviced with - SERVICED_ALLOW_LOOP_BACK=true
+    lineinfile:
+      dest: /etc/default/serviced
+      state: present
+      create: yes
+      backup: yes
+      owner: root
+      group: serviced
+      mode: 0640
+      line: 'SERVICED_ALLOW_LOOP_BACK=true'
+
+      
 # command - Executes a command on a remote node
 # REF: http://docs.ansible.com/ansible/command_module.html
 ##########################################################
 
   - name: systemctl daemon-reload
     command: "systemctl daemon-reload"
+
 
 # Enable and start docker
 # REF: http://docs.ansible.com/ansible/service_module.html
@@ -502,6 +543,8 @@
       name: serviced
       enabled: yes
       state: restarted
-      # serviced host add --register 10.127.215.21:4979 default
+      # serviced host add --register {{ansible_ssh_host}}:4979 default
+      # http://{{ansible_ssh_host}}
+      # df -h
       # htop
-
+      # systemctl status serviced
