@@ -490,7 +490,7 @@
 # http://docs.ansible.com/ansible/copy_module.html
 ##################################################
 
-  - name: Create directory /opt/serviced/var/backups if it does not already exist
+  - name: Copy /etc/default/serviced to /etc/default/serviced.SAMPLE
     copy:
       remote_src: True
       src: /etc/default/serviced
@@ -506,7 +506,7 @@
 
   - name: Delete file /etc/default/serviced
     file:
-      path: /opt/serviced/var/backups
+      path: /etc/default/serviced
       state: absent
 
 
