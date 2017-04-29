@@ -69,6 +69,12 @@
       state: latest
       # brctl show
 
+  - name: Install htop
+    yum:
+      name: htop
+      state: latest
+
+
 # Download and install a specific supported Docker version for Rancher + Kubernetes (allows Kubernetes and Kubernetes dashboard to work)
 # REF: http://docs.rancher.com/rancher/v1.5/en/hosts/#supported-docker-versions
 #  - name: Install Docker 1.12.x
@@ -474,11 +480,6 @@
 # Install yum packages
 # REF: http://docs.ansible.com/ansible/yum_module.html
 ######################################################
-
-  - name: Install htop
-    yum:
-      name: htop
-      state: latest
 
   - name: Install zenoss-core-service
     yum:
