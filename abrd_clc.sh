@@ -43,7 +43,7 @@ pip install clc-sdk --upgrade
 # See: https://github.com/CenturyLinkCloud/clc-ansible-module
 pip install clc-ansible-module
 
-# Create default sample examplews starting kit
+# Create default sample examples starting kit
 mkdir -p /etc/ansible
 mkdir -p /etc/ansible/files/
 mkdir -p /etc/ansible/group_vars/
