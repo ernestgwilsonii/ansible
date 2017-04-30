@@ -16,7 +16,7 @@ apt-get update
 apt-get upgrade
 
 # Install some basic OS requirements for a successful Ansible kit
-apt-get -y install python-setuptools gcc libffi-dev python-dev libssl-dev libkrb5-dev git sshpass tree
+apt-get -y install aptitude python-setuptools gcc libffi-dev python-dev libssl-dev libkrb5-dev git sshpass tree
 
 # Install Python pip
 easy_install pip
