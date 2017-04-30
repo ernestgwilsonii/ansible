@@ -71,7 +71,7 @@ echo "vault" >> /etc/ansible/.gitignore
 
 # Pull down any additional starter playbooks
 cd /etc/ansible
-#wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/abrd_dietpi.sh
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/DietPi_Apply-OS-Updates-playbook.yml
 
 # Create a default starting /etc/ansible/ansible.cfg
 echo "[defaults]" > /etc/ansible/ansible.cfg
