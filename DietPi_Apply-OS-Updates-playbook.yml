@@ -23,7 +23,7 @@
 # REF: http://docs.ansible.com/ansible/apt_module.html
 ######################################################
 
-  - name: Update / upgrade all existing installed packages
+  - name: Update / upgrade all packages
     apt:
       update_cache: yes
       upgrade: full
