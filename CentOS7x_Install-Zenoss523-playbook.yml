@@ -1,0 +1,551 @@
+---
+
+################################################################################
+#  description: Installs Zenoss 5x on CentOS7x
+#  usage: ansible-playbook CentOS7x_Install-Zenoss523-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Install Zenoss 5x on CentOS7x REF https://www.zenoss.com/sites/default/files/Control_Center_Installation_Guide_r1.3.1_d1320.17.100.pdf
+  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# Execute command(s)
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: Enable IPv4 Forwarding
+    command: /usr/sbin/sysctl -w net.ipv4.ip_forward=1
+
+
+# Install or configure repository used on the OS by yum
+# REF: https://docs.ansible.com/ansible/yum_repository_module.html
+##################################################################
+
+# /etc/yum.repos.d/docker.repo
+  - name: Install repository dockerrepo
+    yum_repository:
+      name: dockerrepo
+      description: Docker Repository
+      file: docker
+      baseurl: https://yum.dockerproject.org/repo/main/centos/7
+      enabled: yes
+      gpgcheck: yes
+      gpgkey: https://yum.dockerproject.org/gpg
+
+
+# /etc/yum.repos.d/zenoss-stable.repo
+  - name: Install Zenoss Stable dockerrepo
+    yum_repository:
+      name: zenoss-stable
+      description: Zenoss Stable Repository
+      file: zenoss-stable
+      baseurl: http://get.zenoss.io/yum/zenoss/stable/centos/el7/os/x86_64
+      enabled: yes
+      gpgcheck: no
+
+
+# Install yum packages
+# REF: http://docs.ansible.com/ansible/yum_module.html
+######################################################
+
+  - name: Install bind-utils
+    yum:
+      name: bind-utils
+      state: latest
+
+  - name: Install bridge-utils
+    yum:
+      name: bridge-utils
+      state: latest
+      # brctl show
+
+  - name: Install htop
+    yum:
+      name: htop
+      state: latest
+
+
+# Download and install a specific supported Docker version for Rancher + Kubernetes (allows Kubernetes and Kubernetes dashboard to work)
+# REF: http://docs.rancher.com/rancher/v1.5/en/hosts/#supported-docker-versions
+#  - name: Install Docker 1.12.x
+#    command: /usr/bin/curl https://releases.rancher.com/install-docker/1.12.sh | /usr/bin/sh
+# https://github.com/docker/docker/releases
+  - name: Install specific / approved docker-engine
+    yum:
+      name: docker-engine-1.12.1-1.el7.centos
+      state: present
+      # REF: https://yum.dockerproject.org/repo/main/centos/7/Packages/
+
+  - name: Install lvm2.x86_64
+    yum:
+      name: lvm2.x86_64
+      state: latest
+
+  - name: Install python-pip
+    yum:
+      name: python-pip
+      state: latest
+
+
+# Execute command(s)
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: Use pip to update and ensure pip is at the latest version
+    command: /usr/bin/pip install --upgrade pip
+
+
+# Use pip to install and manage Python dependencies
+# REF: http://docs.ansible.com/ansible/pip_module.html
+######################################################
+
+  - name: Use pip to install docker-py
+    pip:
+      name: docker-py
+
+
+# get_url - Downloads files from HTTP, HTTPS, or FTP to node
+# REF: http://docs.ansible.com/ansible/get_url_module.html
+############################################################
+
+# https://github.com/docker/machine/releases
+  - name: Download and install docker-machine
+    get_url:
+      url: https://github.com/docker/machine/releases/download/v0.10.0/docker-machine-Linux-x86_64
+      dest: /usr/local/bin/docker-machine
+      mode: 777
+      force: yes
+
+# https://github.com/docker/compose/releases
+  - name: Download and install docker-compose
+    get_url:
+      url: https://github.com/docker/compose/releases/download/1.12.0/docker-compose-Linux-x86_64
+      dest: /usr/local/bin/docker-compose
+      mode: 777
+      force: yes
+
+
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+# Create LVM physical volume on {{BlkDev|default ('/dev/sde')}}
+  - name: "pvcreate {{BlkDev|default ('/dev/sde')}}"
+    command: "/usr/sbin/pvcreate {{BlkDev|default ('/dev/sde')}}"
+
+# Create LVM volume group vg_zenoss
+  - name: "vgcreate vg_zenoss {{BlkDev|default ('/dev/sde')}}"
+    command: "/usr/sbin/vgcreate vg_zenoss {{BlkDev|default ('/dev/sde')}}"
+
+
+# file - Sets attributes of files and directories
+# http://docs.ansible.com/ansible/file_module.html
+##################################################
+
+  - name: Create directory /opt/serviced/var/backups if it does not already exist
+    file:
+      path: /opt/serviced/var/backups
+      owner: root
+      group: root
+      mode: 0755
+      state: directory
+
+  - name: Create directory /opt/serviced/var/isvcs if it does not already exist
+    file:
+      path: /opt/serviced/var/isvcs
+      owner: root
+      group: root
+      mode: 0755
+      state: directory
+
+  - name: Create directory /opt/serviced/var/volumes if it does not already exist
+    file:
+      path: /opt/serviced/var/volumes
+      owner: root
+      group: root
+      mode: 0755
+      state: directory
+
+
+# lvol - Configure LVM logical volumes
+# REF: http://docs.ansible.com/ansible/lvol_module.html
+#######################################################
+
+  - name: Create a 150GB logical volume lv_BACKUPS on vg_zenoss
+    lvol:
+      vg: vg_zenoss
+      lv: lv_BACKUPS
+      size: 150g
+
+  - name: Create a 50GB logical volume lv_ISVCS on vg_zenoss
+    lvol:
+      vg: vg_zenoss
+      lv: lv_ISVCS
+      size: 50g
+
+  - name: Create a  200GB logical volume lv_VOLUMES on vg_zenoss
+    lvol:
+      vg: vg_zenoss
+      lv: lv_VOLUMES
+      size: 200g
+
+
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: mkfs -t xfs /dev/vg_zenoss/lv_BACKUPS
+    command: "/sbin/mkfs -t xfs /dev/vg_zenoss/lv_BACKUPS"
+
+  - name: mkfs -t xfs /dev/vg_zenoss/lv_ISVCS
+    command: "/sbin/mkfs -t xfs /dev/vg_zenoss/lv_ISVCS"
+
+  - name: mkfs -t xfs /dev/vg_zenoss/lv_VOLUMES
+    command: "/sbin/mkfs -t xfs /dev/vg_zenoss/lv_VOLUMES"
+
+
+# mount - Control active and configured mount points
+# REF: http://docs.ansible.com/ansible/mount_module.html
+########################################################
+
+  - name: Mount path /opt/serviced/var/backups to LVM /dev/vg_zenoss/lv_BACKUPS as XFS
+    mount:
+      path: /opt/serviced/var/backups
+      src: /dev/vg_zenoss/lv_BACKUPS
+      fstype: xfs
+      opts: defaults
+      state: mounted
+
+  - name: Mount path /opt/serviced/var/isvcs to LVM /dev/vg_zenoss/lv_ISVCS as XFS
+    mount:
+      path: /opt/serviced/var/isvcs
+      src: /dev/vg_zenoss/lv_ISVCS
+      fstype: xfs
+      opts: defaults
+      state: mounted
+
+  - name: Mount path /opt/serviced/var/volumes to LVM /dev/vg_zenoss/lv_VOLUMES as XFS
+    mount:
+      path: /opt/serviced/var/volumes
+      src: /dev/vg_zenoss/lv_VOLUMES
+      fstype: xfs
+      opts: defaults
+      state: mounted
+
+
+# Tweak settings in INI files
+# REF: http://docs.ansible.com/ansible/ini_file_module.html
+###########################################################
+
+# REF: http://docs.rancher.com/rancher/v1.5/en/hosts/#supported-docker-versions
+  - name: Set value in /etc/yum.conf to exclude auto upgrades of docker-engine so we stay on a compatible Rancher with Kubernetes version
+    ini_file:
+      dest: /etc/yum.conf
+      section: main
+      option: exclude
+      value: 'docker-engine'
+
+
+# Restart firewalld to make sure it is running OK before changing any rules
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Ensure the firewalld service is enabled and re-started before changing any rules
+    service:
+      name: firewalld
+      enabled: yes
+      state: restarted
+
+
+# Update the firewalld configuration
+# REF: http://docs.ansible.com/ansible/firewalld_module.html
+############################################################
+
+  - name: Update firewall to allow port TCP 22 for incoming Zenoss sshd connections
+    firewalld:
+      port: 22/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 443 for incoming Zenoss HTTPS connections
+    firewalld:
+      port: 443/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 2048 for incoming Zenoss Optional connections
+    firewalld:
+      port: 2048/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 2049 for incoming Zenoss NFS connections
+    firewalld:
+      port: 2049/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 2181 for incoming Zenoss Zookeeper connections
+    firewalld:
+      port: 2181/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 2375 for incoming Docker Cloud connections
+    firewalld:
+      port: 2375/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 2376 for incoming docker-machine connections
+    firewalld:
+      port: 2376/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 2377 for incoming Docker cluster management connections
+    firewalld:
+      port: 2377/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 2888 for incoming Zenoss Zookeeper connections
+    firewalld:
+      port: 2888/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 3888 for incoming Zenoss Zookeeper connections
+    firewalld:
+      port: 3888/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 4789 for incoming Docker overlay network connections
+    firewalld:
+      port: 4789/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port UDP 4789 for incoming Docker overlay network connections
+    firewalld:
+      port: 4789/udp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 4979 for incoming Zenoss serviced RPC connections
+    firewalld:
+      port: 4979/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 5000 for incoming Zenoss Docker registry connections
+    firewalld:
+      port: 5000/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 5042 for incoming Zenoss logstash connections
+    firewalld:
+      port: 5042/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 5043 for incoming Zenoss logstash connections
+    firewalld:
+      port: 5043/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 6783 for incoming Docker overlay network connections
+    firewalld:
+      port: 6783/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port UDP 6783 for incoming Docker overlay network connections
+    firewalld:
+      port: 6783/udp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 7946 for incoming Docker communication among nodes
+    firewalld:
+      port: 7946/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port UDP 7946 for incoming Docker communication among nodes
+    firewalld:
+      port: 7946/udp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 8443 for incoming Zenoss metric consumer connections
+    firewalld:
+      port: 8443/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow port TCP 22250 for incoming Zenoss mux connections
+    firewalld:
+      port: 22250/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+  - name: Update firewall to allow ports TCP 30000-32767 for incoming Docker swarm manager PublishedPort connections
+    firewalld:
+      port: 30000-32767/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+
+# Enable and start docker
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Enable and start (or restart) the docker service
+    service:
+      name: docker
+      enabled: yes
+      state: restarted
+      # Note: Verify docker via SSH command line:
+      # systemctl status docker
+      # docker run hello-world
+      #
+      # More advanced verification:
+      # docker run -it ubuntu bash
+      # cat /etc/lsb-release
+      #
+      # To run docker as a normal user, add that user to the docker group:
+      # usermod -aG docker your_username
+
+
+# Install yum packages
+# REF: http://docs.ansible.com/ansible/yum_module.html
+######################################################
+
+  - name: Install zenoss-core-service
+    yum:
+      name: zenoss-core-service
+      state: latest
+
+
+# copy - Copies files to remote locations
+# http://docs.ansible.com/ansible/copy_module.html
+##################################################
+
+  - name: Copy /etc/default/serviced to /etc/default/serviced.SAMPLE
+    copy:
+      remote_src: True
+      src: /etc/default/serviced
+      dest: /etc/default/serviced.SAMPLE
+      owner: root
+      group: serviced
+      mode: 0440
+
+
+# file - Sets attributes of files and directories
+# http://docs.ansible.com/ansible/file_module.html
+##################################################
+
+  - name: Delete file /etc/default/serviced
+    file:
+      path: /etc/default/serviced
+      state: absent
+
+
+# Update various configuration files
+# REF: http://docs.ansible.com/ansible/lineinfile_module.html
+#############################################################
+
+  - name: Populate values in /etc/default/serviced with - SERVICED_ALLOW_LOOP_BACK=true
+    lineinfile:
+      dest: /etc/default/serviced
+      state: present
+      create: yes
+      backup: yes
+      owner: root
+      group: serviced
+      mode: 0640
+      line: 'SERVICED_ALLOW_LOOP_BACK=true'
+
+      
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: systemctl daemon-reload
+    command: "systemctl daemon-reload"
+
+
+# Enable and start docker
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Enable and start the serviced service
+    service:
+      name: serviced
+      enabled: yes
+      state: restarted
+      # serviced host add --register IPAddressHere:4979 default
+      # http://IPAddressHere
+      # df -h
+      # htop
+      # systemctl status serviced

@@ -1,0 +1,46 @@
+---
+
+################################################################################
+#  description: Ensure a specific server group exists in Control in CenturyLink Cloud
+#  usage: ansible-playbook CLC_Create-Zenoss523-Servers-In-Control-playbook.yml
+#  example: ansible-playbook CLC_Create-Zenoss523-Servers-In-Control-playbook.yml --extra-vars 'DC=VA1 Password=P@$$W0rd! Name=ztkx Description=Zenoss Count=1 Memory=24 Group=Zenoss'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+ 
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Ensure servers exist in Control
+  hosts: localhost
+  gather_facts: False
+  connection: local
+  tasks:
+
+
+# clc_server - Create, Delete, Start and Stop servers in CenturyLink Cloud
+# REF: http://docs.ansible.com/ansible/clc_server_module.html
+#############################################################
+
+    - name: Create servers
+      ignore_errors: yes
+      clc_server:
+        location: "{{ DC|default ('VA1') }}"
+        password: "{{ Password|default ('P@$$W0rd!') }}"
+        name: "{{ Name|default ('ZDTSX') }}"
+        description: "{{ Description|default ('Zenoss') }}"
+        template: "{{ Template|default ('CENTOS-7-64-TEMPLATE') }}"
+        count: "{{ Count|default ('1') }}"
+        group: "{{ Group|default ('Default Group') }}"
+        cpu: "{{ CPU|default ('4') }}"
+        memory: "{{ Memory|default ('24') }}"
+        additional_disks:
+          - {sizeGB: 62, type: raw}
+          - {sizeGB: 234, type: raw}
+          - {sizeGB: 50, type: raw}
+          - {sizeGB: 150, type: raw}
+        primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
+        secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
+        wait: True
