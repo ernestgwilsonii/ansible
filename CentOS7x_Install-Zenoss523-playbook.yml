@@ -566,7 +566,7 @@
       name: dnsmasq
       enabled: yes
       state: restarted
-      # systemctl start dnsmasq
+      # systemctl status dnsmasq
       # cat /etc/dnsmasq.conf
 
   - name: Enable and start (or restart) the docker service
