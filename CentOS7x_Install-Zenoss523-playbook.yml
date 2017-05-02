@@ -143,13 +143,9 @@
 # REF: http://docs.ansible.com/ansible/command_module.html
 ##########################################################
 
-# Use the Zenoss serviced-storage tool to create a thinpool LVM volume group called vg_docker on /dev/sdd
-  - name: "serviced-storage create-thin-pool vg_docker {{DockerBlkDev|default ('/dev/sdd')}}"
-    command: "serviced-storage create-thin-pool vg_docker {{DockerBlkDev|default ('/dev/sdd')}}"
-
-# Use the Zenoss serviced-storage tool to create a thinpool LVM logical volume called lv_docker_thinpool in the volume group called vg_docker
-  - name: "serviced-storage create-thin-pool --size=50G lv_docker_thinpool vg_docker"
-    command: "serviced-storage create-thin-pool --size=50G lv_docker_thinpool vg_docker"
+# Use the Zenoss serviced-storage tool to create a thinpool LVM volume group called docker on /dev/sdd
+  - name: "serviced-storage create-thin-pool docker {{DockerBlkDev|default ('/dev/sdd')}}"
+    command: "serviced-storage create-thin-pool docker {{DockerBlkDev|default ('/dev/sdd')}}"
 
 
 # file - Sets attributes of files and directories
@@ -170,49 +166,22 @@
 #######################################################
 
 # /etc/docker/daemon.json
-  - name: Copy Docker configuration file daemon.json from Ansible files/Docker/etc_docker_daemon.json to Docker remote /etc/docker/daemon.json
+  - name: Copy Docker configuration file daemon.json from Ansible files/Docker/etc_docker_zenoss-daemon.json to Docker remote /etc/docker/daemon.json
     copy:
-      src=files/Docker/etc_docker_daemon.json
+      src=files/Docker/etc_docker_zenoss-daemon.json
       dest=/etc/docker/daemon.json
       owner=root
       group=root
       mode=0444
 
 
-# Use the copy module to copy various files into place
-# REF: http://docs.ansible.com/ansible/copy_module.html
-#######################################################
-
-# /etc/lvm/profile/vg_docker-lv_docker_thinpool.profile
-  - name: Copy LVM configuration file vg_docker-lv_docker_thinpool.profile from Ansible files/Docker/vg_docker-lv_docker_thinpool.profile to Docker remote /etc/lvm/profile/vg_docker-lv_docker_thinpool.profile
-    copy:
-      src=files/Docker/vg_docker-lv_docker_thinpool.profile
-      dest=/etc/lvm/profile/vg_docker-lv_docker_thinpool.profile
-      owner=root
-      group=root
-      mode=0444
-
-
 # command - Executes a command on a remote node
 # REF: http://docs.ansible.com/ansible/command_module.html
 ##########################################################
 
-# Apply the desired autoextend LVM policy to the Docker thinpool
-  - name: "lvchange --metadataprofile vg_docker-lv_docker_thinpool vg_docker/lv_docker_thinpool"
-    command: "/usr/sbin/lvchange --metadataprofile vg_docker-lv_docker_thinpool vg_docker/lv_docker_thinpool"
-
-
-# command - Executes a command on a remote node
-# REF: http://docs.ansible.com/ansible/command_module.html
-##########################################################
-
-# Use the Zenoss serviced-storage tool to create a thinpool LVM volume group called vg_zenoss_app_data on /dev/sde
-  - name: "serviced-storage create-thin-pool vg_zenoss_app_data {{ZenossAppDataBlkDev|default ('/dev/sde')}}"
-    command: "serviced-storage create-thin-pool vg_zenoss_app_data {{ZenossAppDataBlkDev|default ('/dev/sde')}}"
-
-# Use the Zenoss serviced-storage tool to create a thinpool LVM logical volume called lv_zenoss_app_data_thinpool in the volume group called vg_zenoss_app_data
-  - name: "serviced-storage create-thin-pool --size=50G lv_zenoss_app_data_thinpool vg_zenoss_app_data"
-    command: "serviced-storage create-thin-pool --size=50G lv_zenoss_app_data_thinpool vg_zenoss_app_data"
+# Use the Zenoss serviced-storage tool to create a thinpool LVM volume group called serviced on /dev/sde
+  - name: "serviced-storage create-thin-pool serviced {{ZenossAppDataBlkDev|default ('/dev/sde')}}"
+    command: "serviced-storage create-thin-pool serviced {{ZenossAppDataBlkDev|default ('/dev/sde')}}"
 
 
 # command - Executes a command on a remote node
@@ -598,7 +567,7 @@
       mode: 0640
       line: ' SERVICED_FS_TYPE=devicemapper'
 
-  - name: Populate values in /etc/default/serviced with - SERVICED_DM_THINPOOLDEV=/dev/mapper/vg_zenoss_app_data-lv_zenoss_app_data_thinpool
+  - name: Populate values in /etc/default/serviced with - SERVICED_DM_THINPOOLDEV=/dev/mapper/serviced-serviced-pool
     lineinfile:
       dest: /etc/default/serviced
       state: present
@@ -607,7 +576,7 @@
       owner: root
       group: serviced
       mode: 0640
-      line: 'SERVICED_DM_THINPOOLDEV=/dev/mapper/vg_zenoss_app_data-lv_zenoss_app_data_thinpool'
+      line: 'SERVICED_DM_THINPOOLDEV=/dev/mapper/serviced-serviced-pool'
 
       
 # command - Executes a command on a remote node

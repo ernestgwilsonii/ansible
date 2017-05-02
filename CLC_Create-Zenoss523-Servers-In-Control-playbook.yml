@@ -37,8 +37,8 @@
         cpu: "{{ CPU|default ('4') }}"
         memory: "{{ Memory|default ('24') }}"
         additional_disks:
-          - {sizeGB: 62, type: raw}
-          - {sizeGB: 234, type: raw}
+          - {sizeGB: 50, type: raw}
+          - {sizeGB: 200, type: raw}
           - {sizeGB: 50, type: raw}
           - {sizeGB: 150, type: raw}
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
