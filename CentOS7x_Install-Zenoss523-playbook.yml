@@ -74,11 +74,7 @@
       name: htop
       state: latest
 
-# Download and install a specific supported Docker version for Rancher + Kubernetes (allows Kubernetes and Kubernetes dashboard to work)
-# REF: http://docs.rancher.com/rancher/v1.5/en/hosts/#supported-docker-versions
-#  - name: Install Docker 1.12.x
-#    command: /usr/bin/curl https://releases.rancher.com/install-docker/1.12.sh | /usr/bin/sh
-# https://github.com/docker/docker/releases
+# Download and install a specific supported Docker version for Zenoss
   - name: Install specific / Zenoss approved docker-engine
     yum:
       name: docker-engine-1.12.1-1.el7.centos
