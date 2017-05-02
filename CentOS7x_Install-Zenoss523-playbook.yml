@@ -587,11 +587,11 @@
     command: "systemctl daemon-reload"
 
 
-# Enable and start docker
+# Enable and start
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
 
-  - name: Enable and start the serviced service
+  - name: Enable and start the Zenoss serviced service
     service:
       name: serviced
       enabled: yes
