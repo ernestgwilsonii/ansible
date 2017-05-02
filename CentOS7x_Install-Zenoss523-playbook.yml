@@ -567,7 +567,7 @@
       mode: 0640
       line: ' SERVICED_FS_TYPE=devicemapper'
 
-  - name: Populate values in /etc/default/serviced with - SERVICED_DM_THINPOOLDEV=/dev/mapper/serviced-serviced-pool
+  - name: Populate values in /etc/default/serviced with - SERVICED_DM_THINPOOLDEV=/dev/mapper/serviced-serviced--pool
     lineinfile:
       dest: /etc/default/serviced
       state: present
@@ -576,7 +576,7 @@
       owner: root
       group: serviced
       mode: 0640
-      line: 'SERVICED_DM_THINPOOLDEV=/dev/mapper/serviced-serviced-pool'
+      line: 'SERVICED_DM_THINPOOLDEV=/dev/mapper/serviced-serviced--pool'
 
       
 # command - Executes a command on a remote node
