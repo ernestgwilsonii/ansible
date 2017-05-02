@@ -39,8 +39,8 @@
         additional_disks:
           - {sizeGB: 50, type: raw}
           - {sizeGB: 200, type: raw}
-          - {sizeGB: 50, type: raw}
-          - {sizeGB: 150, type: raw}
+          - {sizeGB: 51, type: raw}
+          - {sizeGB: 151, type: raw}
         primary_dns: "{{ DNS1|default ('172.17.1.26') }}"
         secondary_dns: "{{ DNS2|default ('172.17.1.27') }}"
         wait: True
