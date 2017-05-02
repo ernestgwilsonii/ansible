@@ -74,7 +74,6 @@
       name: htop
       state: latest
 
-
 # Download and install a specific supported Docker version for Rancher + Kubernetes (allows Kubernetes and Kubernetes dashboard to work)
 # REF: http://docs.rancher.com/rancher/v1.5/en/hosts/#supported-docker-versions
 #  - name: Install Docker 1.12.x
@@ -94,6 +93,11 @@
   - name: Install python-pip
     yum:
       name: python-pip
+      state: latest
+
+  - name: Install zenoss-core-service
+    yum:
+      name: zenoss-core-service
       state: latest
 
 
@@ -139,13 +143,97 @@
 # REF: http://docs.ansible.com/ansible/command_module.html
 ##########################################################
 
-# Create LVM physical volume on {{BlkDev|default ('/dev/sde')}}
-  - name: "pvcreate {{BlkDev|default ('/dev/sde')}}"
-    command: "/usr/sbin/pvcreate {{BlkDev|default ('/dev/sde')}}"
+# Use the Zenoss serviced-storage tool to create a thinpool LVM volume group called vg_docker on /dev/sdd
+  - name: "serviced-storage create-thin-pool vg_docker {{DockerBlkDev|default ('/dev/sdd')}}"
+    command: "serviced-storage create-thin-pool vg_docker {{DockerBlkDev|default ('/dev/sdd')}}"
 
-# Create LVM volume group vg_zenoss
-  - name: "vgcreate vg_zenoss {{BlkDev|default ('/dev/sde')}}"
-    command: "/usr/sbin/vgcreate vg_zenoss {{BlkDev|default ('/dev/sde')}}"
+# Use the Zenoss serviced-storage tool to create a thinpool LVM logical volume called lv_docker_thinpool in the volume group called vg_docker
+  - name: "serviced-storage create-thin-pool --size=50G lv_docker_thinpool vg_docker"
+    command: "serviced-storage create-thin-pool --size=50G lv_docker_thinpool vg_docker"
+
+
+# file - Sets attributes of files and directories
+# http://docs.ansible.com/ansible/file_module.html
+##################################################
+
+  - name: Create directory /etc/docker if it does not already exist
+    file:
+      path: /etc/docker
+      owner: root
+      group: root
+      mode: 0755
+      state: directory
+
+
+# Use the copy module to copy various files into place
+# REF: http://docs.ansible.com/ansible/copy_module.html
+#######################################################
+
+# /etc/docker/daemon.json
+  - name: Copy Docker configuration file daemon.json from Ansible files/Docker/etc_docker_daemon.json to Docker remote /etc/docker/daemon.json
+    copy:
+      src=files/Docker/etc_docker_daemon.json
+      dest=/etc/docker/daemon.json
+      owner=root
+      group=root
+      mode=0444
+
+
+# Use the copy module to copy various files into place
+# REF: http://docs.ansible.com/ansible/copy_module.html
+#######################################################
+
+# /etc/lvm/profile/vg_docker-lv_docker_thinpool.profile
+  - name: Copy LVM configuration file vg_docker-lv_docker_thinpool.profile from Ansible files/Docker/vg_docker-lv_docker_thinpool.profile to Docker remote /etc/lvm/profile/vg_docker-lv_docker_thinpool.profile
+    copy:
+      src=files/Docker/vg_docker-lv_docker_thinpool.profile
+      dest=/etc/lvm/profile/vg_docker-lv_docker_thinpool.profile
+      owner=root
+      group=root
+      mode=0444
+
+
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+# Apply the desired autoextend LVM policy to the Docker thinpool
+  - name: "lvchange --metadataprofile vg_docker-lv_docker_thinpool vg_docker/lv_docker_thinpool"
+    command: "/usr/sbin/lvchange --metadataprofile vg_docker-lv_docker_thinpool vg_docker/lv_docker_thinpool"
+
+
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+# Use the Zenoss serviced-storage tool to create a thinpool LVM volume group called vg_zenoss_app_data on /dev/sde
+  - name: "serviced-storage create-thin-pool vg_zenoss_app_data {{ZenossAppDataBlkDev|default ('/dev/sde')}}"
+    command: "serviced-storage create-thin-pool vg_zenoss_app_data {{ZenossAppDataBlkDev|default ('/dev/sde')}}"
+
+# Use the Zenoss serviced-storage tool to create a thinpool LVM logical volume called lv_zenoss_app_data_thinpool in the volume group called vg_zenoss_app_data
+  - name: "serviced-storage create-thin-pool --size=50G lv_zenoss_app_data_thinpool vg_zenoss_app_data"
+    command: "serviced-storage create-thin-pool --size=50G lv_zenoss_app_data_thinpool vg_zenoss_app_data"
+
+
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+# Create LVM physical volume on {{ZenossControlCenterBlkDev|default ('/dev/sdf')}}
+  - name: "pvcreate {{ZenossControlCenterBlkDev|default ('/dev/sdf')}}"
+    command: "/usr/sbin/pvcreate {{ZenossControlCenterBlkDev|default ('/dev/sdf')}}"
+
+# Create LVM volume group vg_zenoss_control_center
+  - name: "vgcreate vg_zenoss_control_center {{ZenossControlCenterBlkDev|default ('/dev/sdf')}}"
+    command: "/usr/sbin/vgcreate vg_zenoss_control_center {{ZenossControlCenterBlkDev|default ('/dev/sdf')}}"
+
+# Create LVM physical volume on {{ZenossBackupsBlkDev|default ('/dev/sdg')}}
+  - name: "pvcreate {{ZenossBackupsBlkDev|default ('/dev/sdg')}}"
+    command: "/usr/sbin/pvcreate {{ZenossBackupsBlkDev|default ('/dev/sdg')}}"
+
+# Create LVM volume group vg_zenoss_backups
+  - name: "vgcreate vg_zenoss_backups {{ZenossBackupsBlkDev|default ('/dev/sdg')}}"
+    command: "/usr/sbin/vgcreate vg_zenoss_backups {{ZenossBackupsBlkDev|default ('/dev/sdg')}}"
 
 
 # file - Sets attributes of files and directories
@@ -181,63 +269,46 @@
 # REF: http://docs.ansible.com/ansible/lvol_module.html
 #######################################################
 
-  - name: Create a 150GB logical volume lv_BACKUPS on vg_zenoss
+  - name: Create a 150GB logical volume lv_ZENOSS_BACKUPS on vg_zenoss_backups
     lvol:
-      vg: vg_zenoss
-      lv: lv_BACKUPS
+      vg: vg_zenoss_backups
+      lv: lv_ZENOSS_BACKUPS
       size: 150g
 
-  - name: Create a 50GB logical volume lv_ISVCS on vg_zenoss
+  - name: Create a 50GB logical volume lv_ZENOSS_ISVCS on vg_zenoss_control_center
     lvol:
-      vg: vg_zenoss
-      lv: lv_ISVCS
+      vg: vg_zenoss_control_center
+      lv: lv_ZENOSS_ISVCS
       size: 50g
-
-  - name: Create a  200GB logical volume lv_VOLUMES on vg_zenoss
-    lvol:
-      vg: vg_zenoss
-      lv: lv_VOLUMES
-      size: 200g
 
 
 # command - Executes a command on a remote node
 # REF: http://docs.ansible.com/ansible/command_module.html
 ##########################################################
 
-  - name: mkfs -t xfs /dev/vg_zenoss/lv_BACKUPS
-    command: "/sbin/mkfs -t xfs /dev/vg_zenoss/lv_BACKUPS"
+  - name: mkfs -t xfs /dev/vg_zenoss_backups/lv_ZENOSS_BACKUPS
+    command: "/sbin/mkfs -t xfs /dev/vg_zenoss_backups/lv_ZENOSS_BACKUPS"
 
-  - name: mkfs -t xfs /dev/vg_zenoss/lv_ISVCS
-    command: "/sbin/mkfs -t xfs /dev/vg_zenoss/lv_ISVCS"
-
-  - name: mkfs -t xfs /dev/vg_zenoss/lv_VOLUMES
-    command: "/sbin/mkfs -t xfs /dev/vg_zenoss/lv_VOLUMES"
+  - name: mkfs -t xfs /dev/vg_zenoss_control_center/lv_ZENOSS_ISVCS
+    command: "/sbin/mkfs -t xfs /dev/vg_zenoss_control_center/lv_ZENOSS_ISVCS"
 
 
 # mount - Control active and configured mount points
 # REF: http://docs.ansible.com/ansible/mount_module.html
 ########################################################
 
-  - name: Mount path /opt/serviced/var/backups to LVM /dev/vg_zenoss/lv_BACKUPS as XFS
+  - name: Mount path /opt/serviced/var/backups to LVM /dev/vg_zenoss_backups/lv_ZENOSS_BACKUPS as XFS
     mount:
       path: /opt/serviced/var/backups
-      src: /dev/vg_zenoss/lv_BACKUPS
+      src: /dev/vg_zenoss_backups/lv_ZENOSS_BACKUPS
       fstype: xfs
       opts: defaults
       state: mounted
 
-  - name: Mount path /opt/serviced/var/isvcs to LVM /dev/vg_zenoss/lv_ISVCS as XFS
+  - name: Mount path /opt/serviced/var/isvcs to LVM /dev/vg_zenoss_control_center/lv_ZENOSS_ISVCS as XFS
     mount:
       path: /opt/serviced/var/isvcs
-      src: /dev/vg_zenoss/lv_ISVCS
-      fstype: xfs
-      opts: defaults
-      state: mounted
-
-  - name: Mount path /opt/serviced/var/volumes to LVM /dev/vg_zenoss/lv_VOLUMES as XFS
-    mount:
-      path: /opt/serviced/var/volumes
-      src: /dev/vg_zenoss/lv_VOLUMES
+      src: /dev/vg_zenoss_control_center/lv_ZENOSS_ISVCS
       fstype: xfs
       opts: defaults
       state: mounted
@@ -477,16 +548,6 @@
       # usermod -aG docker your_username
 
 
-# Install yum packages
-# REF: http://docs.ansible.com/ansible/yum_module.html
-######################################################
-
-  - name: Install zenoss-core-service
-    yum:
-      name: zenoss-core-service
-      state: latest
-
-
 # copy - Copies files to remote locations
 # http://docs.ansible.com/ansible/copy_module.html
 ##################################################
@@ -525,6 +586,28 @@
       group: serviced
       mode: 0640
       line: 'SERVICED_ALLOW_LOOP_BACK=true'
+
+  - name: Populate values in /etc/default/serviced with -  SERVICED_FS_TYPE=devicemapper
+    lineinfile:
+      dest: /etc/default/serviced
+      state: present
+      create: yes
+      backup: yes
+      owner: root
+      group: serviced
+      mode: 0640
+      line: ' SERVICED_FS_TYPE=devicemapper'
+
+  - name: Populate values in /etc/default/serviced with - SERVICED_DM_THINPOOLDEV=/dev/mapper/vg_zenoss_app_data-lv_zenoss_app_data_thinpool
+    lineinfile:
+      dest: /etc/default/serviced
+      state: present
+      create: yes
+      backup: yes
+      owner: root
+      group: serviced
+      mode: 0640
+      line: 'SERVICED_DM_THINPOOLDEV=/dev/mapper/vg_zenoss_app_data-lv_zenoss_app_data_thinpool'
 
       
 # command - Executes a command on a remote node
