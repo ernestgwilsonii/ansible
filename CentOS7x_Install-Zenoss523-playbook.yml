@@ -69,6 +69,11 @@
       state: latest
       # brctl show
 
+  - name: Install dnsmasq
+    yum:
+      name: dnsmasq
+      state: latest
+
   - name: Install htop
     yum:
       name: htop
@@ -162,9 +167,9 @@
 #######################################################
 
 # /etc/docker/daemon.json
-  - name: Copy Docker configuration file daemon.json from Ansible files/Docker/etc_docker_zenoss-daemon.json to Docker remote /etc/docker/daemon.json
+  - name: Copy Docker configuration file daemon.json from Ansible files/Docker/etc_docker_daemon.json.ZENOSS to Zenoss remote /etc/docker/daemon.json
     copy:
-      src=files/Docker/etc_docker_zenoss-daemon.json
+      src=files/Docker/etc_docker_daemon.json.ZENOSS
       dest=/etc/docker/daemon.json
       owner=root
       group=root
@@ -284,7 +289,7 @@
 ###########################################################
 
 # REF: http://docs.rancher.com/rancher/v1.5/en/hosts/#supported-docker-versions
-  - name: Set value in /etc/yum.conf to exclude auto upgrades of docker-engine so we stay on a compatible Rancher with Kubernetes version
+  - name: Set value in /etc/yum.conf to exclude auto upgrades of docker-engine so we stay on a version compatible with Zenoss
     ini_file:
       dest: /etc/yum.conf
       section: main
@@ -517,14 +522,23 @@
 # http://docs.ansible.com/ansible/copy_module.html
 ##################################################
 
-  - name: Copy /etc/default/serviced to /etc/default/serviced.SAMPLE
+  - name: Copy /etc/default/serviced to /etc/default/serviced.ORIGINAL
     copy:
       remote_src: True
       src: /etc/default/serviced
-      dest: /etc/default/serviced.SAMPLE
+      dest: /etc/default/serviced.ORIGINAL
       owner: root
       group: serviced
       mode: 0440
+
+  - name: Copy /etc/dnsmasq.conf to /etc/dnsmasq.conf.ORIGINAL
+    copy:
+      remote_src: True
+      src: /etc/dnsmasq.conf
+      dest: /etc/dnsmasq.conf.ORIGINAL
+      owner: root
+      group: root
+      mode: 0644
 
 
 # file - Sets attributes of files and directories
@@ -535,6 +549,25 @@
     file:
       path: /etc/default/serviced
       state: absent
+
+  - name: Delete file /etc/dnsmasq.conf
+    file:
+      path: /etc/dnsmasq.conf
+      state: absent
+
+
+# Use the copy module to copy various files into place
+# REF: http://docs.ansible.com/ansible/copy_module.html
+#######################################################
+
+# /etc/dnsmasq.conf
+  - name: Copy dnsmasq configuration file dnsmasq.conf from Ansible files/dnsmasq/etc_dnsmasq.conf.ZENOSS to Zenoss remote /etc/dnsmasq.conf
+    copy:
+      src=files/dnsmasq/etc_dnsmasq.conf.ZENOSS
+      dest=/etc/dnsmasq.conf
+      owner=root
+      group=root
+      mode=0444
 
 
 # Update various configuration files
@@ -599,6 +632,7 @@
       # pvs; vgs; lvs
       # pvdisplay; vgdisplay; lvdisplay
       # lsblk
+      # mount
       # docker ps
       # serviced host add --register IPAddressHere:4979 default
       # http://IPAddressHere
