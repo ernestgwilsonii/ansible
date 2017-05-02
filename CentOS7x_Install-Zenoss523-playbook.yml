@@ -497,27 +497,6 @@
       zone: public
 
 
-# Enable and start docker
-# REF: http://docs.ansible.com/ansible/service_module.html
-##########################################################
-
-  - name: Enable and start (or restart) the docker service
-    service:
-      name: docker
-      enabled: yes
-      state: restarted
-      # Note: Verify docker via SSH command line:
-      # systemctl status docker
-      # docker run hello-world
-      #
-      # More advanced verification:
-      # docker run -it ubuntu bash
-      # cat /etc/lsb-release
-      #
-      # To run docker as a normal user, add that user to the docker group:
-      # usermod -aG docker your_username
-
-
 # copy - Copies files to remote locations
 # http://docs.ansible.com/ansible/copy_module.html
 ##################################################
@@ -570,6 +549,43 @@
       mode=0444
 
 
+# command - Executes a command on a remote node
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: systemctl daemon-reload
+    command: "systemctl daemon-reload"
+
+
+# Enable and start dsnmasq and docker
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Enable and start the dnsmasq service
+    service:
+      name: dnsmasq
+      enabled: yes
+      state: restarted
+      # systemctl start dnsmasq
+      # cat /etc/dnsmasq.conf
+
+  - name: Enable and start (or restart) the docker service
+    service:
+      name: docker
+      enabled: yes
+      state: restarted
+      # Note: Verify docker via SSH command line:
+      # systemctl status docker
+      # docker run hello-world
+      #
+      # More advanced verification:
+      # docker run -it ubuntu bash
+      # cat /etc/lsb-release
+      #
+      # To run docker as a normal user, add that user to the docker group:
+      # usermod -aG docker your_username
+
+
 # Update various configuration files
 # REF: http://docs.ansible.com/ansible/lineinfile_module.html
 #############################################################
@@ -616,7 +632,7 @@
     command: "systemctl daemon-reload"
 
 
-# Enable and start
+# Enable and start Zenoss
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
 
