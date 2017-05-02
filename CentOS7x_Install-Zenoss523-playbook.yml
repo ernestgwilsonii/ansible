@@ -44,7 +44,7 @@
 
 
 # /etc/yum.repos.d/zenoss-stable.repo
-  - name: Install Zenoss Stable dockerrepo
+  - name: Install Zenoss Stable repository
     yum_repository:
       name: zenoss-stable
       description: Zenoss Stable Repository
@@ -79,13 +79,13 @@
 #  - name: Install Docker 1.12.x
 #    command: /usr/bin/curl https://releases.rancher.com/install-docker/1.12.sh | /usr/bin/sh
 # https://github.com/docker/docker/releases
-  - name: Install specific / approved docker-engine
+  - name: Install specific / Zenoss approved docker-engine
     yum:
       name: docker-engine-1.12.1-1.el7.centos
       state: present
       # REF: https://yum.dockerproject.org/repo/main/centos/7/Packages/
 
-  - name: Install lvm2.x86_64
+  - name: Install lvm2
     yum:
       name: lvm2.x86_64
       state: latest
@@ -601,6 +601,7 @@
       # htop
       # df -h
       # pvs; vgs; lvs
+      # pvdisplay; vgdisplay; lvdisplay
       # lsblk
       # docker ps
       # serviced host add --register IPAddressHere:4979 default
