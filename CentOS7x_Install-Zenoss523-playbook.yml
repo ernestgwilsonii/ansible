@@ -596,8 +596,10 @@
       name: serviced
       enabled: yes
       state: restarted
+      # systemctl status serviced
+      # htop
+      # df -h
+      # lsblk
+      # docker ps
       # serviced host add --register IPAddressHere:4979 default
       # http://IPAddressHere
-      # df -h
-      # htop
-      # systemctl status serviced
