@@ -565,7 +565,7 @@
       owner: root
       group: serviced
       mode: 0640
-      line: ' SERVICED_FS_TYPE=devicemapper'
+      line: 'SERVICED_FS_TYPE=devicemapper'
 
   - name: Populate values in /etc/default/serviced with - SERVICED_DM_THINPOOLDEV=/dev/mapper/serviced-serviced--pool
     lineinfile:
@@ -597,8 +597,10 @@
       enabled: yes
       state: restarted
       # systemctl status serviced
+      # cat /etc/default/serviced
       # htop
       # df -h
+      # pvs; vgs; lvs
       # lsblk
       # docker ps
       # serviced host add --register IPAddressHere:4979 default
