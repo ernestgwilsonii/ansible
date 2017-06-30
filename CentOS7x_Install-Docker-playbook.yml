@@ -70,9 +70,9 @@
       # brctl show
 
 # https://github.com/docker/docker/releases
-  - name: Install docker-engine
+  - name: Install docker-ce
     yum:
-      name: docker-engine
+      name: docker-ce
       state: latest
 
   - name: Install python-pip
