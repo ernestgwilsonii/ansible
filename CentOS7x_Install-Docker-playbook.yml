@@ -24,16 +24,27 @@
 ##################################################################
 
 # /etc/yum.repos.d/docker.repo
-  - name: Install repository dockerrepo
+# https://docs.docker.com/engine/installation/linux/docker-ce/centos/#install-docker-ce
+  - name: Install repository docker-ce-stable
     yum_repository:
-      name: dockerrepo
+      name: docker-ce-stable
       description: Docker Repository
       file: docker
-      baseurl: https://yum.dockerproject.org/repo/main/centos/7
+      baseurl: https://download.docker.com/linux/centos/7/$basearch/stable
       enabled: yes
       gpgcheck: yes
-      gpgkey: https://yum.dockerproject.org/gpg
+      gpgkey: https://download.docker.com/linux/centos/gpg
 
+# Old repo
+  # - name: Install repository dockerrepo
+  #   yum_repository:
+  #     name: dockerrepo
+  #     description: Docker Repository
+  #     file: docker
+  #     baseurl: https://yum.dockerproject.org/repo/main/centos/7
+  #     enabled: yes
+  #     gpgcheck: yes
+  #     gpgkey: https://yum.dockerproject.org/gpg
 
 # Execute command(s)
 # REF: http://docs.ansible.com/ansible/command_module.html
