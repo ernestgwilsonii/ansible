@@ -66,6 +66,11 @@ wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_I
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Install-RDP-Services-playbook.yml
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CLC_Create-Servers-In-Control-playbook.yml
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CLC_Ensure-Control-Group-Exists-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CLC_Create-Docker-Servers-In-Control-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Prepare-LVM-for-Docker-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Install-Docker-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/Docker_Swarm-Join-Manager-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/Docker_Swarm-Join-Worker-playbook.yml
 
 # Create a default starting /etc/ansible/ansible.cfg
 echo "[defaults]" > /etc/ansible/ansible.cfg
