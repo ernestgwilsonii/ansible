@@ -1,0 +1,66 @@
+version: '3.3'
+
+services:
+
+  mongo_n1:
+    image: ernestgwilsonii/mongodb
+    volumes:
+      - mongodata1:/data/db
+      - mongoconfig1:/data/configdb
+    ports:
+      - mode: host
+        target: 27017
+        published: 27017
+    deploy:
+      labels:
+        local.description: "This is MongoDB Node 1 part of Cluster 1"
+      placement:
+        constraints:
+          - node.labels.mongo.rep == 1
+
+  mongo_n2:
+    image: ernestgwilsonii/mongodb
+    volumes:
+      - mongodata2:/data/db
+      - mongoconfig2:/data/configdb
+    ports:
+      - mode: host
+        target: 27017
+        published: 27017
+    deploy:
+      labels:
+        local.description: "This is MongoDB Node 2 part of Cluster 1"
+      placement:
+        constraints:
+          - node.labels.mongo.rep == 2
+
+  mongo_n3:
+    image: ernestgwilsonii/mongodb
+    volumes:
+      - mongodata3:/data/db
+      - mongoconfig3:/data/configdb
+    ports:
+      - mode: host
+        target: 27017
+        published: 27017
+    deploy:
+      labels:
+        local.description: "This is MongoDB Node 3 part of Cluster 1"
+      placement:
+        constraints:
+          - node.labels.mongo.rep == 3
+
+volumes:
+  mongodata1:
+    driver: local
+  mongoconfig1:
+    driver: local
+  mongodata2:
+    driver: local
+  mongoconfig2:
+    driver: local
+  mongodata3:
+    driver: local
+  mongoconfig3:
+    driver: local
+

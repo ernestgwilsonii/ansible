@@ -1,0 +1,57 @@
+./build.sh
+
+# docker login
+# docker push docker push ernestgwilsonii/mongodb:latest
+# List images:
+#   docker images -a
+# Remove all images:
+#   docker rmi $(docker images -a -q)
+# List dangling images:
+#   docker images -f dangling=true
+# Remove dangling images:
+#   docker rmi $(docker images -f dangling=true -q)
+# REF: https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes
+
+# Run MongoDB on a stand-alone Docker
+docker run --name mongodba -p 27017:27017 ernestgwilsonii/mongodb mongod -f /etc/mongod.conf run
+docker run -d --name mongodba -p 27017:27017 ernestgwilsonii/mongodb mongod -f /etc/mongod.conf run
+
+# Run MongoDB cluster on a stand-alone Docker
+docker-compose up
+docker-compose up -d
+
+# Run MongoDB cluster on a Docker Swarm
+docker stack deploy --compose-file=docker-compose.yml mongo_clust1
+docker stack rm mongo_clust1
+
+
+# How to generate a starting mongo replication key file
+# Each cluster member needs to have a copy of the key to securely replicate data
+# REF: https://docs.mongodb.com/manual/tutorial/deploy-replica-set-with-keyfile-access-control/
+openssl rand -base64 756 > src/mongod-replication.key
+
+
+# Generate a new self-signed certificate
+cd src/
+openssl req -nodes -newkey rsa:2048 -new -x509 -days 3650 -keyout mongodb-cert.key -out mongodb-cert.crt -subj '/C=US/ST=Pennsylvania/L=Landenberg/O=SitesExpress/OU=Cloud/CN=*.domain.local/emailAddress=ErnestGWilsonII@gmail.com'
+# Create a single usable file that the MongoDB configuration will use as the self-signed certificate
+cat mongodb-cert.key mongodb-cert.crt > mongodb.pem
+rm mongodb-cert.key
+rm mongodb-cert.crt
+ 
+
+# REF: https://github.com/dockersamples/docker-swarm-visualizer
+# Use the "Visualizer" so you can see what is going on!
+docker service create --name=visualizer --publish=8080:8080/tcp --constraint=node.role==manager --mount=type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock dockersamples/visualizer
+
+# REF: https://medium.com/@kalahari/running-a-mongodb-replica-set-on-docker-1-12-swarm-mode-step-by-step-a5f3ba07d06e
+# Add labels to specific nodes
+docker node update --label-add mongo.rep=1 $(docker node ls -q -f name=VA1EWTDSDP02)
+docker node update --label-add mongo.rep=2 $(docker node ls -q -f name=NY1EWTDSDP01)
+docker node update --label-add mongo.rep=3 $(docker node ls -q -f name=NY1EWTDSDP02)
+# Remove labels
+#docker node update --label-rm mongo.rep $(docker node ls -q -f name=VA1EWTDSDP02)
+#docker node update --label-rm mongo.rep $(docker node ls -q -f name=NY1EWTDSDP01)
+#docker node update --label-rm mongo.rep $(docker node ls -q -f name=NY1EWTDSDP02)
+
+
