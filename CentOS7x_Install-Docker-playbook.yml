@@ -50,15 +50,26 @@
 # REF: http://docs.ansible.com/ansible/command_module.html
 ##########################################################
 
-  - name: Enable IPv4 Forwarding
+  - name: Enable IPv4 Forwarding via sysctl -w net.ipv4.ip_forward=1
     command: /usr/sbin/sysctl -w net.ipv4.ip_forward=1
 
-  - name: Set (increase default) vm.max_map_count
+  - name: Set (increase default) vm.max_map_count via sysctl -w vm.max_map_count=262144
     command: /usr/sbin/sysctl -w vm.max_map_count=262144
 
 # Update various configuration files
 # REF: http://docs.ansible.com/ansible/lineinfile_module.html
 #############################################################
+
+  - name: Populate value in /etc/sysctl.conf with net.ipv4.ip_forward=1
+    lineinfile:
+      dest: /etc/sysctl.conf
+      state: present
+      create: yes
+      backup: yes
+      owner: root
+      group: root
+      mode: 0644
+      line: 'net.ipv4.ip_forward=1'
 
   - name: Populate value in /etc/sysctl.conf with vm.max_map_count = 262144
     lineinfile:
@@ -69,7 +80,7 @@
       owner: root
       group: root
       mode: 0644
-      line: 'vm.max_map_count = 262144'
+      line: 'vm.max_map_count=262144'
 
 
 # Install yum packages
