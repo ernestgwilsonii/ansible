@@ -71,7 +71,7 @@
       mode: 0644
       line: 'net.ipv4.ip_forward=1'
 
-  - name: Populate value in /etc/sysctl.conf with vm.max_map_count = 262144
+  - name: Populate value in /etc/sysctl.conf with vm.max_map_count=262144
     lineinfile:
       dest: /etc/sysctl.conf
       state: present
