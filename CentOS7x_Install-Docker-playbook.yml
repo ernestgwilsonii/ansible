@@ -53,6 +53,8 @@
   - name: Enable IPv4 Forwarding
     command: /usr/sbin/sysctl -w net.ipv4.ip_forward=1
 
+  - name: Set (increase default) vm.max_map_count
+    command: /usr/sbin/sysctl -w vm.max_map_count=262144
 
 # Update various configuration files
 # REF: http://docs.ansible.com/ansible/lineinfile_module.html
