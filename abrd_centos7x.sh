@@ -1,15 +1,15 @@
 #!/usr/bin/bash
 
-#################################################################################################
-# Ansible Bootstrap Rapid Deployment                                                            #
-#                                                                                               #
-# CentOS7x Usage:                                                                               #
-#   curl https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/abrd.sh | bash -      #
-#                                                                                               #
-#                                                          ErnestGWilsonII@gmail.com 2016-12-31 #
-#                                                            https://github.com/ernestgwilsonii #
-#                                                   https://www.linkedin.com/in/ernestgwilsonii #
-#################################################################################################
+#######################################################################################################
+# Ansible Bootstrap Rapid Deployment for CentOS7x                                                     #
+#                                                                                                     #
+# CentOS7x Usage:                                                                                     #
+#   curl https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/abrd_centos7x.sh | bash -   #
+#                                                                                                     #
+#                                                                ErnestGWilsonII@gmail.com 2017-08-12 #
+#                                                                  https://github.com/ernestgwilsonii #
+#                                                         https://www.linkedin.com/in/ernestgwilsonii #
+#######################################################################################################
 
 # Update the base OS
 yum -y upgrade
@@ -60,7 +60,6 @@ wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_I
 
 # Create a default starting /etc/ansible/ansible.cfg
 echo "[defaults]" > /etc/ansible/ansible.cfg
-echo "library=/usr/lib/python2.7/site-packages/clc_ansible_module" >> /etc/ansible/ansible.cfg
 echo "inventory=/etc/ansible/hosts" >> /etc/ansible/ansible.cfg
 echo "host_key_checking=False" >> /etc/ansible/ansible.cfg
 echo "retry_files_enabled=False" >> /etc/ansible/ansible.cfg
@@ -70,9 +69,6 @@ echo "forks=100" >> /etc/ansible/ansible.cfg
 echo " " >> /root/.bashrc
 echo "# Ansible #" >> /root/.bashrc
 echo "###########" >> /root/.bashrc
-
-# Add ANSIBLE_LIBRARY variable to .bashrc
-echo "export ANSIBLE_LIBRARY=/usr/lib/python2.7/site-packages/clc_ansible_module" >> /root/.bashrc
 
 # Add ANSIBLE_HOST_KEY_CHECKING=False variable to .bashrc
 echo "export ANSIBLE_HOST_KEY_CHECKING=False" >> /root/.bashrc
