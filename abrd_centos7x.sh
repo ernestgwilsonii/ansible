@@ -95,14 +95,11 @@ clear
 echo "################################################################################"
 echo "# Welcome to Ansible! #"
 echo "#######################"
-echo ""
 echo "ansible --version"
 ansible --version
-echo ""
 tree /etc/ansible/
 
 # Instruct the human:
-echo "################################################################################"
 echo ""
 echo " # Type:"
 echo " #######"
