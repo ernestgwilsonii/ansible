@@ -24,7 +24,7 @@
 ##########################################################
 
   - name: Install the nodesource/x86_64 repository for Node.js
-    raw: curl --silent --location https://rpm.nodesource.com/setup_7.x | bash -
+    raw: curl --silent --location https://rpm.nodesource.com/setup_8.x | bash -
     # REF: https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora
 
 
@@ -75,6 +75,8 @@
   - name: Install generator-hubot globally
     raw: /usr/bin/npm install generator-hubot -g
 
+  - name: Install yarn globally
+    raw: /usr/bin/npm install yarn -g
 
 # Use the file module to create a directory and symbolic links if they don't exist
 # REF: http://docs.ansible.com/ansible/file_module.html
