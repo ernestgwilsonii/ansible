@@ -19,6 +19,23 @@
   tasks:
 
 
+# Install or configure repository used on the OS by yum
+# REF: https://docs.ansible.com/ansible/yum_repository_module.html
+##################################################################
+
+# /etc/yum.repos.d/vscode.repo
+# https://code.visualstudio.com/docs/setup/linux
+  - name: Install repository Visual Studio Code
+    yum_repository:
+      name: vscode
+      description: Visual Studio Code
+      file: vscode
+      baseurl: https://packages.microsoft.com/yumrepos/vscode
+      enabled: yes
+      gpgcheck: yes
+      gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+
+
 # Install yum packages
 # REF: http://docs.ansible.com/ansible/yum_module.html
 ######################################################
@@ -41,9 +58,9 @@
       name=tigervnc-server
       state=latest
 
-  - name: Install the Microsoft Visual Studio Code via remote rpm
+  - name: Install the Microsoft Visual Studio Code
     yum:
-      name: https://az764295.vo.msecnd.net/stable/6eaebe3b9c70406d67c97779468c324a7a95db0e/code-1.11.2-1492070635.el7.x86_64.rpm
+      name: code
       state: present
 
 
