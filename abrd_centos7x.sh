@@ -14,6 +14,11 @@
 # Update the base OS
 yum -y upgrade
 
+# Enable EPEL Repository
+yum -y install wget
+wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-10.noarch.rpm -O /tmp/epel-release-7-10.noarch.rpm
+yum -y localinstall /tmp/epel-release-7-10.noarch.rpm
+
 # Install a compiler and some pre-requisites into the OS
 yum -y install python-setuptools gcc libffi-devel python-devel openssl-devel krb5-devel krb5-libs krb5-workstation git sshpass tree
 
@@ -49,13 +54,21 @@ echo "ansible_ssh_user: \"root\"" > /etc/ansible/group_vars/CentOS7.yml
 echo "ansible_ssh_pass: \"YourCentOS7ServersGrouprootPasswordGoesHere\"" >> /etc/ansible/group_vars/CentOS7.yml
 echo "ansible_ssh_port: \"22\"" >> /etc/ansible/group_vars/CentOS7.yml
 echo "ansible_connection: \"ssh\"" >> /etc/ansible/group_vars/CentOS7.yml
+echo "[CentOS7]" >> /etc/ansible/hosts
+echo "srvtest-01 ansible_host=192.168.0.101" >> /etc/ansible/hosts
+echo "srvtest-02 ansible_host=192.168.0.102" >> /etc/ansible/hosts
 cd /etc/ansible
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Apply-OS-Updates-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Enable-EPEL-Repository-playbook.yml
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Install-Basic-Utilities-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Install-NTP-Services-playbook.yml
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Install-Java8x-playbook.yml
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Install-NodeJS-playbook.yml
-wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Install-NTP-Services-playbook.yml
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Install-RDP-Services-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Prepare-LVM-for-Docker-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Install-Docker-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/Docker_Swarm-Join-Manager-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/Docker_Swarm-Join-Worker-playbook.yml
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Install-Zenoss526-playbook.yml
 
 # Create a default starting /etc/ansible/ansible.cfg
