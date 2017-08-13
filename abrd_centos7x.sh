@@ -73,6 +73,10 @@ wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_I
 mkdir -p /etc/ansible/files/Docker
 cd /etc/ansible/files/Docker
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/files/Docker/etc_docker_daemon.json.ZENOSS
+mkdir -p /etc/ansible/files/dnsmasq
+cd /etc/ansible/files/dnsmasq
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/files/dnsmasq/etc_dnsmasq.conf.ZENOSS
+cd /etc/ansible
 
 # Create a default starting /etc/ansible/ansible.cfg
 echo "[defaults]" > /etc/ansible/ansible.cfg
