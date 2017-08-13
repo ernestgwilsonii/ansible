@@ -340,6 +340,14 @@
       state: enabled
       zone: public
 
+  - name: Update firewall to allow port TCP 80 for incoming Zenoss Control Center connections
+    firewalld:
+      port: 80/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
   - name: Update firewall to allow port TCP 443 for incoming Zenoss HTTPS connections
     firewalld:
       port: 443/tcp
