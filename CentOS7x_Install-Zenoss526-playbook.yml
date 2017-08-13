@@ -31,16 +31,29 @@
 # REF: https://docs.ansible.com/ansible/yum_repository_module.html
 ##################################################################
 
-# /etc/yum.repos.d/docker.repo
-  - name: Install dockerrepo repository
+# /etc/yum.repos.d/docker-ce.repo
+# https://docs.docker.com/engine/installation/linux/docker-ce/centos/#install-docker-ce
+  - name: Install repository Docker CE Stable
     yum_repository:
-      name: dockerrepo
-      description: Docker Repository
-      file: docker
-      baseurl: https://yum.dockerproject.org/repo/main/centos/7
+      name: docker-ce-stable
+      description: Docker CE Stable
+      file: docker-ce
+      baseurl: https://download.docker.com/linux/centos/7/$basearch/stable
       enabled: yes
       gpgcheck: yes
-      gpgkey: https://yum.dockerproject.org/gpg
+      gpgkey: https://download.docker.com/linux/centos/gpg
+
+# # Old Docker Repo - Do not use!
+# # /etc/yum.repos.d/docker.repo
+#   - name: Install dockerrepo repository
+#     yum_repository:
+#       name: dockerrepo
+#       description: Docker Repository
+#       file: docker
+#       baseurl: https://yum.dockerproject.org/repo/main/centos/7
+#       enabled: yes
+#       gpgcheck: yes
+#       gpgkey: https://yum.dockerproject.org/gpg
 
 
 # /etc/yum.repos.d/zenoss-stable.repo
@@ -57,6 +70,25 @@
 # Install yum packages
 # REF: http://docs.ansible.com/ansible/yum_module.html
 ######################################################
+
+# Zenoss is broken and cannot find this dependancy, so we manually install hit here first as a work-around:
+  - name: Install docker-ce-selinux-17.03.1.ce-1.el7.centos.noarch.rpm
+    yum:
+      name: https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-selinux-17.03.1.ce-1.el7.centos.noarch.rpm
+      state: present
+
+# Install Zenoss first so it can select which version of Docker it likes today:
+  - name: Install zenoss-core-service
+    yum:
+      name: zenoss-core-service
+      state: latest
+
+# # Download and install a specific supported Docker version for Zenoss
+#   - name: Install specific / Zenoss approved docker-engine
+#     yum:
+#       name: docker-engine-17.03.1.ce-1.el7.centos
+#       state: present
+#       # REF: https://yum.dockerproject.org/repo/main/centos/7/Packages/
 
   - name: Install bind-utils
     yum:
@@ -79,13 +111,6 @@
       name: htop
       state: latest
 
-# Download and install a specific supported Docker version for Zenoss
-  - name: Install specific / Zenoss approved docker-engine
-    yum:
-      name: docker-engine-1.12.1-1.el7.centos
-      state: present
-      # REF: https://yum.dockerproject.org/repo/main/centos/7/Packages/
-
   - name: Install lvm2
     yum:
       name: lvm2.x86_64
@@ -94,11 +119,6 @@
   - name: Install python-pip
     yum:
       name: python-pip
-      state: latest
-
-  - name: Install zenoss-core-service
-    yum:
-      name: zenoss-core-service
       state: latest
 
 

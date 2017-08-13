@@ -70,6 +70,9 @@ wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_I
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/Docker_Swarm-Join-Manager-playbook.yml
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/Docker_Swarm-Join-Worker-playbook.yml
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Install-Zenoss526-playbook.yml
+mkdir -p /etc/ansible/files/Docker
+cd /etc/ansible/files/Docker
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/files/Docker/etc_docker_daemon.json.ZENOSS
 
 # Create a default starting /etc/ansible/ansible.cfg
 echo "[defaults]" > /etc/ansible/ansible.cfg
