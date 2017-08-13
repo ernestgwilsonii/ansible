@@ -20,7 +20,7 @@ wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-10.noarch.rp
 yum -y localinstall /tmp/epel-release-7-10.noarch.rpm
 
 # Install a compiler and some pre-requisites into the OS
-yum -y install python-setuptools gcc libffi-devel python-devel openssl-devel krb5-devel krb5-libs krb5-workstation git sshpass tree
+yum -y install python-setuptools gcc libffi-devel python-devel openssl-devel krb5-devel krb5-libs krb5-workstation git sshpass tree telnet
 
 # Install Python pip
 easy_install pip
