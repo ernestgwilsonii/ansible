@@ -1,0 +1,113 @@
+---
+
+################################################################################
+#  description: Installs Rundeck on CentOS7x
+#  usage: ansible-playbook CentOS7x_Install-Rundeck-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere RunDeckIP=IPAddress'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Install Rundeck on CentOS7x
+  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# Install yum packages
+# REF: http://docs.ansible.com/ansible/yum_module.html
+######################################################
+
+  - name: Install Rundeck repo
+    yum:
+      name: http://repo.rundeck.org/latest.rpm 
+      state: present
+
+  - name: Install Rundeck
+    yum:
+      name: rundeck
+      state: latest
+
+
+# Restart firewalld to make sure it is running OK before changing any rules
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Ensure the firewalld service is enabled and re-started before changing any rules
+    service:
+      name: firewalld
+      enabled: yes
+      state: restarted
+
+
+# Update the firewalld configuration
+# REF: http://docs.ansible.com/ansible/firewalld_module.html
+############################################################
+
+  - name: Update firewall to allow port TCP 4440 for incoming Rundeck connections
+    firewalld:
+      port: 4440/tcp
+      permanent: true
+      immediate: yes
+      state: enabled
+      zone: public
+
+
+
+# Use the template module to populate files with data
+# REF: http://docs.ansible.com/ansible/template_module.html
+###########################################################
+
+# Copy the replication initialization script to the master /tmp/ directory
+  - name: Copy the initial replication script from Ansible to the host that will be the starting MongoDB replication master
+    template:
+      src=templates/MongoDB/initiateReplication.js.j2
+      dest=/tmp/initiateReplication.js
+      owner=root
+      group=mongod
+      mode=0644
+
+
+
+# get_url - Downloads files from HTTP, HTTPS, or FTP to node
+# REF: http://docs.ansible.com/ansible/get_url_module.html
+############################################################
+
+
+https://github.com/Batix/rundeck-ansible-plugin/releases/download/2.2.0/ansible-plugin-2.2.0.jar
+
+RD_WINRM='1.5.1'
+curl https://github.com/NetDocuments/rd-winrm-plugin/archive/$RD_WINRM.zip -o /var/lib/rundeck/libext/rd-winrm-plugin-$RD_WINRM.zip
+rd-winrm-plugin-1.5.1.zip
+chown rundeck:rundeck rd-winrm-plugin-1.5.1.zip
+
+wget https://github.com/ohioit/rundeck-http-plugin/releases/download/1.0.6/rundeck-http-plugin-1.0.6.jar
+
+
+# https://github.com/docker/machine/releases
+  - name: Download and install docker-machine
+    get_url:
+      url: https://github.com/docker/machine/releases/download/v0.12.0/docker-machine-Linux-x86_64
+      dest: /usr/local/bin/docker-machine
+      mode: 777
+      force: yes
+
+
+
+
+# Enable and start rundeck
+# REF: http://docs.ansible.com/ansible/service_module.html
+##########################################################
+
+  - name: Enable and start (or restart) the rundeck service
+    service:
+      name: rundeck
+      enabled: yes
+      state: restarted
+      # Browse to Rundeck http://10.127.215.21:4440/
+      # Staring username and password: admin 

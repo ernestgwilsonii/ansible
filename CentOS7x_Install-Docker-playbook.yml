@@ -234,7 +234,7 @@
 # https://github.com/docker/machine/releases
   - name: Download and install docker-machine
     get_url:
-      url: https://github.com/docker/machine/releases/download/v0.12.0/docker-machine-Linux-x86_64
+      url: https://github.com/docker/machine/releases/download/v0.12.2/docker-machine-Linux-x86_64
       dest: /usr/local/bin/docker-machine
       mode: 777
       force: yes
@@ -242,7 +242,7 @@
 # https://github.com/docker/compose/releases
   - name: Download and install docker-compose
     get_url:
-      url: https://github.com/docker/compose/releases/download/1.14.0/docker-compose-Linux-x86_64
+      url: https://github.com/docker/compose/releases/download/1.15.0/docker-compose-Linux-x86_64
       dest: /usr/local/bin/docker-compose
       mode: 777
       force: yes

@@ -1,0 +1,29 @@
+---
+
+################################################################################
+#  description: Simple MTR play example
+#  usage: ansible-playbook MTR-playbook.yml --extra-vars 'Target=NameOrIP Count=100'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: MTR play
+  hosts: localhost
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+# Execute raw command(s)
+# REF: http://docs.ansible.com/ansible/raw_module.html
+##########################################################
+
+# Generate a new self-signed certificate
+  - name: mtr {{Target|default ('8.8.8.8')}} --report --show-ips --aslookup --report-wide --report-cycles={{Count|default ('10')}}
+    raw: mtr {{Target|default ('8.8.8.8')}} --report --show-ips --aslookup --report-wide --report-cycles={{Count|default ('10')}}
+    register: mtr_results
+  - debug: msg="{{mtr_results.stdout_lines}}"
