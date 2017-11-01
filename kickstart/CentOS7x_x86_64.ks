@@ -3,6 +3,12 @@ install
 eula --agreed
 firstboot --disable
 
+# System authorization information
+auth --enableshadow --passalgo=sha512
+
+# Root password
+rootpw --iscrypted $6$nqnI1CAhFXwimPIO$TSZL4HNxzGDtJtAIjYZcvyBUaRT0ESGFucWhwIrhMepdqlG1UZf4XqbwA.fWKfzIAejsYhQaQnaKsID6XoJxb0
+
 # System language
 lang en_US.UTF-8
 
@@ -11,9 +17,6 @@ keyboard --vckeymap=us --xlayouts='us'
 
 # System timezone
 timezone Etc/GMT --isUtc --nontp
-
-# System authorization information
-auth --enableshadow --passalgo=sha512
 
 # System services
 services --disabled="chronyd"
@@ -35,9 +38,6 @@ part /boot --fstype="xfs" --ondisk=sda --size=1024 --label=boot
 part pv.01 --fstype="lvmpv" --ondisk=sda --size=17407 --grow
 volgroup centos --pesize=4096 pv.01
 logvol /  --fstype="xfs" --size=17404 --label="root" --name=root --vgname=centos
-
-# Root password
-rootpw --iscrypted $6$nqnI1CAhFXwimPIO$TSZL4HNxzGDtJtAIjYZcvyBUaRT0ESGFucWhwIrhMepdqlG1UZf4XqbwA.fWKfzIAejsYhQaQnaKsID6XoJxb0
 
 # Network information
 network  --bootproto=dhcp --device=eth0 --onboot=on --ipv6=auto
