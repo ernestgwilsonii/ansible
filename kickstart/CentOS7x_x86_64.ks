@@ -56,8 +56,7 @@ kexec-tools
 %end
 
 # Add-ons for Anaconda which expand the functionality of the installer
-%addon 
-com_redhat_kdump --enable --reserve-mb='auto'
+%addon com_redhat_kdump --enable --reserve-mb='auto'
 %end
 
 # Anaconda
