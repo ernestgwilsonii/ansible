@@ -1,5 +1,7 @@
+# Install OS instead of upgrade
 install
 eula --agreed
+firstboot --disable
 
 # System language
 lang en_US.UTF-8
@@ -50,7 +52,7 @@ repo --name=base --baseurl=http://mirror.cogentco.com/pub/linux/centos/7/os/x86_
 %packages
 @^minimal
 @core
-kexec-tools
+#kexec-tools
 # Use eth0 naming
 -biosdevname
 %end
@@ -59,4 +61,5 @@ kexec-tools
 #%addon com_redhat_kdump --enable --reserve-mb='auto'
 #%end
 
+# Reboot after installation
 reboot
