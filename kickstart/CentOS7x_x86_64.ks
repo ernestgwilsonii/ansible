@@ -7,7 +7,7 @@ firstboot --disable
 auth --enableshadow --passalgo=sha512
 
 # Root password
-rootpw --iscrypted $6$nqnI1CAhFXwimPIO$TSZL4HNxzGDtJtAIjYZcvyBUaRT0ESGFucWhwIrhMepdqlG1UZf4XqbwA.fWKfzIAejsYhQaQnaKsID6XoJxb0
+rootpw --iscrypted $6$5LJqIN.y2PbMrY5e$6kugMUNV7i3Fl8OA1DNXXM9hY6JDVR/VJBQAuTQlkDqP8zYpEuEIS.z8ZDPUEnLiYB0W/bakJy0WmYGaHm/Eg1
 
 # System language
 lang en_US.UTF-8
