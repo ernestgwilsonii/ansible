@@ -25,10 +25,10 @@
 
   - name: Install wget if that package is not already present or update existing if needed
     yum:
-      name=wget
-      state=latest
+      name: wget
+      state: latest
 
-  - name: Install epel-release-7-10.noarch.rpm if that package is not already present
+  - name: Install epel-release-7-11.noarch.rpm if that package is not already present
     yum:
-      name=http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-10.noarch.rpm
-      state=present
+      name: http://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm
+      state: present
