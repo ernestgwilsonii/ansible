@@ -39,6 +39,11 @@
       name: iptables
       state: latest
 
+  - name: Install iptables-services
+    yum:
+      name: iptables-services
+      state: latest
+
   - name: Install bridge-utils
     yum:
       name: bridge-utils
