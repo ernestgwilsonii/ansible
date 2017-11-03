@@ -101,8 +101,10 @@ echo " " >> /root/.bashrc
 
 # Display the Ansible version and next steps
 clear
+echo ""
 echo "################################################################################"
 tree /etc/ansible/
+echo ""
 echo "################################################################################"
 echo "# Welcome to Ansible! #"
 echo "#######################"
@@ -110,7 +112,7 @@ echo "ansible --version"
 ansible --version
 # Instruct the human:
 echo ""
-echo " # Type:"
+echo " # Next:"
 echo " #######"
 echo " cd /etc/ansible"
 echo " ansible --version"
