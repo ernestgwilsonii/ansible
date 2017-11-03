@@ -1,9 +1,9 @@
 ---
 
 ################################################################################
-#  description: Ensure a specific server group exists in Control in CenturyLink Cloud
+#  description: Prepares CentOS7x for Docker by setting up LVM using Docker's published best practices
 #  usage: ansible-playbook CentOS7x_Prepare-LVM-for-Docker-playbook.yml
-#  example: ansible-playbook CentOS7x_Prepare-LVM-for-Docker-playbook.yml --extra-vars 'HostOrGroup=Swarm1'
+#  example: ansible-playbook CentOS7x_Prepare-LVM-for-Docker-playbook.yml --extra-vars 'HostOrGroup=Swarm1 BlkDev=/dev/sdb'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
