@@ -51,7 +51,7 @@ echo "ChangeMeToWhateverYouWantForYourAnsibleVaultEncryptionPassword" > /etc/ans
 echo "hosts" > /etc/ansible/.gitignore
 echo "vault" >> /etc/ansible/.gitignore
 echo "ansible_ssh_user: \"root\"" > /etc/ansible/group_vars/CentOS7.yml
-echo "ansible_ssh_pass: \"M1n1m\@l\!\"" >> /etc/ansible/group_vars/CentOS7.yml
+echo "ansible_ssh_pass: \"M1n1m@l!\"" >> /etc/ansible/group_vars/CentOS7.yml
 echo "ansible_ssh_port: \"22\"" >> /etc/ansible/group_vars/CentOS7.yml
 echo "ansible_connection: \"ssh\"" >> /etc/ansible/group_vars/CentOS7.yml
 echo "[CentOS7]" >> /etc/ansible/hosts
@@ -99,15 +99,17 @@ echo "export ANSIBLE_HOST_KEY_CHECKING=False" >> /root/.bashrc
 echo "export ANSIBLE_VAULT_PASSWORD_FILE=/etc/ansible/vault/vault_pass.txt" >> /root/.bashrc
 echo " " >> /root/.bashrc
 
-# Verify your Ansible version
+# Display the Ansible version and next steps
 clear
 echo "################################################################################"
+tree /etc/ansible/
+echo "################################################################################"
 echo "# Welcome to Ansible! #"
+echo "#######################"
 echo "ansible --version"
 ansible --version
-tree /etc/ansible/
-
 # Instruct the human:
+echo ""
 echo " # Type:"
 echo " #######"
 echo " cd /etc/ansible"
