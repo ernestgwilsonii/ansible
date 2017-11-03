@@ -73,6 +73,8 @@ wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_C
 mkdir -p /etc/ansible/files/Docker
 cd /etc/ansible/files/Docker
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/files/Docker/etc_docker_daemon.json.ZENOSS
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/files/Docker/vg_docker-lv_docker_thinpool.profile
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/files/Docker/etc_docker_daemon.json
 mkdir -p /etc/ansible/files/dnsmasq
 cd /etc/ansible/files/dnsmasq
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/files/dnsmasq/etc_dnsmasq.conf.ZENOSS
@@ -101,17 +103,14 @@ echo " " >> /root/.bashrc
 clear
 echo "################################################################################"
 echo "# Welcome to Ansible! #"
-echo "#######################"
 echo "ansible --version"
 ansible --version
 tree /etc/ansible/
 
 # Instruct the human:
-echo ""
 echo " # Type:"
 echo " #######"
 echo " cd /etc/ansible"
 echo " ansible --version"
-echo ""
 echo "################################################################################"
 echo ""
