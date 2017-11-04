@@ -1,0 +1,46 @@
+#####################
+# REF Documentation #
+#####################
+# GitLab Docker Official Guide
+#      REF: https://docs.gitlab.com/omnibus/docker/
+#
+# GitLab SSL and self-signed certificate
+#      REF: https://gitlab.com/gitlab-org/omnibus-gitlab/issues/2299
+#           https://futurestud.io/tutorials/how-to-run-gitlab-with-self-signed-ssl-certificate
+#           https://www.digitalocean.com/community/questions/ssl-on-standard-gitlab-image
+#           https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md
+#
+# Setting up your own fully functional GitLab: HTTPS, Registry, CI + Runners
+#     REF: https://gitlabfan.com/setting-up-your-own-fully-functional-gitlab-https-registry-ci-runners-79901ac617c0
+#
+# Enable the Container Registry
+#     REF: https://docs.gitlab.com/ce/administration/container_registry.html
+#
+# GitLab Git LFS Administration
+#     REF: https://docs.gitlab.com/ee/workflow/lfs/lfs_administration.html
+#          https://git-lfs.github.com/
+#
+# Database settings
+#    REF: https://docs.gitlab.com/omnibus/settings/database.html
+#
+# LDAP settings
+#    REF: https://docs.gitlab.com/ee/articles/how_to_configure_ldap_gitlab_ce/index.html
+#         https://docs.gitlab.com/ce/administration/auth/ldap.html
+#
+# Backing up and restoring GitLab
+#    REF: https://docs.gitlab.com/ee/raketasks/backup_restore.html
+################################################################################
+
+################################################################################
+# Manual start using the docker command (if not using the docker-compose command like you should be!)
+docker run --detach \
+    --hostname gitlab.example.com \
+    --env GITLAB_OMNIBUS_CONFIG="external_url 'https://scm.pims.presidio.com'; gitlab_rails['gitlab_shell_ssh_port'] = 2222; nginx['redirect_http_to_https'] = true; nginx['ssl_certificate'] = '/etc/gitlab/ssl/gitlab.crt'; nginx['ssl_certificate_key'] = '/etc/gitlab/ssl/gitlab.key'; gitlab_rails['lfs_enabled'] = true;" registry_external_url 'https://scm.pims.presidio.com:5000'; registry_nginx['ssl_certificate'] = "/etc/gitlab/ssl/gitlab.pem"; registry_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/gitlab.key"\
+    --publish 443:443 --publish 80:80 --publish 2222:22 \
+    --name gitlab \
+    --restart always \
+    --volume /opt/gitlab/config:/etc/gitlab \
+    --volume /opt/gitlab/logs:/var/log/gitlab \
+    --volume /opt/gitlab/data:/var/opt/gitlab \
+    gitlab/gitlab-ce:latest
+################################################################################

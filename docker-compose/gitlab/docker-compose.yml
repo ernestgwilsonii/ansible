@@ -1,0 +1,46 @@
+version: '3.4'
+services:
+  gitlab:
+    container_name: gitlab
+    image: gitlab/gitlab-ce:latest
+    restart: unless-stopped
+    hostname: 'scm.pims.presidio.com'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'https://scm.pims.presidio.com'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2222
+        gitlab_rails['lfs_enabled'] = true
+        nginx['redirect_http_to_https'] = true
+        nginx['ssl_certificate'] = '/etc/gitlab/ssl/gitlab.crt'
+        nginx['ssl_certificate_key'] = '/etc/gitlab/ssl/gitlab.key'
+        registry_external_url 'https://localhost:4567'
+        registry_nginx['ssl_certificate'] = "/etc/gitlab/ssl/gitlab.pem"
+        registry_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/gitlab.key"
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
+      - target: 22
+        published: 2222
+        protocol: tcp
+        mode: host
+      - target: 4567
+        published: 4567
+        protocol: tcp
+        mode: host
+    volumes:
+      - '/opt/gitlab/config:/etc/gitlab'
+      - '/opt/gitlab/logs:/var/log/gitlab'
+      - '/opt/gitlab/data:/var/opt/gitlab'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 2m30s
+      timeout: 10s
+      retries: 3
+    stop_grace_period: 1m30s
+
