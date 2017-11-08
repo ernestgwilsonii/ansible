@@ -19,7 +19,7 @@ keyboard --vckeymap=us --xlayouts='us'
 timezone Etc/GMT --isUtc --nontp
 
 # System services
-services --disabled="chronyd"
+#services --disabled="chronyd"
 selinux --disabled
 firewall --disabled
 services --enabled=NetworkManager,sshd

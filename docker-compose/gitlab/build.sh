@@ -17,6 +17,7 @@ cat /opt/gitlab/config/ssl/gitlab.key /opt/gitlab/config/ssl/gitlab.crt > /opt/g
 # docker tag ubuntu gitlab.domain.local:4567/root/my-ubuntu:latest
 # docker login gitlab.domain.local:4567
 # docker push gitlab.domain.local:4567/root/my-ubuntu:latest
+mkdir -p /etc/docker/certs.d/localhost:4567/
 mkdir -p /etc/docker/certs.d/gitlab.domain.local:4567/
 cp /opt/gitlab/config/ssl/gitlab.crt /etc/docker/certs.d/gitlab.domain.local:4567/ca.crt
 systemctl restart docker
