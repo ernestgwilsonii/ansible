@@ -44,21 +44,50 @@
 # REF: http://docs.ansible.com/ansible/firewalld_module.html
 ############################################################
 
-  - name: Update firewall to allow port TCP 123 ntpd connections
-    firewalld:
-      port=123/tcp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+  # - name: Update firewall to allow port TCP 123 ntpd connections
+  #   firewalld:
+  #     port=123/tcp
+  #     permanent=true
+  #     immediate=yes
+  #     state=enabled
+  #     zone=public
 
-  - name: Update firewall to allow port UDP 123 ntpd connections
-    firewalld:
-      port=123/udp
-      permanent=true
-      immediate=yes
-      state=enabled
-      zone=public
+  # - name: Update firewall to allow port UDP 123 ntpd connections
+  #   firewalld:
+  #     port=123/udp
+  #     permanent=true
+  #     immediate=yes
+  #     state=enabled
+  #     zone=public
+
+
+# iptables - Modify the systems iptables
+# REF: http://docs.ansible.com/ansible/latest/iptables_module.html
+##################################################################
+
+  - name: Update iptables to allow port TCP 123 ntpd connections
+    iptables:
+      chain: INPUT
+      ctstate: NEW,ESTABLISHED,RELATED
+      protocol: tcp
+      match: tcp
+      destination_port: 123
+      comment: #iptables -A INPUT -p tcp -m state --state NEW -m tcp --dport 123 -j ACCEPT
+      jump: ACCEPT
+      state: present
+    become: yes
+
+  - name: Update iptables to allow port UDP 123 ntpd connections
+    iptables:
+      chain: INPUT
+      ctstate: NEW,ESTABLISHED,RELATED
+      protocol: udp
+      match: udp
+      destination_port: 123
+      comment: #iptables -A INPUT -p udp -m state --state NEW -m udp --dport 123 -j ACCEPT
+      jump: ACCEPT
+      state: present
+    become: yes
 
 
 # Enable and start services
@@ -82,4 +111,3 @@
   - name: /usr/libexec/iptables/iptables.init save
     command: /usr/libexec/iptables/iptables.init save
     #cat /etc/sysconfig/iptables
-    

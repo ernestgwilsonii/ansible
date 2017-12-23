@@ -56,6 +56,13 @@
   - name: Set (increase default) vm.max_map_count via sysctl -w vm.max_map_count=262144
     command: /usr/sbin/sysctl -w vm.max_map_count=262144
 
+  - name: Set sysctl -w net.bridge.bridge-nf-call-iptables=1
+    command: /usr/sbin/sysctl -w net.bridge.bridge-nf-call-iptables=1
+
+  - name: Set sysctl -w net.bridge.bridge-nf-call-ip6tables=1
+    command: /usr/sbin/sysctl -w net.bridge.bridge-nf-call-ip6tables=1
+
+
 # Update various configuration files
 # REF: http://docs.ansible.com/ansible/lineinfile_module.html
 #############################################################
@@ -81,6 +88,28 @@
       group: root
       mode: 0644
       line: 'vm.max_map_count=262144'
+
+  - name: Populate value in /etc/sysctl.conf with net.bridge.bridge-nf-call-iptables=1
+    lineinfile:
+      dest: /etc/sysctl.conf
+      state: present
+      create: yes
+      backup: yes
+      owner: root
+      group: root
+      mode: 0644
+      line: 'net.bridge.bridge-nf-call-iptables=1'
+
+  - name: Populate value in /etc/sysctl.conf with net.bridge.bridge-nf-call-ip6tables=1
+    lineinfile:
+      dest: /etc/sysctl.conf
+      state: present
+      create: yes
+      backup: yes
+      owner: root
+      group: root
+      mode: 0644
+      line: 'net.bridge.bridge-nf-call-ip6tables=1'
 
 
 # Install yum packages
@@ -125,85 +154,224 @@
 # REF: http://docs.ansible.com/ansible/firewalld_module.html
 ############################################################
 
-  - name: Update firewall to allow port TCP 2375 for incoming Docker Cloud connections
-    firewalld:
-      port: 2375/tcp
-      permanent: true
-      immediate: yes
-      state: enabled
-      zone: public
+  # - name: Update firewall to allow port TCP 2375 for incoming Docker Cloud connections
+  #   firewalld:
+  #     port: 2375/tcp
+  #     permanent: true
+  #     immediate: yes
+  #     state: enabled
+  #     zone: public
 
-  - name: Update firewall to allow port TCP 2376 for incoming docker-machine connections
-    firewalld:
-      port: 2376/tcp
-      permanent: true
-      immediate: yes
-      state: enabled
-      zone: public
+  # - name: Update firewall to allow port TCP 2376 for incoming docker-machine connections
+  #   firewalld:
+  #     port: 2376/tcp
+  #     permanent: true
+  #     immediate: yes
+  #     state: enabled
+  #     zone: public
 
-  - name: Update firewall to allow port TCP 2377 for incoming Docker cluster management connections
-    firewalld:
-      port: 2377/tcp
-      permanent: true
-      immediate: yes
-      state: enabled
-      zone: public
+  # - name: Update firewall to allow port TCP 2377 for incoming Docker cluster management connections
+  #   firewalld:
+  #     port: 2377/tcp
+  #     permanent: true
+  #     immediate: yes
+  #     state: enabled
+  #     zone: public
 
-  - name: Update firewall to allow port TCP 4789 for incoming Docker overlay network connections
-    firewalld:
-      port: 4789/tcp
-      permanent: true
-      immediate: yes
-      state: enabled
-      zone: public
+  # - name: Update firewall to allow port TCP 4789 for incoming Docker overlay network connections
+  #   firewalld:
+  #     port: 4789/tcp
+  #     permanent: true
+  #     immediate: yes
+  #     state: enabled
+  #     zone: public
 
-  - name: Update firewall to allow port UDP 4789 for incoming Docker overlay network connections
-    firewalld:
-      port: 4789/udp
-      permanent: true
-      immediate: yes
-      state: enabled
-      zone: public
+  # - name: Update firewall to allow port UDP 4789 for incoming Docker overlay network connections
+  #   firewalld:
+  #     port: 4789/udp
+  #     permanent: true
+  #     immediate: yes
+  #     state: enabled
+  #     zone: public
 
-  - name: Update firewall to allow port TCP 6783 for incoming Docker overlay network connections
-    firewalld:
-      port: 6783/tcp
-      permanent: true
-      immediate: yes
-      state: enabled
-      zone: public
+  # - name: Update firewall to allow port TCP 6783 for incoming Docker overlay network connections
+  #   firewalld:
+  #     port: 6783/tcp
+  #     permanent: true
+  #     immediate: yes
+  #     state: enabled
+  #     zone: public
 
-  - name: Update firewall to allow port UDP 6783 for incoming Docker overlay network connections
-    firewalld:
-      port: 6783/udp
-      permanent: true
-      immediate: yes
-      state: enabled
-      zone: public
+  # - name: Update firewall to allow port UDP 6783 for incoming Docker overlay network connections
+  #   firewalld:
+  #     port: 6783/udp
+  #     permanent: true
+  #     immediate: yes
+  #     state: enabled
+  #     zone: public
 
-  - name: Update firewall to allow port TCP 7946 for incoming Docker communication among nodes
-    firewalld:
-      port: 7946/tcp
-      permanent: true
-      immediate: yes
-      state: enabled
-      zone: public
+  # - name: Update firewall to allow port TCP 7946 for incoming Docker communication among nodes
+  #   firewalld:
+  #     port: 7946/tcp
+  #     permanent: true
+  #     immediate: yes
+  #     state: enabled
+  #     zone: public
 
-  - name: Update firewall to allow port UDP 7946 for incoming Docker communication among nodes
-    firewalld:
-      port: 7946/udp
-      permanent: true
-      immediate: yes
-      state: enabled
-      zone: public
+  # - name: Update firewall to allow port UDP 7946 for incoming Docker communication among nodes
+  #   firewalld:
+  #     port: 7946/udp
+  #     permanent: true
+  #     immediate: yes
+  #     state: enabled
+  #     zone: public
 
-  - name: Update firewall to allow ports TCP 30000-32767 for incoming Docker swarm manager PublishedPort connections
-    firewalld:
-      port: 30000-32767/tcp
-      permanent: true
-      immediate: yes
-      state: enabled
-      zone: public
+  # - name: Update firewall to allow ports TCP 30000-32767 for incoming Docker swarm manager PublishedPort connections
+  #   firewalld:
+  #     port: 30000-32767/tcp
+  #     permanent: true
+  #     immediate: yes
+  #     state: enabled
+  #     zone: public
+
+
+# iptables - Modify the systems iptables
+# REF: http://docs.ansible.com/ansible/latest/iptables_module.html
+##################################################################
+
+  - name: Update iptables to allow port TCP 2375 for incoming Docker Cloud connections
+    iptables:
+      chain: INPUT
+      ctstate: NEW,ESTABLISHED,RELATED
+      protocol: tcp
+      match: tcp
+      destination_port: 2375
+      comment: Allow port TCP 2375 for incoming Docker Cloud connections
+      jump: ACCEPT
+      state: present
+    become: yes
+
+  - name: Update iptables to allow port TCP 2376 for incoming docker-machine connections
+    iptables:
+      chain: INPUT
+      ctstate: NEW,ESTABLISHED,RELATED
+      protocol: tcp
+      match: tcp
+      destination_port: 2376
+      comment: Allow port TCP 2376 for incoming docker-machine connections
+      jump: ACCEPT
+      state: present
+    become: yes
+
+  - name: Update iptables to allow port TCP 2377 for incoming Docker cluster management connections
+    iptables:
+      chain: INPUT
+      ctstate: NEW,ESTABLISHED,RELATED
+      protocol: tcp
+      match: tcp
+      destination_port: 2377
+      comment: Allow port TCP 2377 for incoming Docker cluster management connections
+      jump: ACCEPT
+      state: present
+    become: yes
+
+  - name: Update iptables to allow port TCP 4789 for incoming Docker overlay network connections
+    iptables:
+      chain: INPUT
+      ctstate: NEW,ESTABLISHED,RELATED
+      protocol: tcp
+      match: tcp
+      destination_port: 4789
+      comment: Allow port TCP 4789 for incoming Docker overlay network connections
+      jump: ACCEPT
+      state: present
+    become: yes
+
+  - name: Update iptables to allow port UDP 4789 for incoming Docker overlay network connections
+    iptables:
+      chain: INPUT
+      ctstate: NEW,ESTABLISHED,RELATED
+      protocol: udp
+      match: udp
+      destination_port: 4789
+      comment: Allow port UDP 4789 for incoming Docker overlay network connections
+      jump: ACCEPT
+      state: present
+    become: yes
+
+  - name: Update iptables to allow port TCP 6783 for incoming Docker overlay network connections
+    iptables:
+      chain: INPUT
+      ctstate: NEW,ESTABLISHED,RELATED
+      protocol: tcp
+      match: tcp
+      destination_port: 6783
+      comment: Allow port TCP 6783 for incoming Docker overlay network connections
+      jump: ACCEPT
+      state: present
+    become: yes
+
+  - name: Update iptables to allow port UDP 6783 for incoming Docker overlay network connections
+    iptables:
+      chain: INPUT
+      ctstate: NEW,ESTABLISHED,RELATED
+      protocol: udp
+      match: udp
+      destination_port: 6783
+      comment: Allow port UDP 6783 for incoming Docker overlay network connections
+      jump: ACCEPT
+      state: present
+    become: yes
+
+  - name: Update iptables to allow port TCP 7946 for incoming Docker communication among nodes
+    iptables:
+      chain: INPUT
+      ctstate: NEW,ESTABLISHED,RELATED
+      protocol: tcp
+      match: tcp
+      destination_port: 7946
+      comment: Allow port TCP 7946 for incoming Docker communication among nodes
+      jump: ACCEPT
+      state: present
+    become: yes
+
+  - name: Update iptables to allow port UDP 7946 for incoming Docker communication among nodes
+    iptables:
+      chain: INPUT
+      ctstate: NEW,ESTABLISHED,RELATED
+      protocol: udp
+      match: udp
+      destination_port: 7946
+      comment: Allow port UDP 7946 for incoming Docker communication among nodes
+      jump: ACCEPT
+      state: present
+    become: yes
+
+  - name: Update iptables to allow ports TCP 30000-32767 for incoming Docker swarm manager published port connections
+    iptables:
+      chain: INPUT
+      ctstate: NEW,ESTABLISHED,RELATED
+      protocol: udp
+      match: udp
+      destination_port: 30000:32767
+      comment: Allow ports TCP 30000-32767 for incoming Docker swarm manager published port connections
+      jump: ACCEPT
+      state: present
+    become: yes
+
+
+# Use the copy module to copy various files into place
+# REF: http://docs.ansible.com/ansible/copy_module.html
+#######################################################
+
+# /etc/docker/daemon.json
+  - name: Copy Docker configuration file daemon.json from Ansible files/Docker/etc_docker_daemon.json to Docker remote /etc/docker/daemon.json
+    copy:
+      src=files/Docker/etc_docker_daemon.json
+      dest=/etc/docker/daemon.json
+      owner=root
+      group=root
+      mode=0444
 
 
 # Enable and start docker
