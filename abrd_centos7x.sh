@@ -43,6 +43,8 @@ pip install --upgrade ansible
 # Set specific versions to avoid annoying warning messages
 pip uninstall chardet -y
 pip uninstall urllib3 -y
+pip uninstall chardet -y
+pip uninstall urllib3 -y
 pip install "chardet<3.1.0"
 pip install "urllib3<=1.22"
 
