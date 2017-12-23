@@ -42,11 +42,12 @@ pip install --upgrade ansible
 
 # Create default sample examples starting kit
 mkdir -p /etc/ansible
-mkdir -p /etc/ansible/files/
-mkdir -p /etc/ansible/group_vars/
-mkdir -p /etc/ansible/host_vars/
-mkdir -p /etc/ansible/templates/
-mkdir -p /etc/ansible/vault/
+mkdir -p /etc/ansible/files
+mkdir -p /etc/ansible/files/Docker
+mkdir -p /etc/ansible/group_vars
+mkdir -p /etc/ansible/host_vars
+mkdir -p /etc/ansible/templates
+mkdir -p /etc/ansible/vault
 echo "ChangeMeToWhateverYouWantForYourAnsibleVaultEncryptionPassword" > /etc/ansible/vault/vault_pass.txt
 echo "hosts" > /etc/ansible/.gitignore
 echo "vault" >> /etc/ansible/.gitignore
@@ -68,16 +69,11 @@ wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_P
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Install-Docker-playbook.yml
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/Docker_Swarm-Join-Manager-playbook.yml
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/Docker_Swarm-Join-Worker-playbook.yml
-wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Install-Zenoss526-playbook.yml
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Convert-to-IPTables-playbook.yml
 mkdir -p /etc/ansible/files/Docker
 cd /etc/ansible/files/Docker
-wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/files/Docker/etc_docker_daemon.json.ZENOSS
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/files/Docker/vg_docker-lv_docker_thinpool.profile
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/files/Docker/etc_docker_daemon.json
-mkdir -p /etc/ansible/files/dnsmasq
-cd /etc/ansible/files/dnsmasq
-wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/files/dnsmasq/etc_dnsmasq.conf.ZENOSS
 cd /etc/ansible
 
 # Create a default starting /etc/ansible/ansible.cfg

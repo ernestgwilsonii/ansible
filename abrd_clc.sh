@@ -45,11 +45,12 @@ pip install clc-ansible-module
 
 # Create default sample examples starting kit
 mkdir -p /etc/ansible
-mkdir -p /etc/ansible/files/
-mkdir -p /etc/ansible/group_vars/
-mkdir -p /etc/ansible/host_vars/
-mkdir -p /etc/ansible/templates/
-mkdir -p /etc/ansible/vault/
+mkdir -p /etc/ansible/files
+mkdir -p /etc/ansible/files/Docker
+mkdir -p /etc/ansible/group_vars
+mkdir -p /etc/ansible/host_vars
+mkdir -p /etc/ansible/templates
+mkdir -p /etc/ansible/vault
 echo "ChangeMeToWhateverYouWantForYourAnsibleVaultEncryptionPassword" > /etc/ansible/vault/vault_pass.txt
 echo "hosts" > /etc/ansible/.gitignore
 echo "vault" >> /etc/ansible/.gitignore
@@ -57,6 +58,9 @@ echo "ansible_ssh_user: \"root\"" > /etc/ansible/group_vars/CentOS7.yml
 echo "ansible_ssh_pass: \"YourCentOS7ServersGrouprootPasswordGoesHere\"" >> /etc/ansible/group_vars/CentOS7.yml
 echo "ansible_ssh_port: \"22\"" >> /etc/ansible/group_vars/CentOS7.yml
 echo "ansible_connection: \"ssh\"" >> /etc/ansible/group_vars/CentOS7.yml
+cd /etc/ansible/files/Docker
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/files/Docker/etc_docker_daemon.json
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/files/Docker/vg_docker-lv_docker_thinpool.profile
 cd /etc/ansible
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Apply-OS-Updates-playbook.yml
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Install-Basic-Utilities-playbook.yml
