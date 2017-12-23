@@ -114,11 +114,11 @@
 # REF: http://docs.ansible.com/ansible/service_module.html
 ##########################################################
 
-  - name: Ensure the firewalld service is enabled and re-started before changing any rules
-    service:
-      name: firewalld
-      enabled: yes
-      state: restarted
+  # - name: Ensure the firewalld service is enabled and re-started before changing any rules
+  #   service:
+  #     name: firewalld
+  #     enabled: yes
+  #     state: restarted
 
 
 # Update the firewalld configuration
@@ -267,3 +267,11 @@
   - name: Use pip to install docker-py
     pip:
       name: docker-py
+
+# Execute command(s)
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: /usr/libexec/iptables/iptables.init save
+    command: /usr/libexec/iptables/iptables.init save
+    #cat /etc/sysconfig/iptables

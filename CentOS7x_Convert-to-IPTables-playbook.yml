@@ -2,7 +2,7 @@
 
 ################################################################################
 #  description: Installs Docker on CentOS7x
-#  usage: ansible-playbook CentOS7x_Install-Docker-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  usage: ansible-playbook CentOS7x_Convert-to-IPTables-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
@@ -59,7 +59,23 @@
     service:
       name: iptables
       enabled: yes
-      state: started
+      #state: started
+
+
+# shell - Execute commands in nodes
+# REF: http://docs.ansible.com/ansible/latest/shell_module.html
+###############################################################
+
+  - name: Reboot
+    shell: sleep 2 && /usr/sbin/shutdown -r now "Rebooting for Ansible"
+    async: 1
+    poll: 0
+    ignore_errors: true
+
+  - name: Waiting for reboot to complete
+    wait_for_connection:
+      delay: 30
+      timeout: 300
 
 
 # Execute command(s)

@@ -102,5 +102,26 @@
   - name: Update grub so it boots the new kernel on next reboot
     command: grub2-mkconfig -o /boot/grub2/grub.cfg
 
+
+# shell - Execute commands in nodes
+# REF: http://docs.ansible.com/ansible/latest/shell_module.html
+###############################################################
+
+  - name: Reboot
+    shell: sleep 2 && /usr/sbin/shutdown -r now "Rebooting for Ansible"
+    async: 1
+    poll: 0
+    ignore_errors: true
+
+  - name: Waiting for reboot to complete
+    wait_for_connection:
+      delay: 30
+      timeout: 300
+
+
+# Execute command(s)
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
   - name: Remove old kernels from the OS keeping only the current and last most recent one
     command: /usr/bin/package-cleanup --oldkernels --count=1 -y
