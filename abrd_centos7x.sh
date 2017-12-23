@@ -16,8 +16,8 @@ yum -y upgrade
 
 # Enable EPEL Repository
 yum -y install wget
-wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-10.noarch.rpm -O /tmp/epel-release-7-10.noarch.rpm
-yum -y localinstall /tmp/epel-release-7-10.noarch.rpm
+wget http://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm -O /tmp/epel-release-7-11.noarch.rpm
+yum -y localinstall /tmp/epel-release-7-11.noarch.rpm
 
 # Install a compiler and some pre-requisites into the OS
 yum -y install python-setuptools gcc libffi-devel python-devel openssl-devel krb5-devel krb5-libs krb5-workstation git sshpass tree telnet bind-utils
