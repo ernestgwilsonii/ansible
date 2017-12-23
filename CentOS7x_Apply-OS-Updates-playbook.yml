@@ -43,5 +43,5 @@
 # REF: http://docs.ansible.com/ansible/command_module.html
 ##########################################################
 
-  - name: Remove old kernels from the OS keeping only the last most recent two
-    command: /usr/bin/package-cleanup --oldkernels --count=2 -y
+  - name: Remove old kernels from the OS keeping only the current and last most recent one
+    command: /usr/bin/package-cleanup --oldkernels --count=1 -y

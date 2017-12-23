@@ -1,0 +1,114 @@
+---
+
+################################################################################
+#  description: Installs/updates OS Kernel to 4x main line on CentOS7x
+#  usage: ansible-playbook CentOS7x_Update-OS-to-Kernel4x-playbook.yml --extra-vars 'HostOrGroup=YourServerOrGroupNameGoesHere'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Update OS Kernel to 4x main line on CentOS7x
+  hosts: "{{ HostOrGroup|default ('FATAL ERROR --> HostOrGroup NOT SET! You must specify either a Host or a Group name!') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# # Execute command(s)
+# # REF: http://docs.ansible.com/ansible/command_module.html
+# ##########################################################
+
+#   - name: Add ELRepo GPG key
+#     command: rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+
+
+# rpm_key - Adds or removes a gpg key from the rpm db
+# REF: http://docs.ansible.com/ansible/latest/rpm_key_module.html
+#################################################################
+
+  - name: Add ELRepo GPG key
+    rpm_key:
+      state: present
+      key: https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+
+
+# Install yum packages
+# REF: http://docs.ansible.com/ansible/yum_module.html
+######################################################
+
+  - name: Install wget if that package is not already present or update existing if needed
+    yum:
+      name: wget
+      state: latest
+
+  - name: Add ELRepo yum repository
+    yum:
+      name: http://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
+      state: present
+
+  - name: Install yum-plugin-fastestmirror if that package is not already present or update existing if needed
+    yum:
+      name: yum-plugin-fastestmirror
+      state: latest
+
+  - name: Install yum-utils if that package is not already present or update existing if needed
+    yum:
+      name: yum-utils
+      state: latest
+
+
+# Tweak settings in INI files
+# REF: http://docs.ansible.com/ansible/ini_file_module.html
+###########################################################
+
+  - name: Set enabled=1 for yum repository elrepo-kernel in /etc/yum.repos.d/elrepo.repo
+    ini_file:
+      dest: /etc/yum.repos.d/elrepo.repo
+      section: elrepo-kernel
+      option: enabled
+      value: '1'
+      state: present
+
+
+# Install yum packages
+# REF: http://docs.ansible.com/ansible/yum_module.html
+######################################################
+
+  - name: Update the kernel to 4x main line
+    yum:
+      name: kernel-ml
+      enablerepo: elrepo-kernel
+      state: latest
+
+  - name: Update additional items in case the new kernel needs them!
+    yum:
+      name: '*'
+      state: latest
+
+
+# Update various configuration files
+# REF: http://docs.ansible.com/ansible/lineinfile_module.html
+#############################################################
+
+  - name: Set GRUB_DEFAULT=0 in /etc/default/grub so it boots the new kernel at the top of the list
+    lineinfile:
+      dest: /etc/default/grub
+      state: present
+      regexp: '^GRUB_DEFAULT\='
+      line: 'GRUB_DEFAULT=0'
+
+
+# Execute command(s)
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: Update grub so it boots the new kernel on next reboot
+    command: grub2-mkconfig -o /boot/grub2/grub.cfg
+
+  - name: Remove old kernels from the OS keeping only the current and last most recent one
+    command: /usr/bin/package-cleanup --oldkernels --count=1 -y

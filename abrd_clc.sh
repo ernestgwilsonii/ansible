@@ -43,6 +43,12 @@ pip install clc-sdk --upgrade
 # See: https://github.com/CenturyLinkCloud/clc-ansible-module
 pip install clc-ansible-module
 
+# Set specific versions to avoid annoying warning messages
+pip uninstall chardet -y
+pip uninstall urllib3 -y
+pip install "chardet<3.1.0"
+pip install "urllib3<=1.22"
+
 # Create default sample examples starting kit
 mkdir -p /etc/ansible
 mkdir -p /etc/ansible/files
