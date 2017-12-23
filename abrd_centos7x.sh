@@ -76,6 +76,7 @@ wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_I
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/Docker_Swarm-Join-Manager-playbook.yml
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/Docker_Swarm-Join-Worker-playbook.yml
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Convert-to-IPTables-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Update-OS-to-Kernel4x-playbook.yml
 mkdir -p /etc/ansible/files/Docker
 cd /etc/ansible/files/Docker
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/files/Docker/vg_docker-lv_docker_thinpool.profile

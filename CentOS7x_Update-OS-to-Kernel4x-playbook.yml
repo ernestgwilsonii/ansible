@@ -19,14 +19,6 @@
   tasks:
 
 
-# # Execute command(s)
-# # REF: http://docs.ansible.com/ansible/command_module.html
-# ##########################################################
-
-#   - name: Add ELRepo GPG key
-#     command: rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
-
-
 # rpm_key - Adds or removes a gpg key from the rpm db
 # REF: http://docs.ansible.com/ansible/latest/rpm_key_module.html
 #################################################################
