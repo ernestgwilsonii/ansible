@@ -27,7 +27,7 @@
     service:
       name: firewalld
       enabled: no
-      state: stopped
+      #state: stopped
 
 
 # Install yum packages
@@ -59,7 +59,7 @@
     service:
       name: iptables
       enabled: yes
-      state: restarted
+      state: started
 
 
 # Execute command(s)

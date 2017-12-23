@@ -34,13 +34,13 @@
 # REF: http://docs.ansible.com/ansible/command_module.html
 ##########################################################
 
-# Create LVM physical volume on {{BlkDev|default ('/dev/sdd')}}
-  - name: "pvcreate {{BlkDev|default ('/dev/sdd')}}"
-    command: "/usr/sbin/pvcreate {{BlkDev|default ('/dev/sdd')}}"
+# Create LVM physical volume on {{BlkDev|default ('/dev/sdb')}}
+  - name: "pvcreate {{BlkDev|default ('/dev/sdb')}}"
+    command: "/usr/sbin/pvcreate {{BlkDev|default ('/dev/sdb')}}"
 
 # Create LVM volume group vg_docker
-  - name: "vgcreate vg_docker {{BlkDev|default ('/dev/sdd')}}"
-    command: "/usr/sbin/vgcreate vg_docker {{BlkDev|default ('/dev/sdd')}}"
+  - name: "vgcreate vg_docker {{BlkDev|default ('/dev/sdb')}}"
+    command: "/usr/sbin/vgcreate vg_docker {{BlkDev|default ('/dev/sdb')}}"
        
 
 # lvol - Configure LVM logical volumes
@@ -48,11 +48,11 @@
 #######################################################
 
 # lvcreate --thinpool vg_docker/lv_docker_thinpool -n lv_docker_thinpool vg_docker -l 85%VG
-  - name: Create thin logical volume vg_docker/lv_docker_thinpool on /dev/sdd
+  - name: Create thin logical volume vg_docker/lv_docker_thinpool on /dev/sdb
     lvol:
       vg: vg_docker
       lv: lv_docker_thinpool
-      pvs: "{{BlkDev|default ('/dev/sdd')}}"
+      pvs: "{{BlkDev|default ('/dev/sdb')}}"
       size: 85%PVS
       opts: --thinpool vg_docker/lv_docker_thinpool
 
