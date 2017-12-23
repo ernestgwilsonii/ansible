@@ -63,8 +63,12 @@ echo "ansible_ssh_user: \"root\"" > /etc/ansible/group_vars/CentOS7.yml
 echo "ansible_ssh_pass: \"M1n1m@l!\"" >> /etc/ansible/group_vars/CentOS7.yml
 echo "ansible_ssh_port: \"22\"" >> /etc/ansible/group_vars/CentOS7.yml
 echo "ansible_connection: \"ssh\"" >> /etc/ansible/group_vars/CentOS7.yml
+cp /etc/ansible/group_vars/CentOS7.yml /etc/ansible/group_vars/Swarm1.yml
 echo "[CentOS7]" >> /etc/ansible/hosts
 echo "localhost ansible_host=127.0.0.1" >> /etc/ansible/hosts
+echo "" >> /etc/ansible/hosts
+echo "[Swarm1]" >> /etc/ansible/hosts
+echo "" >> /etc/ansible/hosts
 cd /etc/ansible
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Apply-OS-Updates-playbook.yml
 wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/CentOS7x_Enable-EPEL-Repository-playbook.yml
