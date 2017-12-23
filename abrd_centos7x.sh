@@ -6,7 +6,7 @@
 # CentOS7x Usage:                                                                                     #
 #   curl https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/abrd_centos7x.sh | bash -   #
 #                                                                                                     #
-#                                                                ErnestGWilsonII@gmail.com 2017-08-12 #
+#                                                                ErnestGWilsonII@gmail.com 2017-12-23 #
 #                                                                  https://github.com/ernestgwilsonii #
 #                                                         https://www.linkedin.com/in/ernestgwilsonii #
 #######################################################################################################
