@@ -1,0 +1,66 @@
+---
+
+################################################################################
+#  description: Spin up a visualizer and add iptables rules to the swarm
+#  usage: ansible-playbook Docker-Compose_Swarm_Visualizer-playbook.yml --extra-vars 'HostOrGroup=Swarm1'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Add iptables firewall rules to the swarm
+  hosts: "{{ HostOrGroup|default ('Swarm1') }}"
+  serial: "100%"
+  gather_facts: False
+  tasks:
+
+
+# iptables - Modify the systems iptables
+# REF: http://docs.ansible.com/ansible/latest/iptables_module.html
+##################################################################
+
+  - name: Update iptables to allow port TCP 8080 for incoming Docker Visualizer connections
+    iptables:
+      chain: INPUT
+      ctstate: NEW,ESTABLISHED,RELATED
+      protocol: tcp
+      match: tcp
+      destination_port: 8080
+      comment: Allow port TCP 8080 for incoming Docker Visualizer connections
+      jump: ACCEPT
+      state: present
+    become: yes
+
+
+# Execute command(s)
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: /usr/libexec/iptables/iptables.init save
+    command: /usr/libexec/iptables/iptables.init save
+    # cat /etc/sysconfig/iptables
+
+
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+# - name: Switch to localhost (assumes this is a Docker Swarm Manager) to perform a Docker Stack Deploy
+#   hosts: localhost
+#   gather_facts: False
+#   connection: local
+#   tasks:
+
+# Execute command(s)
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  # - name: docker stack deploy -c docker-compose-visualizer.yml visualizer
+  #   command: cd /etc/ansible/docker-compose/visualizer && docker stack deploy -c docker-compose-visualizer.yml visualizer
+  #   ignore_errors: true
