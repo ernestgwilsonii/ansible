@@ -360,6 +360,24 @@
     become: yes
 
 
+# Execute command(s)
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: iptables -D INPUT -j REJECT --reject-with icmp-host-prohibited
+    command: iptables -D INPUT -j REJECT --reject-with icmp-host-prohibited
+    ignore_errors: true
+
+  - name: iptables -D FORWARD -j REJECT --reject-with icmp-host-prohibited
+    command: iptables -D FORWARD -j REJECT --reject-with icmp-host-prohibited
+    ignore_errors: true
+
+  - name: /usr/libexec/iptables/iptables.init save
+    command: /usr/libexec/iptables/iptables.init save
+    # cat /etc/sysconfig/iptables
+
+
+
 # Use the copy module to copy various files into place
 # REF: http://docs.ansible.com/ansible/copy_module.html
 #######################################################
@@ -435,11 +453,3 @@
   - name: Use pip to install docker-py
     pip:
       name: docker-py
-
-# Execute command(s)
-# REF: http://docs.ansible.com/ansible/command_module.html
-##########################################################
-
-  - name: /usr/libexec/iptables/iptables.init save
-    command: /usr/libexec/iptables/iptables.init save
-    #cat /etc/sysconfig/iptables
