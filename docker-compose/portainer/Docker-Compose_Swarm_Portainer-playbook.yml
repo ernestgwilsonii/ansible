@@ -1,8 +1,8 @@
 ---
 
 ################################################################################
-#  description: Spin up a visualizer and add iptables rules to the swarm
-#  usage: ansible-playbook Docker-Compose_Swarm_Visualizer-playbook.yml --extra-vars 'HostOrGroup=Swarm1'
+#  description: Add iptables rules to the swarm for Portainer
+#  usage: ansible-playbook Docker-Compose_Swarm_Portainer-playbook.yml --extra-vars 'HostOrGroup=Swarm1'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
@@ -23,14 +23,14 @@
 # REF: http://docs.ansible.com/ansible/latest/iptables_module.html
 ##################################################################
 
-  - name: Update iptables to allow port TCP 8080 for incoming Docker Visualizer connections
+  - name: Update iptables to allow port TCP 9000 for incoming Docker Portainer connections
     iptables:
       chain: INPUT
       ctstate: NEW,ESTABLISHED,RELATED
       protocol: tcp
       match: tcp
-      destination_port: 8080
-      comment: Allow port TCP 8080 for incoming Docker Visualizer connections
+      destination_port: 9000
+      comment: Allow port TCP 9000 for incoming Docker Portainer connections
       jump: ACCEPT
       state: present
     become: yes

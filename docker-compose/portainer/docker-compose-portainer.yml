@@ -1,0 +1,43 @@
+version: '3.4'
+
+services:
+
+  portainer-server:
+    image: portainer/portainer
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - type: bind
+        source: /opt/portainer
+        target: /data
+    networks:
+      - portainer-net1
+    deploy:
+      placement:
+        constraints:
+          - node.labels.swarm.node == 1
+          - node.role == manager
+      labels:
+        local.description: "Portainer"
+
+  nginx-portainer:
+    image: nginx:1.13.7
+    volumes:
+      - type: bind
+        source: /opt/nginx-portainer
+        target: /etc/nginx
+    ports:
+      - mode: host
+        target: 443
+        published: 443
+    command: nginx -g 'daemon off;'
+    networks:
+      - portainer-net1
+    deploy:
+      labels:
+        local.description: "NGINGX for Portainer"
+      placement:
+        constraints:
+          - node.labels.swarm.node == 1
+
+networks:
+  portainer-net1:
