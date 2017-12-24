@@ -84,3 +84,4 @@
 
   - name: /usr/libexec/iptables/iptables.init save
     command: /usr/libexec/iptables/iptables.init save
+    # cat /etc/sysconfig/iptables
