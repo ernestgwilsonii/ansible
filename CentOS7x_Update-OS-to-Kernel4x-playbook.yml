@@ -125,3 +125,38 @@
 
   - name: Remove old kernels from the OS keeping only the current and last most recent one
     command: /usr/bin/package-cleanup --oldkernels --count=1 -y
+
+
+# Update various configuration files
+# REF: http://docs.ansible.com/ansible/lineinfile_module.html
+#############################################################
+
+  - name: Make sure /etc/yum.conf has exclude=kernel-3*
+    lineinfile:
+      dest=/etc/yum.conf
+      state=present
+      line='exclude=kernel-3*'
+
+  - name: Make sure /etc/yum.conf has exclude=kernel-headers-3*
+    lineinfile:
+      dest=/etc/yum.conf
+      state=present
+      line='exclude=kernel-headers-3*'
+
+  - name: Make sure /etc/yum.conf has exclude=kernel-tools-3*
+    lineinfile:
+      dest=/etc/yum.conf
+      state=present
+      line='exclude=kernel-tools-3*'
+
+  - name: Make sure /etc/yum.conf has exclude=kernel-tools-libs-3*
+    lineinfile:
+      dest=/etc/yum.conf
+      state=present
+      line='exclude=kernel-tools-libs-3*'
+
+  - name: Make sure /etc/yum.conf has installonly_limit=3
+    lineinfile:
+      dest=/etc/yum.conf
+      state=present
+      line='installonly_limit=3'

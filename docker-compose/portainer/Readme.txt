@@ -4,8 +4,8 @@ ansible-playbook Docker-Compose_Swarm_Portainer-playbook.yml --extra-vars 'HostO
 # Create the bind mount directories and copy files to the correct node based on constraints in the docker-compose!
 mkdir -p /opt/nginx-portainer
 cp nginx.conf /opt/nginx-portainer/
-cp pims.crt /opt/nginx-portainer/
-cp pims.key /opt/nginx-portainer/
+cp my.crt /opt/nginx-portainer/
+cp my.key /opt/nginx-portainer/
 chown -R 101:101 /opt/nginx-portainer
 mkdir -p /opt/portainer
 
