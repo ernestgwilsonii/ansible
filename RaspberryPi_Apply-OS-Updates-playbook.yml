@@ -1,7 +1,7 @@
 ---
 
 ################################################################################
-#  description: Installs/applies OS updates and patches on RaspberryPi
+#  description: Installs/applies OS updates and patches on Raspbian Raspberry Pi
 #  usage: ansible-playbook RaspberryPi_Apply-OS-Updates-playbook.yml --extra-vars 'HostOrGroup=raspberrypi'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
@@ -12,7 +12,7 @@
 # REF: http://docs.ansible.com/ansible/playbooks.html
 #####################################################
 
-- name: Apply OS updates and patches on DietPi
+- name: Apply OS updates and patches on Raspbian Raspberry Pi
   hosts: "{{ HostOrGroup|default ('localhost') }}"
   serial: "100%"
   gather_facts: False
