@@ -1,0 +1,441 @@
+---
+
+################################################################################
+#  description: Installs Docker on Raspbian Raspberry Pi
+#  usage: ansible-playbook RaspberryPi_Raspbian_Install_Docker-playbook.yml --extra-vars 'HostOrGroup=raspberrypi'
+#  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
+#  license: MIT
+################################################################################
+
+
+# Ansible Playbook options
+# REF: http://docs.ansible.com/ansible/playbooks.html
+#####################################################
+
+- name: Install Docker on Raspbian Raspberry Pi
+  hosts: "{{ HostOrGroup|default ('localhost') }}"
+  serial: "100%"
+  gather_facts: False
+  become: true
+  become_user: root 
+  tasks:
+
+
+# apt - Manages apt-packages
+# REF: http://docs.ansible.com/ansible/apt_module.html
+######################################################
+
+  - name: Update / upgrade all packages
+    apt:
+      update_cache: yes
+      upgrade: full
+      autoremove: yes
+
+
+# Execute command(s)
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
+
+  - name: Download Raspberry Pi Docker install script
+    command: sudo curl -fsSL get.docker.com -o /tmp/get-docker.sh
+
+  - name: Executue Raspberry Pi Docker install script
+    command: sudo sh /tmp/get-docker.sh
+
+#   - name: Set sysctl -w net.bridge.bridge-nf-call-iptables=1
+#     command: /usr/sbin/sysctl -w net.bridge.bridge-nf-call-iptables=1
+
+#   - name: Set sysctl -w net.bridge.bridge-nf-call-ip6tables=1
+#     command: /usr/sbin/sysctl -w net.bridge.bridge-nf-call-ip6tables=1
+
+
+# # Update various configuration files
+# # REF: http://docs.ansible.com/ansible/lineinfile_module.html
+# #############################################################
+
+#   - name: Populate value in /etc/sysctl.conf with net.ipv4.ip_forward=1
+#     lineinfile:
+#       dest: /etc/sysctl.conf
+#       state: present
+#       create: yes
+#       backup: yes
+#       owner: root
+#       group: root
+#       mode: 0644
+#       line: 'net.ipv4.ip_forward=1'
+
+#   - name: Populate value in /etc/sysctl.conf with vm.max_map_count=262144
+#     lineinfile:
+#       dest: /etc/sysctl.conf
+#       state: present
+#       create: yes
+#       backup: yes
+#       owner: root
+#       group: root
+#       mode: 0644
+#       line: 'vm.max_map_count=262144'
+
+#   - name: Populate value in /etc/sysctl.conf with net.bridge.bridge-nf-call-iptables=1
+#     lineinfile:
+#       dest: /etc/sysctl.conf
+#       state: present
+#       create: yes
+#       backup: yes
+#       owner: root
+#       group: root
+#       mode: 0644
+#       line: 'net.bridge.bridge-nf-call-iptables=1'
+
+#   - name: Populate value in /etc/sysctl.conf with net.bridge.bridge-nf-call-ip6tables=1
+#     lineinfile:
+#       dest: /etc/sysctl.conf
+#       state: present
+#       create: yes
+#       backup: yes
+#       owner: root
+#       group: root
+#       mode: 0644
+#       line: 'net.bridge.bridge-nf-call-ip6tables=1'
+
+
+# # Install yum packages
+# # REF: http://docs.ansible.com/ansible/yum_module.html
+# ######################################################
+
+#   - name: Install bind-utils
+#     yum:
+#       name: bind-utils
+#       state: latest
+
+#   - name: Install bridge-utils
+#     yum:
+#       name: bridge-utils
+#       state: latest
+#       # brctl show
+
+# # https://github.com/docker/docker/releases
+#   - name: Install docker-ce
+#     yum:
+#       name: docker-ce
+#       state: latest
+
+#   - name: Install python-pip
+#     yum:
+#       name: python-pip
+#       state: latest
+
+
+# # Restart firewalld to make sure it is running OK before changing any rules
+# # REF: http://docs.ansible.com/ansible/service_module.html
+# ##########################################################
+
+#   # - name: Ensure the firewalld service is enabled and re-started before changing any rules
+#   #   service:
+#   #     name: firewalld
+#   #     enabled: yes
+#   #     state: restarted
+
+
+# # Update the firewalld configuration
+# # REF: http://docs.ansible.com/ansible/firewalld_module.html
+# ############################################################
+
+#   # - name: Update firewall to allow port TCP 2375 for incoming Docker Cloud connections
+#   #   firewalld:
+#   #     port: 2375/tcp
+#   #     permanent: true
+#   #     immediate: yes
+#   #     state: enabled
+#   #     zone: public
+
+#   # - name: Update firewall to allow port TCP 2376 for incoming docker-machine connections
+#   #   firewalld:
+#   #     port: 2376/tcp
+#   #     permanent: true
+#   #     immediate: yes
+#   #     state: enabled
+#   #     zone: public
+
+#   # - name: Update firewall to allow port TCP 2377 for incoming Docker cluster management connections
+#   #   firewalld:
+#   #     port: 2377/tcp
+#   #     permanent: true
+#   #     immediate: yes
+#   #     state: enabled
+#   #     zone: public
+
+#   # - name: Update firewall to allow port TCP 4789 for incoming Docker overlay network connections
+#   #   firewalld:
+#   #     port: 4789/tcp
+#   #     permanent: true
+#   #     immediate: yes
+#   #     state: enabled
+#   #     zone: public
+
+#   # - name: Update firewall to allow port UDP 4789 for incoming Docker overlay network connections
+#   #   firewalld:
+#   #     port: 4789/udp
+#   #     permanent: true
+#   #     immediate: yes
+#   #     state: enabled
+#   #     zone: public
+
+#   # - name: Update firewall to allow port TCP 6783 for incoming Docker overlay network connections
+#   #   firewalld:
+#   #     port: 6783/tcp
+#   #     permanent: true
+#   #     immediate: yes
+#   #     state: enabled
+#   #     zone: public
+
+#   # - name: Update firewall to allow port UDP 6783 for incoming Docker overlay network connections
+#   #   firewalld:
+#   #     port: 6783/udp
+#   #     permanent: true
+#   #     immediate: yes
+#   #     state: enabled
+#   #     zone: public
+
+#   # - name: Update firewall to allow port TCP 7946 for incoming Docker communication among nodes
+#   #   firewalld:
+#   #     port: 7946/tcp
+#   #     permanent: true
+#   #     immediate: yes
+#   #     state: enabled
+#   #     zone: public
+
+#   # - name: Update firewall to allow port UDP 7946 for incoming Docker communication among nodes
+#   #   firewalld:
+#   #     port: 7946/udp
+#   #     permanent: true
+#   #     immediate: yes
+#   #     state: enabled
+#   #     zone: public
+
+#   # - name: Update firewall to allow ports TCP 30000-32767 for incoming Docker swarm manager PublishedPort connections
+#   #   firewalld:
+#   #     port: 30000-32767/tcp
+#   #     permanent: true
+#   #     immediate: yes
+#   #     state: enabled
+#   #     zone: public
+
+
+# # iptables - Modify the systems iptables
+# # REF: http://docs.ansible.com/ansible/latest/iptables_module.html
+# ##################################################################
+
+#   - name: Update iptables to allow port TCP 2375 for incoming Docker Cloud connections
+#     iptables:
+#       chain: INPUT
+#       ctstate: NEW,ESTABLISHED,RELATED
+#       protocol: tcp
+#       match: tcp
+#       destination_port: 2375
+#       comment: Allow port TCP 2375 for incoming Docker Cloud connections
+#       jump: ACCEPT
+#       state: present
+#     become: yes
+
+#   - name: Update iptables to allow port TCP 2376 for incoming docker-machine connections
+#     iptables:
+#       chain: INPUT
+#       ctstate: NEW,ESTABLISHED,RELATED
+#       protocol: tcp
+#       match: tcp
+#       destination_port: 2376
+#       comment: Allow port TCP 2376 for incoming docker-machine connections
+#       jump: ACCEPT
+#       state: present
+#     become: yes
+
+#   - name: Update iptables to allow port TCP 2377 for incoming Docker cluster management connections
+#     iptables:
+#       chain: INPUT
+#       ctstate: NEW,ESTABLISHED,RELATED
+#       protocol: tcp
+#       match: tcp
+#       destination_port: 2377
+#       comment: Allow port TCP 2377 for incoming Docker cluster management connections
+#       jump: ACCEPT
+#       state: present
+#     become: yes
+
+#   - name: Update iptables to allow port TCP 4789 for incoming Docker overlay network connections
+#     iptables:
+#       chain: INPUT
+#       ctstate: NEW,ESTABLISHED,RELATED
+#       protocol: tcp
+#       match: tcp
+#       destination_port: 4789
+#       comment: Allow port TCP 4789 for incoming Docker overlay network connections
+#       jump: ACCEPT
+#       state: present
+#     become: yes
+
+#   - name: Update iptables to allow port UDP 4789 for incoming Docker overlay network connections
+#     iptables:
+#       chain: INPUT
+#       ctstate: NEW,ESTABLISHED,RELATED
+#       protocol: udp
+#       match: udp
+#       destination_port: 4789
+#       comment: Allow port UDP 4789 for incoming Docker overlay network connections
+#       jump: ACCEPT
+#       state: present
+#     become: yes
+
+#   - name: Update iptables to allow port TCP 6783 for incoming Docker overlay network connections
+#     iptables:
+#       chain: INPUT
+#       ctstate: NEW,ESTABLISHED,RELATED
+#       protocol: tcp
+#       match: tcp
+#       destination_port: 6783
+#       comment: Allow port TCP 6783 for incoming Docker overlay network connections
+#       jump: ACCEPT
+#       state: present
+#     become: yes
+
+#   - name: Update iptables to allow port UDP 6783 for incoming Docker overlay network connections
+#     iptables:
+#       chain: INPUT
+#       ctstate: NEW,ESTABLISHED,RELATED
+#       protocol: udp
+#       match: udp
+#       destination_port: 6783
+#       comment: Allow port UDP 6783 for incoming Docker overlay network connections
+#       jump: ACCEPT
+#       state: present
+#     become: yes
+
+#   - name: Update iptables to allow port TCP 7946 for incoming Docker communication among nodes
+#     iptables:
+#       chain: INPUT
+#       ctstate: NEW,ESTABLISHED,RELATED
+#       protocol: tcp
+#       match: tcp
+#       destination_port: 7946
+#       comment: Allow port TCP 7946 for incoming Docker communication among nodes
+#       jump: ACCEPT
+#       state: present
+#     become: yes
+
+#   - name: Update iptables to allow port UDP 7946 for incoming Docker communication among nodes
+#     iptables:
+#       chain: INPUT
+#       ctstate: NEW,ESTABLISHED,RELATED
+#       protocol: udp
+#       match: udp
+#       destination_port: 7946
+#       comment: Allow port UDP 7946 for incoming Docker communication among nodes
+#       jump: ACCEPT
+#       state: present
+#     become: yes
+
+#   - name: Update iptables to allow ports TCP 30000-32767 for incoming Docker swarm manager published port connections
+#     iptables:
+#       chain: INPUT
+#       ctstate: NEW,ESTABLISHED,RELATED
+#       protocol: udp
+#       match: udp
+#       destination_port: 30000:32767
+#       comment: Allow ports TCP 30000-32767 for incoming Docker swarm manager published port connections
+#       jump: ACCEPT
+#       state: present
+#     become: yes
+
+
+# # Execute command(s)
+# # REF: http://docs.ansible.com/ansible/command_module.html
+# ##########################################################
+
+#   - name: iptables -D INPUT -j REJECT --reject-with icmp-host-prohibited
+#     command: iptables -D INPUT -j REJECT --reject-with icmp-host-prohibited
+#     ignore_errors: true
+
+#   - name: iptables -D FORWARD -j REJECT --reject-with icmp-host-prohibited
+#     command: iptables -D FORWARD -j REJECT --reject-with icmp-host-prohibited
+#     ignore_errors: true
+
+#   - name: /usr/libexec/iptables/iptables.init save
+#     command: /usr/libexec/iptables/iptables.init save
+#     # cat /etc/sysconfig/iptables
+
+
+
+# # Use the copy module to copy various files into place
+# # REF: http://docs.ansible.com/ansible/copy_module.html
+# #######################################################
+
+# # /etc/docker/daemon.json
+#   - name: Copy Docker configuration file daemon.json from Ansible files/Docker/etc_docker_daemon.json to Docker remote /etc/docker/daemon.json
+#     copy:
+#       src=files/Docker/etc_docker_daemon.json
+#       dest=/etc/docker/daemon.json
+#       owner=root
+#       group=root
+#       mode=0444
+
+
+# # Enable and start docker
+# # REF: http://docs.ansible.com/ansible/service_module.html
+# ##########################################################
+
+#   - name: Enable and start (or restart) the docker service
+#     service:
+#       name: docker
+#       enabled: yes
+#       state: restarted
+#       # Note: Verify docker via SSH command line:
+#       # systemctl status docker
+#       # docker run hello-world
+#       #
+#       # More advanced verification:
+#       # docker run -it ubuntu bash
+#       # cat /etc/lsb-release
+#       #
+#       # To run docker as a normal user, add that user to the docker group:
+#       # usermod -aG docker your_username
+
+
+# # get_url - Downloads files from HTTP, HTTPS, or FTP to node
+# # REF: http://docs.ansible.com/ansible/get_url_module.html
+# ############################################################
+
+# # https://github.com/docker/machine/releases
+#   - name: Download and install docker-machine
+#     get_url:
+#       url: https://github.com/docker/machine/releases/download/v0.13.0/docker-machine-Linux-x86_64
+#       dest: /usr/local/bin/docker-machine
+#       mode: 777
+#       force: yes
+
+# # https://github.com/docker/compose/releases
+#   - name: Download and install docker-compose
+#     get_url:
+#       url: https://github.com/docker/compose/releases/download/1.18.0/docker-compose-Linux-x86_64
+#       dest: /usr/local/bin/docker-compose
+#       mode: 777
+#       force: yes
+
+
+# # Execute command(s)
+# # REF: http://docs.ansible.com/ansible/command_module.html
+# ##########################################################
+
+#   - name: Use pip to update and ensure pip is at the latest version
+#     command: /usr/bin/pip install --upgrade pip
+
+
+# # Use pip to install and manage Python dependencies
+# # REF: http://docs.ansible.com/ansible/pip_module.html
+# ######################################################
+
+#   - name: Use pip to install docker-cloud
+#     pip:
+#       name: docker-cloud
+
+#   - name: Use pip to install docker-py
+#     pip:
+#       name: docker-py

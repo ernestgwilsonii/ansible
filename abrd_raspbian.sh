@@ -82,7 +82,8 @@ echo "vault" >> /etc/ansible/.gitignore
 
 # Pull down any additional starter playbooks
 cd /etc/ansible
-wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/RaspberryPi_Apply-OS-Updates-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/RaspberryPi_Raspbian-Apply-OS-Updates-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/RaspberryPi_Raspbian-Install-Docker-playbook.yml
 
 # Create a default starting /etc/ansible/ansible.cfg
 echo "[defaults]" > /etc/ansible/ansible.cfg
@@ -120,7 +121,8 @@ echo " ###################################"
 echo " cd /etc/ansible"
 echo " ansible all --list-hosts"
 echo " ansible all -m ping"
-echo " ansible-playbook RaspberryPi_Apply-OS-Updates-playbook.yml --extra-vars 'HostOrGroup=raspberrypi'"
+echo " ansible-playbook RaspberryPi_Raspbian-Apply-OS-Updates-playbook.yml --extra-vars 'HostOrGroup=raspberrypi'"
+echo " ansible-playbook RaspberryPi_Raspbian-Install-Docker-playbook.yml --extra-vars 'HostOrGroup=raspberrypi'"
 echo ""
 echo "################################################################################"
 echo ""
