@@ -82,7 +82,7 @@ echo "vault" >> /etc/ansible/.gitignore
 
 # Pull down any additional starter playbooks
 cd /etc/ansible
-wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/RaspbianPi_Apply-OS-Updates-playbook.yml
+wget https://raw.githubusercontent.com/ernestgwilsonii/ansible/master/RaspberryPi_Apply-OS-Updates-playbook.yml
 
 # Create a default starting /etc/ansible/ansible.cfg
 echo "[defaults]" > /etc/ansible/ansible.cfg
@@ -103,7 +103,7 @@ echo "export ANSIBLE_HOST_KEY_CHECKING=False" >> /root/.bashrc
 echo "export ANSIBLE_VAULT_PASSWORD_FILE=/etc/ansible/vault/vault_pass.txt" >> /root/.bashrc
 echo " " >> /root/.bashrc
 
-# Display the Ansible version and starting welcome""
+# Display the Ansible version and starting welcome
 clear
 echo "################################################################################"
 echo "# Welcome to Ansible! #"
@@ -120,6 +120,7 @@ echo " ###################################"
 echo " cd /etc/ansible"
 echo " ansible all --list-hosts"
 echo " ansible all -m ping"
+echo " ansible-playbook RaspberryPi_Apply-OS-Updates-playbook.yml --extra-vars 'HostOrGroup=raspberrypi'"
 echo ""
 echo "################################################################################"
 echo ""
