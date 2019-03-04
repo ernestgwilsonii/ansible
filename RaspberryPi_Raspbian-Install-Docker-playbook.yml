@@ -65,6 +65,59 @@
 
 
 
+
+# # Allow the current logged user (probably "pi") to run Docker without typing sudo in the future
+# sudo groupadd docker # If the group already exists, that is ok
+# sudo gpasswd -a $USER docker
+# sudo usermod -a -G docker $USER
+# newgrp docker
+
+# # Optional: Add other users (If you have another Linux login user named "bob" that also needs to run Docker)
+# #sudo usermod -aG docker bob
+
+# # Verify that you can now run Docker!
+# which docker # /usr/bin/docker
+# docker --version
+# docker run hello-world
+
+# # Install docker-compose
+# cd /tmp
+# git clone https://github.com/docker/compose.git
+# cd compose
+# git checkout release
+# # Build it
+# time docker build -t docker-compose:armhf -f Dockerfile.armhf .
+# # Create the binary
+# time docker run --rm --entrypoint="script/build/linux-entrypoint" -v $(pwd)/dist:/code/dist -v $(pwd)/.git:/code/.git "docker-compose:armhf"
+# # Copy the binary into place
+# sudo cp dist/docker-compose-Linux-armv7l /usr/local/bin/docker-compose
+# sudo chown root:root /usr/local/bin/docker-compose
+# sudo chmod 0755 /usr/local/bin/docker-compose
+# /usr/local/bin/docker-compose --version
+# # Clean up
+# cd /tmp
+# rm -Rf /tmp/compose
+# #sudo docker system prune -af
+
+# # Verify
+# which docker-compose # /usr/local/bin/docker-compose
+# docker-compose --version
+
+
+# # Reboot the Raspberry Pi
+# sudo reboot
+
+# # SSH log-in to your Raspberry Pi as user "pi"
+# ssh pi@ipAddressOfYourPi
+
+# # Verify that Docker started automatically and that commands work!
+# docker --version
+# docker-compose --version
+# docker run hello-world # Should not need sudo to work!
+
+
+
+
 # Execute command(s)
 # REF: http://docs.ansible.com/ansible/command_module.html
 ##########################################################
