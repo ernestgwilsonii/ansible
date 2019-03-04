@@ -50,6 +50,8 @@ pip install ansible
 pip install --upgrade ansible
 
 # Create the default Ansible directory stucture
+mkdir -p /opt/ansible
+ln -s /opt/ansible /etc/ansible
 mkdir -p /etc/ansible
 mkdir -p /etc/ansible/files
 mkdir -p /etc/ansible/group_vars
