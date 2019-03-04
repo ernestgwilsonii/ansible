@@ -32,15 +32,42 @@
       autoremove: yes
 
 
+# get_url - Downloads files from HTTP, HTTPS, or FTP to node
+# REF: http://docs.ansible.com/ansible/get_url_module.html
+############################################################
+
+# https://get.docker.com
+  - name: Download Raspberry Pi Docker install script - curl -fsSL get.docker.com -o /tmp/get-docker.sh
+    get_url:
+      url: https://get.docker.com/
+      dest: /tmp/get-docker.sh
+      mode: 777
+      force: yes
+
+
 # Execute command(s)
 # REF: http://docs.ansible.com/ansible/command_module.html
 ##########################################################
 
-  - name: Download Raspberry Pi Docker install script
-    command: sudo curl -fsSL get.docker.com -o /tmp/get-docker.sh
+  - name: Executue Raspberry Pi Docker install script - sh /tmp/get-docker.sh
+    command: sh /tmp/get-docker.sh
 
-  - name: Executue Raspberry Pi Docker install script
-    command: sudo sh /tmp/get-docker.sh
+
+# Remove (delete) file(s)
+# REF: https://docs.ansible.com/ansible/latest/modules/file_module.html
+######################################################################
+
+  - name: Delete Raspberry Pi Docker temporary install script - rm /tmp/get-docker.sh
+    file:
+      state: absent
+      path: "/tmp/get-docker.sh"
+
+
+
+
+# Execute command(s)
+# REF: http://docs.ansible.com/ansible/command_module.html
+##########################################################
 
 #   - name: Set sysctl -w net.bridge.bridge-nf-call-iptables=1
 #     command: /usr/sbin/sysctl -w net.bridge.bridge-nf-call-iptables=1
