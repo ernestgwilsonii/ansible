@@ -2,7 +2,7 @@
 
 ################################################################################
 #  description: Installs/applies OS updates and patches on Raspbian Raspberry Pi
-#  usage: ansible-playbook RaspberryPi_Apply-OS-Updates-playbook.yml --extra-vars 'HostOrGroup=raspberrypi'
+#  usage: ansible-playbook RaspberryPi_Raspbian-Apply-OS-Updates-playbook.yml --extra-vars 'HostOrGroup=raspberrypi'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################

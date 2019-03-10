@@ -2,7 +2,7 @@
 
 ################################################################################
 #  description: Installs Docker on Raspbian Raspberry Pi
-#  usage: ansible-playbook RaspberryPi_Raspbian_Install_Docker-playbook.yml --extra-vars 'HostOrGroup=raspberrypi'
+#  usage: ansible-playbook RaspberryPi_Raspbian-Install-Docker-playbook.yml --extra-vars 'HostOrGroup=raspberrypi'
 #  author: Ernest G. Wilson II <ErnestGWilsonII@gmail.com> (https://github.com/ernestgwilsonii)
 #  license: MIT
 ################################################################################
