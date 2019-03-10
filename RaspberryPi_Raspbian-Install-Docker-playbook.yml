@@ -63,6 +63,13 @@
       path: "/tmp/get-docker.sh"
 
 
+# Use pip to install and manage Python dependencies
+# REF: http://docs.ansible.com/ansible/pip_module.html
+######################################################
+
+  - name: Use pip to install docker-compose
+    pip:
+      name: docker-compose
 
 
 
