@@ -49,6 +49,9 @@ pip install cryptography
 pip install ansible
 pip install --upgrade ansible
 
+# Add docker-compose in case a future Ansible playbook needs it later!
+pip install --upgrade docker-compose
+
 # Create the default Ansible directory stucture
 mkdir -p /opt/ansible
 ln -s /opt/ansible /etc/ansible
